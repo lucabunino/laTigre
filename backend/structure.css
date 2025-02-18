@@ -1,0 +1,14 @@
+/* [data-testid="image-input"],
+[data-testid="image-input"] img,
+[data-testid="image-input"] div {
+  max-height: 300px !important;
+  width: auto;
+  object-fit: contain;
+}
+
+[data-testid="Media"] .iHpkaY {
+  aspect-ratio: 16 / 9 !important;
+  object-fit: cover !important;
+  width: 100% !important;
+  height: auto !important;
+} */
