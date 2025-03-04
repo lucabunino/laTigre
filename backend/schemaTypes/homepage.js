@@ -17,30 +17,39 @@ export default {
         {
           name: 'project',
           type: 'object',
-          options: {
-            columns: 2
-          },
+          fieldsets: [
+            {
+              name: "image",
+              options: {
+                columns: 2,
+                collapsible: true,
+              },
+            }
+          ],
           fields: [
             {
-              name: 'desktop',
-              type: 'image',
-              validation: (Rule) => Rule.required(),
-            },
-            {
-              name: 'mobile',
-              type: 'image',
-            },
-            {
-              name: 'projectReference',
+              name: 'reference',
               title: 'Reference to Work or Personal',
               type: 'reference',
               to: [{ type: 'work'}, { type: 'personal'}]
             },
+            {
+              name: 'desktop',
+              type: 'image',
+              validation: (Rule) => Rule.required(),
+              fieldset: 'image',
+            },
+            {
+              name: 'mobile',
+              type: 'image',
+              fieldset: 'image',
+            },
           ],
           preview: {
             select: {
-              title: 'projectReference.title',
-              media: 'projectReference.images.0.asset'
+              title: 'reference.title',
+              subtitle: 'caption',
+              media: 'reference.images.0.asset'
             }
           }
         }

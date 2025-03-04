@@ -1,0 +1,82 @@
+<script>
+// Imports
+import { urlFor } from "$lib/utils/image";
+
+// Variables
+let { data } = $props()
+let totalImages = data.works.reduce((sum, work) => sum + (work.images?.length || 0), 0);
+let remainingImages = totalImages;
+let archiveColours = data.colours.archive
+</script>
+
+<ul>
+  {#each data.works as work, i}
+    {@const localIndex = data.works.length - i}
+    <a class="folio-14 work-list"
+    href="/archive/{work.slug.current}"
+    style="--archiveColour: {archiveColours[localIndex % archiveColours.length].hex};"
+    >
+      <h2>{work.title}</h2>
+      {#if work.tags}
+        <p>
+          {#each work.tags as tag, i}
+            {tag.title}{#if i+1 < work.tags.length}{@html ", "}{/if}
+          {/each}
+        </p>
+      {:else}
+        <p>No tags</p>
+      {/if}
+      <p>{remainingImages.toString().padStart(3, '0')}–{((remainingImages -= work.images?.length) + 1).toString().padStart(3, '0')}</p>
+      {#if work.images}
+        <img class="hoverImg" src={urlFor(work.images[0].asset)} width={work.images[0].info.metadata.dimensions.width} height={work.images[0].info.metadata.dimensions.height} alt={work.images[0].info.altText}>
+      {/if}
+    </a>
+  {/each}
+</ul>
+
+<style>
+ul {
+  padding: calc(var(--gutter)*2 + 1.1em) var(--gutter) var(--gutter);
+  overflow-y: scroll;
+  height: 100%;
+}
+a {
+  display: flex;
+  justify-content: space-between;
+  width: -webkit-fill-available;
+  gap: var(--gutter);
+}
+a:hover {
+  color: var(--archiveColour);
+  transition-delay: 0s;
+}
+a:not(:hover) {
+  transition-delay: 1000ms;
+}
+a>* {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+a>*:nth-child(1) {
+  width: calc(100%/6*2);
+}
+a>*:nth-child(2) {
+  width: calc(100%/6*3);
+}
+a>*:nth-child(3) {
+  width: calc(100%/6*1);
+}
+.hoverImg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc((100% - calc(var(--gutter))*3)/2 + calc(var(--gutter))*1);
+  height: auto;
+  transform: translateX(-100%);
+  display: none;
+}
+a:hover .hoverImg {
+  display: block;
+}
+</style>
