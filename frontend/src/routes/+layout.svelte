@@ -13,6 +13,7 @@ import Archive from './archive/+page.svelte';
 import ArchiveList from './archive/list/+page.svelte';
 import Studio from './studio/+page.svelte';
 import Modal from '$lib/components/Modal.svelte';
+import { urlFor } from '$lib/utils/image';
 
 // Variables
 let domLoaded = $state(false)
