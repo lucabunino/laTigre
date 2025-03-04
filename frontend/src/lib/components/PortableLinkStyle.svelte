@@ -1,5 +1,6 @@
-<!-- PortableImageStyle -->
-<script lang="ts">
+<!-- PortableLinkStyle -->
+<!-- <script lang="ts">
+  import { urlFor } from '$lib/utils/image';
   import type {BlockComponentProps} from '@portabletext/svelte'
 
   interface Props {
@@ -20,4 +21,4 @@
 {$inspect(value)}
 
 <style>
-</style>
+</style> -->

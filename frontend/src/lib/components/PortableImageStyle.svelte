@@ -1,5 +1,5 @@
 <!-- PortableImageStyle -->
-<script lang="ts">
+ <!-- <script lang="ts">
   import { urlFor } from '$lib/utils/image';
   import type {BlockComponentProps} from '@portabletext/svelte'
 
@@ -36,4 +36,4 @@ span {
 span:hover + .imgHover {
   display: block;
 }
-</style>
+</style> -->

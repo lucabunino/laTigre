@@ -19,8 +19,8 @@ components={{
   },
   listItem: PortableTextStyle,
   marks: {
-    link: PortableLinkStyle,
-    image: PortableImageStyle,
+    // link: PortableLinkStyle,
+    // image: PortableImageStyle,
   },
 }}/>
 {/if}
