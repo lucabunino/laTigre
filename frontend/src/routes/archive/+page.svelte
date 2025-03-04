@@ -6,8 +6,8 @@ let { data } = $props()
 import { urlFor } from "$lib/utils/image";
 
 // Variables
-let totalImages = data.works.reduce((sum, work) => sum + (work.images?.length || 0), 0);
-let remainingImages = totalImages+1;
+let totalmedia = data.works.reduce((sum, work) => sum + (work.media?.length || 0), 0);
+let remainingmedia = totalmedia+1;
 let index = 1;
 let domLoaded = $state(false);
 let innerWidth = $state(0)
@@ -38,7 +38,7 @@ $effect(() => {
 
 <section class="folio-14">
   {#each data.works as work, i}
-    {#each work.images as image, j}
+    {#each work.media as image, j}
     {@const localIndex = index}
     {@const col = (localIndex - 1) % cols()}
     {@const row = Math.floor((localIndex - 1) / cols())}
@@ -62,7 +62,7 @@ $effect(() => {
               </p>
             {/if}
           </div>
-          <p class="index">{(remainingImages -= 1).toString().padStart(3, '0')}</p>
+          <p class="index">{(remainingmedia -= 1).toString().padStart(3, '0')}</p>
         </div>
       </a>
       {(() => {index++})()}

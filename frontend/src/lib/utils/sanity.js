@@ -78,7 +78,7 @@ export async function getWorks() {
 		`
 		*[_type == "work" && !(_id in path('drafts.**'))] {
 			...,
-			images[] {
+			media[] {
 				asset {
 					_ref, _id, _type
 				},
@@ -96,7 +96,7 @@ export async function getPersonals() {
 		`
 		*[_type == "personal" && !(_id in path('drafts.**'))] {
 			...,
-			images[] {
+			media[] {
 				asset {
 					_ref, _id, _type
 				},

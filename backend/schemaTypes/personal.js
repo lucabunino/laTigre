@@ -20,7 +20,7 @@ export default {
       },
     },
     {
-      name: 'images',
+      name: 'media',
       type: 'array',
       of: [{ type: 'image' }],
       validation: (Rule) => Rule.required(),
@@ -56,7 +56,7 @@ export default {
   preview: {
     select: {
       title: 'title',
-      media: 'images.0.asset'
+      media: 'media.0.asset'
     },
   }
 };

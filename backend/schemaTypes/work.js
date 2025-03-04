@@ -16,7 +16,7 @@ export default {
       },
     },
     {
-      name: 'images',
+      name: 'media',
       type: 'array',
       of: [{ type: 'image' }],
       validation: (Rule) => Rule.required(),
@@ -41,7 +41,7 @@ export default {
       tag1: 'tags.1.title',
       tag2: 'tags.2.title',
       tag3: 'tags.3.title',
-      media: 'images.0.asset'
+      media: 'media.0.asset'
     },
     prepare({ title, tag0, tag1, tag2, tag3, media }) {
       const tags = [tag0, tag1, tag2, tag3].filter(Boolean).sort(); // Remove undefined and sort alphabetically

@@ -1,6 +1,7 @@
 <!-- PortableTextStyle -->
 <script lang="ts">
   import type {BlockComponentProps} from '@portabletext/svelte'
+  import { urlFor } from '$lib/utils/image.js';
 
   interface Props {
     portableText: BlockComponentProps;
@@ -10,10 +11,20 @@
   let { portableText, children }: Props = $props();
 
   let {global, value} = $derived(portableText)
-  let {style, listItem} = $derived(value);  
+  let {style, listItem, markDefs} = $derived(value);
+  $inspect(value._type)
 </script>
-
-{#if style === 'normal' && !listItem}
+{#if value._type === 'image'}
+  <span>{@render children()}</span>
+  <div class="imgHover">
+    <img src={urlFor(value.image.asset)} alt="">
+    <p class="folio-14">{value.image}</p>
+  </div>
+{:else if value._type === 'link'}
+  <a class="link" href={value.url} target={value.blank ? '_blank' : undefined}>
+    {@render children()}
+  </a>
+{:else if style === 'normal' && !listItem}
   <p class="portableText">{@render children()}</p>
 {:else if style=== 'h3'}
   <h3 class="text-m">{@render children()}</h3>

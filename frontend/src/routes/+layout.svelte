@@ -98,7 +98,7 @@ $effect.pre(async () => {
     domLoaded = true;
   }
 });
-
+$inspect($page.url.pathname.includes("archive"))
 let viewGrid = $state(false)
 const gridColumnsDesktop = 8
 const gridColumnsMobile = 4
@@ -138,13 +138,13 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
         {#if !studioOpen}
           <a href="/studio" onclick={openStudio} data-sveltekit-preload-data>Studio</a>
         {:else}
-          <button onclick={() => closeModal(true)}>Studio</button> 
+          <button onclick={() => closeModal(true)}>TEST</button> 
         {/if}
       </li>
       <li class="menu-item"><a href="/archive" onclick={() => closeModal(false)}>Archive</a>
-        {#if $page.url.pathname === "/archive" && !listOpen && !studioOpen}
+        {#if $page.url.pathname.includes("/archive") && !listOpen && !studioOpen}
           <a href="/archive/list" onclick={openArchiveList} data-sveltekit-preload-data>List</a>
-        {:else if $page.url.pathname === "/archive" && listOpen && !studioOpen}
+        {:else if $page.url.pathname.includes("/archive") && listOpen && !studioOpen}
           <button onclick={() => closeModal(true)}>Close</button> 
         {/if}
       </li>

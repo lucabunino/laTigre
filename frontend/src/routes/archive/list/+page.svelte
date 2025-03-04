@@ -4,8 +4,8 @@ import { urlFor } from "$lib/utils/image";
 
 // Variables
 let { data } = $props()
-let totalImages = data.works.reduce((sum, work) => sum + (work.images?.length || 0), 0);
-let remainingImages = totalImages;
+let totalMedia = data.works.reduce((sum, work) => sum + (work.media?.length || 0), 0);
+let remainingMedia = totalMedia;
 let archiveColours = data.colours.archive
 </script>
 
@@ -26,9 +26,9 @@ let archiveColours = data.colours.archive
       {:else}
         <p>No tags</p>
       {/if}
-      <p>{remainingImages.toString().padStart(3, '0')}–{((remainingImages -= work.images?.length) + 1).toString().padStart(3, '0')}</p>
-      {#if work.images}
-        <img class="hoverImg" src={urlFor(work.images[0].asset)} width={work.images[0].info.metadata.dimensions.width} height={work.images[0].info.metadata.dimensions.height} alt={work.images[0].info.altText}>
+      <p>{#if (remainingMedia - work.media?.length)+1 < remainingMedia}{remainingMedia.toString().padStart(3, '0')}–{/if}{((remainingMedia -= work.media?.length) + 1).toString().padStart(3, '0')}</p>
+      {#if work.media}
+        <img class="hoverImg" src={urlFor(work.media[0].asset)} width={work.media[0].info.metadata.dimensions.width} height={work.media[0].info.metadata.dimensions.height} alt={work.media[0].info.altText}>
       {/if}
     </a>
   {/each}
@@ -66,6 +66,7 @@ a>*:nth-child(2) {
 }
 a>*:nth-child(3) {
   width: calc(100%/6*1);
+  text-align: right;
 }
 .hoverImg {
   position: absolute;

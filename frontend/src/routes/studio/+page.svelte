@@ -3,8 +3,6 @@ let { data } = $props()
 $inspect(data)
 import { PortableText } from '@portabletext/svelte'
 import PortableTextStyle from '$lib/components/PortableTextStyle.svelte';
-import PortableImageStyle from '$lib/components/PortableImageStyle.svelte';
-import PortableLinkStyle from '$lib/components/PortableLinkStyle.svelte';
 </script>
 
 <section>
@@ -19,8 +17,8 @@ components={{
   },
   listItem: PortableTextStyle,
   marks: {
-    // link: PortableLinkStyle,
-    // image: PortableImageStyle,
+    link: PortableTextStyle,
+    image: PortableTextStyle,
   },
 }}/>
 {/if}

@@ -38,7 +38,7 @@ $effect(() => {
     class:loading={!domLoaded}
     style="--desktopColour: {desktopColours[localIndex % desktopColours.length].hex}; --mobileColour: {mobileColours[localIndex % mobileColours.length].hex}"
     >
-      <img src={urlFor(personal.images[0])} alt="">
+      <img src={urlFor(personal.media[0])} alt="">
       <div class="personal-info-container">
         <div class="personal-info">
           <h2>{personal.title}</h2>
