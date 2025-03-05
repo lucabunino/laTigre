@@ -35,6 +35,19 @@ export async function getProjects() {
 	return await client.fetch(
 		`
 		*[_type == "homepage" && !(_id in path('drafts.**'))][0].projects[] {
+			video {
+				mp4 {
+					asset-> {url}
+				},
+				cover {
+					asset {
+						_ref, _id, _type
+					},
+					"info": asset->{
+						title, description, altText, metadata {dimensions}
+					},
+				},
+			},
 			desktop {
 				asset {
 					_ref, _id, _type
@@ -68,6 +81,17 @@ export async function getStudio() {
 			...,
 			body[] {
 				...,
+				markDefs[] {
+					...,
+					image {
+            asset {
+    					_ref, _id, _type
+    				},
+            "info": asset->{
+    					title, description, altText, metadata {dimensions}
+    				},
+					}
+				}
 			}
 		}
 		`
@@ -76,9 +100,17 @@ export async function getStudio() {
 export async function getWorks() {
 	return await client.fetch(
 		`
-		*[_type == "work" && !(_id in path('drafts.**'))] {
+		*[_type == "work" && !(_id in path('drafts.**'))]|order(orderRank) {
 			...,
 			media[] {
+				mp4 {
+					asset-> {url}
+				},
+				cover {
+					asset {
+						_ref, _id, _type
+					},
+				},
 				asset {
 					_ref, _id, _type
 				},
@@ -94,9 +126,17 @@ export async function getWorks() {
 export async function getPersonals() {
 	return await client.fetch(
 		`
-		*[_type == "personal" && !(_id in path('drafts.**'))] {
+		*[_type == "personal" && !(_id in path('drafts.**'))]|order(orderRank) {
 			...,
 			media[] {
+				mp4 {
+					asset-> {url}
+				},
+				cover {
+					asset {
+						_ref, _id, _type
+					},
+				},
 				asset {
 					_ref, _id, _type
 				},

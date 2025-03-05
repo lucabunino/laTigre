@@ -12,13 +12,14 @@
 
   let {global, value} = $derived(portableText)
   let {style, listItem, markDefs} = $derived(value);
-  $inspect(value._type)
 </script>
 {#if value._type === 'image'}
   <span>{@render children()}</span>
   <div class="imgHover">
     <img src={urlFor(value.image.asset)} alt="">
-    <p class="folio-14">{value.image}</p>
+    {#if value.image.info.description}
+      <p class="folio-14 caption">{value.image.info.description}</p>
+    {/if}
   </div>
 {:else if value._type === 'link'}
   <a class="link" href={value.url} target={value.blank ? '_blank' : undefined}>
@@ -37,6 +38,25 @@
 {/if}
 
 <style>
+span {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.imgHover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(-100%);
+  display: none;
+  width: calc((100vw - calc(var(--gutter))*1)/4);
+}
+.caption {
+  background-color: var(--white);
+  padding: calc(var(--gutter)*.5);
+}
+span:hover + .imgHover {
+  display: block;
+}
 .link {
   color: var(--blue);
   text-decoration: underline;

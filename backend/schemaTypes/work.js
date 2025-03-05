@@ -1,7 +1,10 @@
+import {orderRankField} from '@sanity/orderable-document-list'
+
 export default {
   name: 'work',
   type: 'document',
   fields: [
+    orderRankField({ type: "work" }),
     {
       name: 'title',
       type: 'string',
@@ -18,12 +21,46 @@ export default {
     {
       name: 'media',
       type: 'array',
-      of: [{ type: 'image' }],
+      of: [
+        { type: 'image' },
+        {
+          name: 'video',
+          type: 'object',
+          fields: [
+            {
+              name: 'mp4',
+              title: 'Video (.mp4)',
+              type: 'file',
+              options: {
+                accept: 'mp4',
+                storeOriginalFilename: true,
+              },
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'cover',
+              type: 'image',
+            }
+          ],
+          preview: {
+            select: {
+              title: 'mp4.asset.originalFilename',
+              media: 'cover',
+            },
+            prepare({ title, media }) {
+              return {
+                title: title || 'No filename', // Fallback title
+                media,
+              };
+            }
+          }
+        }
+      ],
       validation: (Rule) => Rule.required(),
       options: {
         layout: 'grid'
       },
-    },
+    },    
     {
       name: 'tags',
       type: 'array',
@@ -41,15 +78,22 @@ export default {
       tag1: 'tags.1.title',
       tag2: 'tags.2.title',
       tag3: 'tags.3.title',
-      media: 'media.0.asset'
+      media: 'media'
     },
     prepare({ title, tag0, tag1, tag2, tag3, media }) {
+      let mediaUsed
+      console.log(media[0]);
+      if (media[0].asset) {
+        mediaUsed = media[0].asset
+      } else {
+        mediaUsed = media[0].cover.asset
+      }
       const tags = [tag0, tag1, tag2, tag3].filter(Boolean).sort(); // Remove undefined and sort alphabetically
   
       return {
         title,
         subtitle: tags.length ? tags.join(', ') : 'No tags', // Show sorted tags or default text
-        media
+        media: mediaUsed,
       };
     }
   }

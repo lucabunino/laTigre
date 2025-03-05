@@ -29,7 +29,7 @@ const swiperParams = {
   centeredSlides: false,
   loop: data.projects.length > 5 ? true : false,
   loopAddBlankSlides: true,
-  loopAdditionalSlides: 1,
+  loopAdditionalSlides: 0,
   mousewheel: {
     forceToAxis: false,
   },
@@ -82,7 +82,18 @@ onswiperrealindexchange={onRealIndexChange}
       onmouseover={() => setCta("View")}
       href="{project.reference._type === "personal" ? "personal" : "archive"}/{project.reference.slug.current}"
       >
-        <img src={urlFor(project.desktop.asset).height(1920)} alt="">
+      {#if project.desktop}
+        <img class="media"
+        src={urlFor(project.desktop.asset).height(1920)}
+        width={project.desktop.info.metadata.dimensions.width}
+        height={project.desktop.info.metadata.dimensions.height}
+        alt={project.desktop.info.altText}>
+      {:else if project.video}
+        <video class="media" muted loop autoplay playsinline
+        src={project.video.mp4.asset.url}
+        placeholder={project.video.cover ? urlFor(project.video.cover.asset).width(600) : ""}
+        ></video>
+      {/if}
       </a>
     </swiper-slide>
   {/each}
@@ -125,7 +136,7 @@ swiper-slide {
 .swiper-button-next {
   right: 0;
 }
-img {
+.media {
   height: 100vh;
   width: auto;
   max-width: 100vw;

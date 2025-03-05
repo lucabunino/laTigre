@@ -1,4 +1,6 @@
 import { EarthGlobeIcon, InfoOutlineIcon, TagsIcon, ProjectsIcon, SparklesIcon, HomeIcon, ColorWheelIcon} from '@sanity/icons'
+import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
+
 
 export const myStructure = (S, context) => {
   const entities = [
@@ -7,12 +9,8 @@ export const myStructure = (S, context) => {
       .title('Homepage')
       .icon(HomeIcon)
       .child(S.document().schemaType('homepage').documentId('homepage')),
-    S.documentTypeListItem('work')
-      .title('Archive')
-      .icon(ProjectsIcon),
-    S.documentTypeListItem('personal')
-      .title('Personal')
-      .icon(SparklesIcon),
+    orderableDocumentListDeskItem({type: 'work', title: 'Archive', icon: ProjectsIcon, S, context}),
+    orderableDocumentListDeskItem({type: 'personal', title: 'Personal', icon: SparklesIcon, S, context}),
     S.divider(),
     S.documentTypeListItem('tag')
       .title('Tags')

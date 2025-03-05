@@ -25,13 +25,38 @@ export default defineConfig({
     media(),
     colorInput(),
   ],
-
   schema: {
     types: schemaTypes,
     templates: (templates) =>
       templates.filter(({ schemaType }) => !singletonTypes.has(schemaType)),
   },
+  // schema: {
+  //   types: (previousTypes) => {
+  //       return [
+  //           ...previousTypes,
+  //           {
+  //               name: "category",
+  //               title: "Category",
+  //               type: "document",
+  //               // Optional: The plugin also exports a set of 'orderings' for use in other Document Lists
+  //               // https://www.sanity.io/docs/sort-orders
+  //               orderings: [orderRankOrdering],
+  //               fields: [
+  //                   // Minimum required configuration
+  //                   orderRankField({ type: "category" }),
 
+  //                   // OR placing new documents on top
+  //                   orderRankField({ type: "category", newItemPosition: "before" }),
+
+  //                   // OR you can override _some_ of the field settings
+  //                   orderRankField({ type: "category", hidden: false }),
+
+  //                   // ...all other fields
+  //               ],
+  //           },
+  //       ]
+  //   }
+  // },
   document: {
     actions: (input, context) =>
       singletonTypes.has(context.schemaType)

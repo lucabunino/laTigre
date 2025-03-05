@@ -1,4 +1,4 @@
-import {HomeIcon} from '@sanity/icons';
+import { HomeIcon } from '@sanity/icons';
 
 export default {
   name: 'homepage',
@@ -31,12 +31,12 @@ export default {
               name: 'reference',
               title: 'Reference to Work or Personal',
               type: 'reference',
-              to: [{ type: 'work'}, { type: 'personal'}]
+              to: [{ type: 'work' }, { type: 'personal' }],
+              validation: (Rule) => Rule.required(),
             },
             {
               name: 'desktop',
               type: 'image',
-              validation: (Rule) => Rule.required(),
               fieldset: 'image',
             },
             {
@@ -44,16 +44,67 @@ export default {
               type: 'image',
               fieldset: 'image',
             },
+            {
+              name: 'video',
+              type: 'object',
+              options: {
+                columns: 2,
+                collapsible: true,
+              },
+              fields: [
+                {
+                  name: 'mp4',
+                  title: 'Video (.mp4)',
+                  type: 'file',
+                  options: {
+                    accept: 'mp4',
+                    storeOriginalFilename: true,
+                  },
+                },
+                {
+                  name: 'cover',
+                  type: 'image',
+                }
+              ],
+              preview: {
+                select: {
+                  title: 'mp4.asset.originalFilename',
+                  media: 'cover',
+                },
+                prepare({ title, media }) {
+                  return {
+                    title: title || 'No filename', // Fallback title
+                    media,
+                  };
+                }
+              }
+            }
           ],
+          validation: (Rule) =>
+            Rule.custom((fields) => {
+              if (!fields?.desktop && !fields?.video?.mp4) {
+                return 'Either Desktop image or Video must be provided';
+              }
+              return true;
+            }),
           preview: {
             select: {
               title: 'reference.title',
-              subtitle: 'caption',
-              media: 'reference.images.0.asset'
+              desktop: 'desktop',
+              desktopFilename: 'desktop.asset.originalFilename',
+              cover: 'video.cover',
+              videoFilename: 'video.mp4.asset.originalFilename',
+            },
+            prepare({ title, desktop, desktopFilename, cover, videoFilename }) {
+              return {
+                title: title || 'No title',
+                subtitle: desktop ? `${desktopFilename}` : videoFilename ? `${videoFilename}` : 'No media',
+                media: desktop || cover || undefined, // Use desktop first, then video cover
+              };
             }
           }
         }
       ],
     },
   ],
-}
+};

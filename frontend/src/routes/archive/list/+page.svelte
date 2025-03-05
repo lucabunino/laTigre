@@ -27,8 +27,17 @@ let archiveColours = data.colours.archive
         <p>No tags</p>
       {/if}
       <p>{#if (remainingMedia - work.media?.length)+1 < remainingMedia}{remainingMedia.toString().padStart(3, '0')}–{/if}{((remainingMedia -= work.media?.length) + 1).toString().padStart(3, '0')}</p>
-      {#if work.media}
-        <img class="hoverImg" src={urlFor(work.media[0].asset)} width={work.media[0].info.metadata.dimensions.width} height={work.media[0].info.metadata.dimensions.height} alt={work.media[0].info.altText}>
+      {#if work.media[0]?.asset}
+        <img class="media"
+        src={urlFor(work.media[0].asset).height(1080)}
+        width={work.media[0].info.metadata.dimensions.width}
+        height={work.media[0].info.metadata.dimensions.height}
+        alt={work.media[0].info.altText}>
+      {:else}
+        <video class="media" muted loop autoplay playsinline
+        src={work.media[0].mp4.asset.url}
+        placeholder={work.media[0].cover ? urlFor(work.media[0].cover.asset).width(600) : ""}
+        ></video>
       {/if}
     </a>
   {/each}
@@ -68,7 +77,7 @@ a>*:nth-child(3) {
   width: calc(100%/6*1);
   text-align: right;
 }
-.hoverImg {
+.media {
   position: absolute;
   left: 0;
   top: 0;
@@ -77,7 +86,7 @@ a>*:nth-child(3) {
   transform: translateX(-100%);
   display: none;
 }
-a:hover .hoverImg {
+a:hover .media {
   display: block;
 }
 </style>

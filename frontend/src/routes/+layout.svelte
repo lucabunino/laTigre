@@ -138,7 +138,7 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
         {#if !studioOpen}
           <a href="/studio" onclick={openStudio} data-sveltekit-preload-data>Studio</a>
         {:else}
-          <button onclick={() => closeModal(true)}>TEST</button> 
+          <button onclick={() => closeModal(true)}>Studio</button> 
         {/if}
       </li>
       <li class="menu-item"><a href="/archive" onclick={() => closeModal(false)}>Archive</a>

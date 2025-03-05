@@ -38,7 +38,18 @@ $effect(() => {
     class:loading={!domLoaded}
     style="--desktopColour: {desktopColours[localIndex % desktopColours.length].hex}; --mobileColour: {mobileColours[localIndex % mobileColours.length].hex}"
     >
-      <img src={urlFor(personal.media[0])} alt="">
+      {#if personal.media[0]?.asset}
+        <img class="media"
+        src={urlFor(personal.media[0].asset).height(1080)}
+        width={personal.media[0].info.metadata.dimensions.width}
+        height={personal.media[0].info.metadata.dimensions.height}
+        alt={personal.media[0].info.altText}>
+      {:else}
+        <video class="media" muted loop autoplay playsinline
+        src={personal.media[0].mp4.asset.url}
+        placeholder={personal.media[0].cover ? urlFor(personal.media[0].cover.asset).width(600) : ""}
+        ></video>
+      {/if}
       <div class="personal-info-container">
         <div class="personal-info">
           <h2>{personal.title}</h2>
@@ -50,6 +61,7 @@ $effect(() => {
         </div>
       </div>
     </div>
+    {#if (row % 2 === 0 && col % 2 === 0) || (row % 2 !== 0 && col % 2 !== 0)}<div class="spacer"></div>{/if}
     {(() => {index++})()}
   {/each}
 </section>
@@ -68,13 +80,13 @@ section {
   overflow: hidden;
   background-color: var(--desktopColour);
 }
-.personal img {
+.personal .media {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: none;
 }
-.personal:not(.loading) img {
+.personal:not(.loading) .media {
   display: block;
 }
 .personal-info-container {

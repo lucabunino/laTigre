@@ -40,10 +40,10 @@ export default {
                 fields: [
                   {
                     name: 'url',
-                    type: 'string', // Change to string to allow custom validation
+                    type: 'string',
                     validation: Rule =>
                       Rule.custom(href => {
-                        if (!href) return true; // Allow empty field
+                        if (!href) return true;
                         return /^(https?:\/\/|mailto:|tel:)/.test(href)
                           ? true
                           : 'Must be a valid URL, mailto:, or tel: link';

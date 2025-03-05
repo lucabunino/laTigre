@@ -38,7 +38,7 @@ $effect(() => {
 
 <section class="folio-14">
   {#each data.works as work, i}
-    {#each work.media as image, j}
+    {#each work.media as media, j}
     {@const localIndex = index}
     {@const col = (localIndex - 1) % cols()}
     {@const row = Math.floor((localIndex - 1) / cols())}
@@ -50,7 +50,16 @@ $effect(() => {
       class:on={(row % 2 === 0 && col % 2 === 0) || (row % 2 !== 0 && col % 2 !== 0)}
       style="--desktopColour: {desktopColours[localIndex % desktopColours.length].hex}; --mobileColour: {mobileColours[localIndex % mobileColours.length].hex}"
       >
-        <img src={urlFor(image)} alt="">
+      {#if media.asset}
+        <img class="media"
+        style="transition-delay:{localIndex*30}ms"
+        src={urlFor(media).width(600)} alt="">
+      {:else}
+        <video class="media" muted loop autoplay playsinline
+        style="transition-delay:{localIndex*30}ms"
+        src={media.mp4.asset.url}
+        placeholder={media.cover ? urlFor(media.cover.asset).width(600) : ""}></video>
+      {/if}
         <div class="work-info-container">
           <div class="work-info">
             <h2>{work.title}</h2>
@@ -86,14 +95,14 @@ section {
 .work.on {
   background-color: var(--desktopColour);
 }
-.work img {
+.work .media {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: none;
+  opacity: 0;
 }
-.work.on:not(.loading) img {
-  display: block;
+.work.on:not(.loading) .media {
+  opacity: 1;
 }
 .work-info-container {
   position: absolute;
