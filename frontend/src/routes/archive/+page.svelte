@@ -54,7 +54,7 @@ $effect(() => {
         <img class="media"
         style="transition-delay:{localIndex*30}ms"
         src={urlFor(media).width(600)} alt="">
-      {:else}
+      {:else if media.mp4}
         <video class="media" muted loop autoplay playsinline
         style="transition-delay:{localIndex*30}ms"
         src={media.mp4.asset.url}
