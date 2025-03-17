@@ -57,7 +57,7 @@ export default {
                   title: 'Video (.mp4)',
                   type: 'file',
                   options: {
-                    accept: 'mp4',
+                    accept: 'video/mp4',
                     storeOriginalFilename: true,
                   },
                 },
