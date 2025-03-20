@@ -51,17 +51,22 @@ $effect(() => {
       style="--desktopColour: {desktopColours[localIndex % desktopColours.length].hex}; --mobileColour: {mobileColours[localIndex % mobileColours.length].hex}"
       >
       {#if media.asset}
-        <img class="media"
+        <!-- <img class="media"
         style="transition-delay:{localIndex*30}ms"
+        src={urlFor(media).width(600)} alt=""> -->
+        <img class="media"
         src={urlFor(media).width(600)} alt="">
       {:else if media.mp4}
-        <video class="media" muted loop autoplay playsinline
+        <!-- <video class="media" muted loop autoplay playsinline
         style="transition-delay:{localIndex*30}ms"
+        src={media.mp4.asset.url}
+        placeholder={media.cover ? urlFor(media.cover.asset).width(600) : ""}></video> -->
+        <video class="media" muted loop autoplay playsinline
         src={media.mp4.asset.url}
         placeholder={media.cover ? urlFor(media.cover.asset).width(600) : ""}></video>
       {/if}
         <div class="work-info-container">
-          <div class="work-info">
+          <div class="work-info difference">
             <h2>{work.title}</h2>
             {#if work.tags}
               <p>
@@ -119,8 +124,9 @@ section {
 }
 .work .work-info {
   display: none;
+  width: 100%;
 }
-.work:not(.on):hover .work-info {
+.work:hover .work-info {
   display: block;
 }
 @media screen and (min-width: 1025px) {

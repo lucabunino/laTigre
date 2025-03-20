@@ -6,11 +6,9 @@ $inspect(data.projects)
 // Imports
 import { register } from 'swiper/element/bundle';register();
 import { urlFor } from '$lib/utils/image';
-import { FreeMode } from 'swiper/modules';
 
 // Variables
 let currentProject = $state(data.projects[0]);
-let cursorTagContent = $state();
 let innerWidth = $state();
 let innerHeight = $state();
 let mouse = $state([])
