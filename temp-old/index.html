@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotos entlang der SVG-Knotenlinie</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+    <div>
+        <p>
+            New website is online soon
+        </p>
+    </div>
+
+   
+    
+
+    <div class="container">
+        <!-- Dein neues SVG -->
+        <svg width="3761" height="1304" viewBox="0 0 3761 1304" fill="none">
+            <path d="M426.634 195.091C342.634 225.758 194.234 317.891 272.634 441.091C370.634 595.091 500.635 575.091 650.635 517.091C800.635 459.091 1042.63 259.091 1062.63 173.091C1082.63 87.091 1008.63 11.091 784.635 173.091C560.635 335.091 584.635 527.09 408.635 669.09C232.635 811.09 104.635 831.09 36.6349 797.09C-31.3651 763.09 -9.36505 689.09 166.635 729.09C342.635 769.09 584.633 865.09 716.633 759.09M1176.63 517.091C1176.63 453.757 1125.43 370.29 920.633 543.09C664.633 759.09 870.633 857.09 1042.63 679.09C1180.23 536.69 1227.97 495.757 1234.63 493.09C1131.3 613.09 959.433 839.89 1098.63 787.09C1237.83 734.29 1315.3 631.757 1336.63 587.09M2112 297C2064 349.637 1956 428.928 1908 325C1848 195.091 1956 117 2112 85.0005C2268 53.0005 2344 141 2480 113C2616 85.0005 2736 41 2784 1M2396 195.091C2338.67 232.424 2201.6 344.29 2112 493.09C2000 679.09 1948 753.181 1824 787.09C1700 821 1660 771.09 1616 679.09M2436 441.091C2332 538.454 2148.8 743.963 2248 787.09C2372 841 2605.36 522.281 2676 473C2762 413 2918 447.091 2846 551M2600 587.09C2536 685.12 2457.6 856.763 2656 759.09C2854.4 661.418 2920 527.667 2928 473M2784 709C2676 937 2633.71 1129 2510 1259C2426 1347.27 2242.07 1297.43 2276 1165C2348 884 2628 1023 2868 787.09C3002.44 654.937 3100 505.182 3112 441.091C3129.33 465.121 3180.8 509.163 3248 493.09C3136 581.757 2958.4 759.09 3144 759.09C3376 759.09 3660 545.09 3676 493.09C3692 441.091 3636 397.182 3460 517.091C3284 637 3336 807.09 3480 797.09C3624 787.09 3732 657.09 3760 587.09M2539 316C2528 312.667 2505.8 311.8 2505 335C2504 364 2565 355 2539 316Z" stroke=""/>
+        </svg>
+
+        <!-- 300 Bilder -->
+        <script>
+            for (let i = 1; i <= 300; i++) {
+                let img = document.createElement("img");
+                img.id = `foto${i}`;
+                img.className = "foto";
+                img.src = `foto/foto${i}.webp`;
+                img.alt = `Foto ${i}`;
+                img.style.width = `${10 + Math.random() * 10}px`; // Zufällige Breite zwischen 10px und 20px
+                document.querySelector(".container").appendChild(img);
+
+                // Eine Kopie des Bildes erstellen, die bei Hover erscheint
+                let hoverCopy = img.cloneNode(true); // Kopie des Bildes erstellen
+                hoverCopy.classList.add("hover-copy"); // Hover-Kopie hinzufügen
+                document.querySelector(".container").appendChild(hoverCopy);
+            }
+        </script>
+    </div>
+
+    <script>
+        function positionImages() {
+            const svg = document.getElementsByTagName('svg')[0]; // Zugriff auf das SVG
+            const paths = svg.querySelectorAll('path'); // Alle Pfade im SVG abrufen
+            const numOfPhotos = 300;
+
+            const svgRect = svg.getBoundingClientRect();
+            const viewBox = svg.viewBox.baseVal;
+            const scaleX = svgRect.width / viewBox.width;
+            const scaleY = svgRect.height / viewBox.height;
+
+            let photoIndex = 0;
+            for (let path of paths) {
+                const pathLength = path.getTotalLength();
+
+                for (let i = 0; i < numOfPhotos; i++) {
+                    const position = (pathLength / (numOfPhotos - 1)) * i;
+                    const point = path.getPointAtLength(position);
+
+                    if (photoIndex < numOfPhotos) {
+                        const foto = document.getElementById(`foto${photoIndex + 1}`);
+
+                        const x = point.x * scaleX + svgRect.left;
+                        const y = point.y * scaleY + svgRect.top;
+
+                        foto.style.left = `${x}px`;
+                        foto.style.top = `${y}px`;
+
+                        // Verzögerung hinzufügen
+                        setTimeout(() => {
+                            foto.style.opacity = 1; // Bild einblenden
+                        }, i * 10); // Verzögerung von 10ms für jedes Bild
+
+                        photoIndex++;
+                    }
+                }
+            }
+        }
+
+        window.onload = positionImages;
+        window.onresize = positionImages;
+    </script>
+
+
+<div class="mobile-images">
+    <img src="foto/foto01.webp" class="foto-m" />
+    <img src="foto/foto02.webp" class="foto-m" />
+    <img src="foto/foto03.webp" class="foto-m" />
+    <img src="foto/foto04.webp" class="foto-m" />
+    <img src="foto/foto05.webp" class="foto-m" />
+    <img src="foto/foto06.webp" class="foto-m" />
+    <img src="foto/foto07.webp" class="foto-m" />
+    <img src="foto/foto08.webp" class="foto-m" />
+    <img src="foto/foto09.webp" class="foto-m" />
+    <img src="foto/foto197.webp" class="foto-m" />
+    <img src="foto/foto217.webp" class="foto-m" />
+    <img src="foto/foto259.webp" class="foto-m" />
+    <img src="foto/foto302.webp" class="foto-m" />
+    <img src="foto/foto474.webp" class="foto-m" />
+    <img src="foto/foto510.webp" class="foto-m" />
+    <img src="foto/foto455.webp" class="foto-m" />
+    <img src="foto/foto70.webp" class="foto-m" />
+    <img src="foto/foto94.webp" class="foto-m" />
+    <img src="foto/foto104.webp" class="foto-m" />
+    <img src="foto/foto159.webp" class="foto-m" />
+    <img src="foto/foto277.webp" class="foto-m" />
+    <!-- Weitere Bilder -->
+</div>
+
+
+<script>
+    function isMobileOrTablet() {
+        return window.matchMedia('(max-width: 1024px)').matches;
+    }
+
+    function startImageRotation() {
+        let currentIndex = 0;
+        const images = document.querySelectorAll('.mobile-images .foto-m');
+        
+        if (images.length > 0) {
+            function changeImage() {
+                images.forEach(image => image.classList.remove('active'));
+                currentIndex = (currentIndex + 1) % images.length;
+                images[currentIndex].classList.add('active');
+            }
+
+            images[currentIndex].classList.add('active');
+            return setInterval(changeImage, 500);
+        }
+        return null;
+    }
+
+    let interval = null;
+
+    function handleResize() {
+        const images = document.querySelectorAll('.mobile-images .foto-m');
+        
+        if (isMobileOrTablet()) {
+            if (!interval) {
+                interval = startImageRotation();
+            }
+        } else {
+            if (interval) {
+                clearInterval(interval);
+                interval = null;
+            }
+            images.forEach(image => image.classList.remove('active'));
+        }
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+</script>
+</body>
+</html>
