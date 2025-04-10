@@ -3,10 +3,28 @@ import { error } from '@sveltejs/kit';
 
 export async function load() {
 	const works = await getWorks();
-	if (works) {
+	const tagMap = new Map();
+
+	works.forEach(work => {
+		work.tags?.forEach(tag => {
+			const key = tag.slug?.current || tag.title;
+			if (!tagMap.has(key)) {
+				tagMap.set(key, { ...tag, amount: 1 });
+			} else {
+				const existing = tagMap.get(key);
+				existing.amount += 1;
+				tagMap.set(key, existing);
+			}
+		});
+	});
+	
+	const tags = Array.from(tagMap.values());
+
+	if (works && tags) {
 		return {
-			works
+			works,
+			tags
 		};
 	}
-  throw error(404, 'Not found');
+	throw error(404, 'Not found');
 }

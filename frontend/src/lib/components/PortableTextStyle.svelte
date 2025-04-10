@@ -61,11 +61,9 @@ span:hover + .imgHover {
   color: var(--blue);
   text-decoration: underline;
 }
-a:hover {
-  text-decoration: none;
-}
 p {
   margin: 0;
+  padding-left: 1em;
 }
 :global(ul) {
   list-style-type: none;
@@ -77,12 +75,10 @@ li::before {
   width: 2em;
   margin-left: -2em;
 }
-h3 {
-  margin-top: .7em;
-  margin-bottom: .3em;
+p + p {
+  
 }
 h4 {
-  margin-top: 1.5em;
-  margin-bottom: .3em;
+  
 }
 </style>

@@ -18,5 +18,10 @@ export default {
         maxLength: 96,
       },
     },
+    {
+      name: 'colour',
+      type: 'color',
+      validation: (Rule) => Rule.required(),
+    }
   ],
 };

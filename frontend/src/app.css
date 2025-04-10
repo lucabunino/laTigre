@@ -35,6 +35,7 @@ body {
   --white: rgba(255, 255, 255, 1);
   color: var(--black);
   background-color: var(--white);
+  overflow-x: hidden;
 }
 body.dark {
   --white: rgba(0, 0, 0, 1);
@@ -80,8 +81,8 @@ a:any-link {
   cursor: pointer;
   text-decoration: none;
 }
-a:not(.project):not(.work):not(.work-list):hover {
-  opacity: .3;
+a:not(.menu-item>a):not(.project):not(.work):not(.work-list):hover {
+  color: #999;
 }
 a:-webkit-any-link.underline,
 a:any-link.underline,

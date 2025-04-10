@@ -1,6 +1,5 @@
 <script>
 let { data } = $props()
-$inspect(data)
 import { PortableText } from '@portabletext/svelte'
 import PortableTextStyle from '$lib/components/PortableTextStyle.svelte';
 </script>
@@ -27,7 +26,7 @@ components={{
 
 <style>
 section {
-  padding: calc(var(--gutter)*2 + 1.1em) var(--gutter) var(--gutter);
+  padding: calc(var(--gutter)*2 + 1em) var(--gutter) var(--gutter);
   overflow-y: scroll;
   height: 100%;
 }

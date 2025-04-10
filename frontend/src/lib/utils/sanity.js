@@ -68,7 +68,7 @@ export async function getProjects() {
 				_type,
 				title,
 				slug,
-				tags[]->{title}
+				tags[]->{title},
 			},
 		}
 		`
@@ -110,6 +110,9 @@ export async function getWorks() {
 					asset {
 						_ref, _id, _type
 					},
+					"info": asset->{
+						title, description, altText, metadata {dimensions}
+					},
 				},
 				asset {
 					_ref, _id, _type
@@ -118,7 +121,61 @@ export async function getWorks() {
 					title, description, altText, metadata {dimensions}
 				},
 			},
-			tags[]->{title}
+			tags[]->{title, slug, colour}
+		}
+		`
+	);
+}
+export async function getTags() {
+	return await client.fetch(
+		`
+		*[_type == "work" && !(_id in path('drafts.**'))]|order(orderRank) {
+			tags[]->{title, slug, colour}
+		}
+		`
+	);
+}
+export async function getWork(slug) {
+	return await client.fetch(
+		`
+		*[_type == "work" && slug.current == $slug] {
+			slug,
+			title,
+			description,
+			media[] {
+				mp4 {
+					asset-> {url}
+				},
+				cover {
+					asset {
+						_ref, _id, _type
+					},
+					"info": asset->{
+						title, description, altText, metadata {dimensions}
+					},
+				},
+				asset {
+					_ref, _id, _type
+				},
+				"info": asset->{
+					title, description, altText, metadata {dimensions}
+				},
+			},
+			tags[]->{title},
+			orderRank,
+			"prev": *[_type == "work" && orderRank < ^.orderRank] | order(orderRank desc)[0] { title, slug, media[] {type} },
+      "next": *[_type == "work" && orderRank > ^.orderRank] | order(orderRank asc)[0] { title, slug }
+		}
+		`, { slug });
+}
+export async function getIndexes() {
+	return await client.fetch(
+		`
+		*[_type == "work" && !(_id in path('drafts.**'))]|order(orderRank) {
+			slug,
+			media[] {
+				_key,
+			},
 		}
 		`
 	);
@@ -129,12 +186,17 @@ export async function getPersonals() {
 		*[_type == "personal" && !(_id in path('drafts.**'))]|order(orderRank) {
 			...,
 			media[] {
-				mp4 {
-					asset-> {url}
-				},
-				cover {
-					asset {
-						_ref, _id, _type
+				video {
+					mp4 {
+						asset-> {url}
+					},
+					cover {
+						asset {
+							_ref, _id, _type
+						},
+						"info": asset->{
+							title, description, altText, metadata {dimensions}
+						},
 					},
 				},
 				asset {
