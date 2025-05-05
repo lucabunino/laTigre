@@ -11,23 +11,30 @@ let totalMedia = data.works.reduce((sum, work) => sum + (work.media?.length || 0
 let remainingMedia = totalMedia;
 let domLoaded = $state(false);
 let tagHover = $state();
+let tagsHeight = $state();
+let activeColour = $state();
 
 $effect(() => {
   domLoaded = true;
 })
 
-function handleTagHover(slug) {
+function handleTagHover(slug, colour) {
+  activeColour = colour
   tagHover = slug
 }
 </script>
 
-<ul class="tags">
+<svelte:window on:wheel|nonpassive|preventDefault />
+
+<div onwheel={(e) => { e.stopPropagation()}}>
+<ul class="tags" bind:clientHeight={tagsHeight}>
   {#each data.tags as tag, i}
   {#if domLoaded}
     <li>
       <button
       style={`--tagColour: ${tag.colour.hex}`}
-      onmouseenter={() => {handleTagHover(tag.slug.current)}}
+      onmouseenter={() => {handleTagHover(tag.slug.current, tag.colour)}}
+      onmouseleave={() => {handleTagHover(null, null)}}
       in:listInOut|global={{ duration: 10, delay: 500+i*10}}
       out:listInOut|global={{ duration: 10, delay: i*10}}
       >{tag.title}<sup>{tag.amount}</sup></button>
@@ -35,7 +42,7 @@ function handleTagHover(slug) {
   {/if}
   {/each}
 </ul>
-<ul class="list">
+<ul class="list" style="padding-top: {tagsHeight}px; --activeColour: {activeColour ? activeColour.hex : ""}">
   {#each data.works as work, i}
     {@const localIndex = data.works.length - i}
     {#if domLoaded}
@@ -46,7 +53,7 @@ function handleTagHover(slug) {
       in:listInOut|global={{ duration: 10, delay: 500+i*10}}
       out:listInOut|global={{ duration: 10, delay: i*10}}
       href="/archive/{work.slug.current}"
-      onclick={(e) => toggler.toggleSingle(e, work.slug.current)} data-sveltekit-preload-data
+      onclick={(e) => toggler.toggleWork(e, work.slug.current)} data-sveltekit-preload-data
       style={work.tags ? `--listColour: ${work.tags[0].colour.hex};` : `--listColour: #999;`}
       >
         <h2>{work.title}</h2>
@@ -75,6 +82,7 @@ function handleTagHover(slug) {
     {/if}
   {/each}
 </ul>
+</div>
 
 <style>
 .tags {
@@ -82,6 +90,8 @@ function handleTagHover(slug) {
   display: flex;
   column-gap: .2em;
   flex-wrap: wrap;
+  z-index: 2;
+  position: relative;
 }
 .tags sup {
   font-size: .5em;
@@ -93,6 +103,9 @@ function handleTagHover(slug) {
   padding: 0 var(--gutter) var(--gutter);
   overflow-y: scroll;
   height: 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
 }
 a {
   display: flex;
@@ -100,8 +113,13 @@ a {
   width: -webkit-fill-available;
   gap: var(--gutter);
 }
-a:hover, a.active {
+a:hover {
   color: var(--listColour);
+  transition-property: opacity;
+  transition-delay: 0s;
+}
+a.active {
+  color: var(--activeColour);
   transition-property: opacity;
   transition-delay: 0s;
 }

@@ -168,7 +168,7 @@ export async function getWork(slug) {
 		}
 		`, { slug });
 }
-export async function getIndexes() {
+export async function getWorkIndexes() {
 	return await client.fetch(
 		`
 		*[_type == "work" && !(_id in path('drafts.**'))]|order(orderRank) {
@@ -207,6 +207,52 @@ export async function getPersonals() {
 				},
 			},
 			tags[]->{title}
+		}
+		`
+	);
+}
+export async function getPersonal(slug) {
+	return await client.fetch(
+		`
+		*[_type == "personal" && slug.current == $slug] {
+			slug,
+			title,
+			description,
+			media[] {
+				mp4 {
+					asset-> {url}
+				},
+				cover {
+					asset {
+						_ref, _id, _type
+					},
+					"info": asset->{
+						title, description, altText, metadata {dimensions}
+					},
+				},
+				asset {
+					_ref, _id, _type
+				},
+				"info": asset->{
+					title, description, altText, metadata {dimensions}
+				},
+			},
+			tags[]->{title},
+			moreInfo,
+			orderRank,
+			"prev": *[_type == "personal" && orderRank < ^.orderRank] | order(orderRank desc)[0] { title, slug, media[] {type} },
+      "next": *[_type == "personal" && orderRank > ^.orderRank] | order(orderRank asc)[0] { title, slug }
+		}
+		`, { slug });
+}
+export async function getPersonalIndexes() {
+	return await client.fetch(
+		`
+		*[_type == "personal" && !(_id in path('drafts.**'))]|order(orderRank) {
+			slug,
+			media[] {
+				_key,
+			},
 		}
 		`
 	);

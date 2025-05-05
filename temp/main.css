@@ -69,6 +69,20 @@ p {
     text-align: center;
     width: 100%;
     opacity: 1;
+    z-index: 1000; 
+}
+
+a {
+    color: inherit; /* übernimmt die Textfarbe vom Elternelement */
+    text-decoration: underline; /* unterstreicht den Link */
+}
+
+a:visited {
+    color: inherit; /* auch besuchte Links sollen die gleiche Farbe behalten */
+}
+
+a:hover {
+    color: gray; /* oder z.B. black, #333, etc. */
 }
 
 /* Mobile Ansicht (Bilder ausblenden) */

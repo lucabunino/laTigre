@@ -50,6 +50,8 @@ if (swiperEl && swiperEl.swiper && typeof slider.slide === 'number') {
 })
 </script>
 
+<svelte:window on:wheel|nonpassive|preventDefault />
+
 <swiper-container
 class={data.work[0].slug.current}
 init="false"
@@ -80,7 +82,7 @@ onmouseover={() => ctaer.setCta("Previous")}></button>
 class="swiper-single-button swiper-single-button-next"
 onmouseover={() => ctaer.setCta("Next")}></button>
 
-{#if data.work[0].prev && slider.slide == 0}
+<!-- {#if data.work[0].prev && slider.slide == 0}
   <a
   class="project-link project-link-prev"
   href="/archive/{data.work[0].prev.slug.current}"
@@ -95,6 +97,23 @@ onmouseover={() => ctaer.setCta("Next")}></button>
   data-sveltekit-preload-data="false"
   onclick={(e) => {toggler.changeSingle(e, data.work[0].next.slug.current, 0)}}
   onmouseover={() => ctaer.setCta("Go to: " + data.work[0].next.title)}></a>
+{/if} -->
+
+{#if data.work[0].prev && slider.slide == 0}
+  <a
+  class="project-link project-link-prev"
+  href="/archive/{data.work[0].prev.slug.current}"
+  data-sveltekit-preload-data="false"
+  onclick={(e) => {toggler.changeWork(e, data.work[0].prev.slug.current, data.work[0].prev.media?.length > 1 ? data.work[0].prev.media?.length : 0)}}
+  onmouseover={() => ctaer.setCta("Prev")}></a>
+{/if}
+{#if data.work[0].next && slider.slide == data.work[0].media?.length-1}
+  <a
+  class="project-link project-link-next"
+  href="/archive/{data.work[0].next.slug.current}"
+  data-sveltekit-preload-data="false"
+  onclick={(e) => {toggler.changeWork(e, data.work[0].next.slug.current, 0)}}
+  onmouseover={() => ctaer.setCta("Next")}></a>
 {/if}
 
 <style>

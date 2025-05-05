@@ -4,9 +4,9 @@ let { data } = $props();
 $inspect(data)
 
 // Imports
-import SwiperSingle from "$lib/components/SwiperSingle.svelte"
+import SwiperWork from "$lib/components/SwiperWork.svelte"
 </script>
 
 {#key data.work[0].title}
-  <SwiperSingle data={data}/>
+  <SwiperWork data={data}/>
 {/key}

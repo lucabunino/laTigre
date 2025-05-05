@@ -9,7 +9,8 @@ import { page } from '$app/stores';
 import { preloadData, pushState, goto } from '$app/navigation';
 import { tick } from 'svelte';
 import List from './archive/list/+page.svelte';
-import Single from './archive/[slug]/+page.svelte';
+import Work from './archive/[slug]/+page.svelte';
+import Personal from './personal/[slug]/+page.svelte';
 import Studio from './studio/+page.svelte';
 import Modal from '$lib/components/Modal.svelte';
 import { urlFor } from '$lib/utils/image';
@@ -26,8 +27,8 @@ let mouse = $state([])
 let domLoaded = $state(false)
 let innerWidth = $state(0)
 let innerHeight = $state(0)
-let modalWidth = $derived($page.state.listData ? "50%" : $page.state.studioData ? "75%" : $page.state.singleData ? "100%" : "auto")
-let closeWidth = $derived($page.state.listData ? "50%" : $page.state.studioData ? "25%" : $page.state.singleData ? "0%" : "auto")
+let modalWidth = $derived(innerWidth <= 700 ? "100%" : $page.state.listData ? "50%" : $page.state.studioData ? "75%" : $page.state.workData ? "100%" : $page.state.personalData ? "100%" : "auto")
+let closeWidth = $derived(innerWidth <= 700 ? "0%" : $page.state.listData ? "50%" : $page.state.studioData ? "25%" : $page.state.workData ? "0%" : $page.state.personalData ? "0%" : "auto")
 
 // Functions
 function handleMousemove(event) {
@@ -36,12 +37,7 @@ function handleMousemove(event) {
 }
 
 // Lifecycle
-$effect.pre(async () => {
-  if (!toggler.firstLoaded) {
-    await toggler.setFirstLoaded(); 
-  }
-  console.log(toggler.firstLoaded);
-  
+$effect.pre(async () => {  
   if (data.pathname === '/archive/list') {
     console.log("redirect list");
     await goto('/archive');
@@ -57,11 +53,18 @@ $effect.pre(async () => {
     toggler.toggleStudio();
   } else if (data.pathname.includes('/archive/')) {
     let slug = data.pathname
-    console.log("redirect single");
+    console.log("redirect work");
     await goto('/');
     domLoaded = true;
     await tick();
-    toggler.toggleSingle(null, slug);
+    toggler.toggleWork(null, slug);
+  } else if (data.pathname.includes('/personal/')) {
+    let slug = data.pathname
+    console.log("redirect work");
+    await goto('/');
+    domLoaded = true;
+    await tick();
+    toggler.togglePersonal(null, slug);
   } else {
     domLoaded = true;
   }
@@ -100,10 +103,9 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
 </svelte:head>
 
 <!-- svelte-ignore a11y_consider_explicit_label -->
-<!-- <p style="position: fixed; bottom:2em; left:0; z-index:99; background-color:#FFF;">Path: {$page.url.pathname} | Studio: {toggler.studio} | List: {toggler.list} | Single: {toggler.single}</p> -->
 <header>
     <nav>
-    {#if !toggler.single}
+    {#if !toggler.work && !toggler.personal}
       <ul class="menu difference"
       in:headerInOut|global={{ duration: 250, delay: 0 }}
       out:headerInOut|global={{ duration: 250, delay: 0 }}
@@ -130,7 +132,7 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
           onmouseenter={() => ctaer.setCta("")}
           onclick={(e) => {toggler.toggleList(e)}} data-sveltekit-preload-data
           class:crossed={toggler.list}
-          class:off={$page.url.pathname !== "/archive" || toggler.studio || toggler.single }
+          class:off={$page.url.pathname !== "/archive" || toggler.studio || toggler.work || toggler.personal }
           >
             <div style="position: relative; height:100%;">
               <div class="line"></div>
@@ -197,8 +199,8 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
 {/key}
 {/if}
 
-{#if domLoaded && toggler.single && $page.state.singleData}
-{#key $page.state.singleData}
+{#if domLoaded && toggler.work && $page.state.workData}
+{#key $page.state.workData}
   <div class="background"
   in:backgroundInOut|global={{ duration: 250, delay: 0 }}
   out:backgroundInOut|global={{ duration: 250, delay: 750 }}
@@ -208,7 +210,7 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
     out:singleOut|global={{ duration: 500, delay: 500, fromRight: true}}
     >
       <Modal onclose={() => history.back()} width={modalWidth} bgWhite={false}>
-        <Single data={$page.state.singleData}/>
+        <Work data={$page.state.workData}/>
       </Modal>
     </div>
   </div>
@@ -217,23 +219,23 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
   out:headerInOut|global={{ duration: 250, delay: 0 }}
   >
     <div>
-      <h1>{$page.state.singleData.work[0].title}</h1>
-      {#if $page.state.singleData.work[0].description}
-        <p>{$page.state.singleData.work[0].description}</p>
+      <h1>{$page.state.workData.work[0].title}</h1>
+      {#if $page.state.workData.work[0].description}
+        <p>{$page.state.workData.work[0].description}</p>
       {/if}
-      {#if $page.state.singleData.indexedMedia}
+      {#if $page.state.workData.indexedMedia}
       <div class="single-project-indexes">
-        {#each $page.state.singleData.indexedMedia as index, i}
+        {#each $page.state.workData.indexedMedia as index, i}
           <button data-index={i} class:active={slider.slide === i} onclick={(e) => {slider.setSlide(i)}}>{index._mediaIndex}</button>
         {/each}
       </div>
       {/if}
     </div>
     <div>
-      {#if $page.state.singleData.work[0].tags}
+      {#if $page.state.workData.work[0].tags}
         <p>
-          {#each $page.state.singleData.work[0].tags as tag, i}
-            {tag.title}{#if i+1 < $page.state.singleData.work[0].tags.length}{@html ", "}{/if}
+          {#each $page.state.workData.work[0].tags as tag, i}
+            {tag.title}{#if i+1 < $page.state.workData.work[0].tags.length}{@html ", "}{/if}
           {/each}
         </p>
       {:else}
@@ -244,7 +246,57 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
 {/key}
 {/if}
 
-<p id="cta" class="difference"
+{#if domLoaded && toggler.personal && $page.state.personalData}
+{#key $page.state.personalData}
+  <div class="background"
+  in:backgroundInOut|global={{ duration: 250, delay: 0 }}
+  out:backgroundInOut|global={{ duration: 250, delay: 750 }}
+  >
+    <div
+    in:singleIn|global={{ duration: 500, delay: 0, fromRight: true }}
+    out:singleOut|global={{ duration: 500, delay: 500, fromRight: true}}
+    >
+      <Modal onclose={() => history.back()} width={modalWidth} bgWhite={false}>
+        <Personal data={$page.state.personalData}/>
+      </Modal>
+    </div>
+  </div>
+  <div class="single-project-info difference"
+  in:headerInOut|global={{ duration: 250, delay: 0 }}
+  out:headerInOut|global={{ duration: 250, delay: 0 }}
+  >
+    <div>
+      <h1>{$page.state.personalData.personal[0].title}</h1>
+      {#if $page.state.personalData.personal[0].description}
+        <p>{$page.state.personalData.personal[0].description}</p>
+      {/if}
+      {#if $page.state.personalData.indexedMedia}
+      <div class="single-project-indexes">
+        {#each $page.state.personalData.indexedMedia as index, i}
+          <button data-index={i} class:active={slider.slide === i} onclick={(e) => {slider.setSlide(i)}}>{index._mediaIndex}</button>
+        {/each}
+      </div>
+      {/if}
+    </div>
+    <div>
+      {#if $page.state.personalData.personal[0].moreInfo}
+        <p>{$page.state.personalData.personal[0].moreInfo}</p>
+      {/if}
+      {#if $page.state.personalData.personal[0].tags}
+        <p>
+          {#each $page.state.personalData.personal[0].tags as tag, i}
+            {tag.title}{#if i+1 < $page.state.personalData.personal[0].tags.length}{@html ", "}{/if}
+          {/each}
+        </p>
+      {:else}
+        <p>Missing tag</p>
+      {/if}
+    </div>  
+  </div>
+{/key}
+{/if}
+
+<p id="cta" class="difference desktop-only"
 style={ctaer.cta === "" ? `-webkit-transform: translateX(${(mouse.x / innerWidth)*-100}%);-ms-transform: translateX(${(mouse.x / innerWidth)*-100}%);transform: translateX(${(mouse.x / innerWidth)*-100}%);left: ${mouse.x}px;top: ${mouse.y}px;` : `-webkit-transform: translateX(${(mouse.x / innerWidth)*-100}%);-ms-transform: translateX(${(mouse.x / innerWidth)*-100}%);transform: translateX(${(mouse.x / innerWidth)*-100}%);left: ${mouse.x}px;top: ${mouse.y}px;`}
 class:visible={mouse.x}
 >{ctaer.cta}</p>
@@ -308,6 +360,14 @@ class:visible={mouse.x}
   transform: rotate(-20deg);
   top: 50%;
 }
+@media screen and (max-width: 380px) {
+  .menu {
+    flex-wrap: wrap;
+  }
+  .menu-item {
+    width: 50%;
+  }
+}
 
 /* Modals */
 .background {
@@ -329,7 +389,7 @@ class:visible={mouse.x}
 }
 #cta {
   z-index: 2;
-  position: absolute;
+  position: fixed;
   top: 50%;
   pointer-events: none;
   margin: 1em;
@@ -340,7 +400,7 @@ class:visible={mouse.x}
   visibility: visible;
 }
 .single-project-info {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 2;
@@ -382,8 +442,6 @@ footer div {
   grid-auto-flow: column;
   column-gap: var(--gutter);
 }
-
-
 @media screen and (max-width: 900px) {
   footer {
     flex-direction: column;
@@ -398,4 +456,5 @@ footer div {
     margin-bottom: 1.5em;
   }
 }
+
 </style>

@@ -71,21 +71,29 @@ export default {
     {
       name: 'description',
       type: 'text',
-      rows: 2,
+      rows: 4,
     },
     {
       name: 'moreInfo',
       type: 'text',
     },
     {
-      name: 'price',
-      title: 'Price (€)',
-      type: 'number',
-      validation: Rule => Rule.precision(2).positive(),
+      name: 'priceInfo',
+      type: 'string',
+    },
+    {
+      name: 'showShipping',
+      type: 'boolean',
+      initialValue: true,
     },
     {
       name: 'payPalUrl',
       type: 'url',
+    },
+    {
+      name: 'linkPayPalUrl',
+      type: 'boolean',
+      initialValue: true,
     },
   ],
   preview: {

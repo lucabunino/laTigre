@@ -26,7 +26,7 @@
     {@render children()}
   </a>
 {:else if style === 'normal' && !listItem}
-  <p class="portableText">{@render children()}</p>
+  <p class="paragraph">{@render children()}</p>
 {:else if style=== 'h3'}
   <h3 class="text-m">{@render children()}</h3>
 {:else if style=== 'h4'}
@@ -61,9 +61,12 @@ span:hover + .imgHover {
   color: var(--blue);
   text-decoration: underline;
 }
-p {
+.paragraph {
   margin: 0;
   padding-left: 1em;
+}
+:global(.paragraph:has(+ .paragraph)) {
+  margin-bottom: .8em;
 }
 :global(ul) {
   list-style-type: none;
@@ -74,9 +77,6 @@ li::before {
   content: "— ";
   width: 2em;
   margin-left: -2em;
-}
-p + p {
-  
 }
 h4 {
   

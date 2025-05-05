@@ -1,6 +1,9 @@
 <script>
-  let { data } = $props()
   import { urlFor } from "$lib/utils/image";
+  import { getToggles  } from '$lib/stores/toggle.svelte.js';
+  let toggler = getToggles()
+
+  let { data } = $props()
 
   let cols = 4;
   let totalItems = data.personals.length;
@@ -46,10 +49,22 @@
                   {#if personal.description}<p>{personal.description}</p>{/if}
                 </div>
                 <div class="personal-cta">
-                  {#if personal.price && personal.payPalUrl}
-                    <p><a class="buy-btn" href={personal.payPalUrl} target="_blank" rel="noopener noreferrer">Buy €{personal.price}</a> + shipping</p>
+                  {#if personal.priceInfo}
+                  <p>
+                    {#if personal.linkPayPalUrl && personal.payPalUrl}
+                      <a class="buy-btn" href={personal.payPalUrl} target="_blank" rel="noopener noreferrer">{personal.priceInfo}</a>
+                    {:else}
+                      <p class="buy-btn">{personal.priceInfo}</p>
+                    {/if}
+                    {#if personal.showShipping}
+                      <span>+ shipping</span>
+                    {/if}
+                  </p>
                   {/if}
-                  <a href="/personal/{personal.slug.current}">More info</a>
+                  <a
+                  href="/personal/{personal.slug.current}"
+                  onclick={(e) => toggler.togglePersonal(e, personal.slug.current)} data-sveltekit-preload-data
+                  >More info</a>
                 </div>
               </div>
             </div>

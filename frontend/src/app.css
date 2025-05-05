@@ -25,7 +25,7 @@ html {
   font-weight: 400;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
-  font-size: clamp(18.5px, 1.953125vw, 30px);
+  font-size: clamp(18.5px, 1.953125vw, 24px);
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: 0;
@@ -89,11 +89,6 @@ a:any-link.underline,
 .underline {
   text-decoration: underline;
 }
-.folio-25 {
-  font-size: 1rem;
-  letter-spacing: 0;
-  line-height: 1.1;
-}
 .folio-14 {
   font-size: .56rem;
   letter-spacing: 0;
@@ -115,24 +110,22 @@ a:any-link.underline,
   color: var(--white);
   mix-blend-mode: difference;
 }
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 700px) {
   :root {
-    --gutter: 1.285rem;
-    --margin: 1rem;
+    --gutter: .540rem;
   }
   html {
     line-height: 1.2;
-  }
-  .swiss-28 {
-    font-size: 1.285rem;
-  }
-  .swiss-12 {
-    font-size: 0.714rem;
   }
   .mobile-only {
     display: unset;
   }
   .desktop-only {
     display: none !important;
+  }
+}
+@media screen and (max-width: 380px) {
+  html {
+    font-size: clamp(14px, 5.138vw, 18.5px);
   }
 }

@@ -1,23 +1,22 @@
 import { preloadData, pushState, goto, replaceState } from '$app/navigation';
 import { getSlide  } from '$lib/stores/slide.svelte.js';
 let slider = getSlide()
+import { getCta  } from '$lib/stores/cta.svelte.js';
+let ctaer = getCta()
 
 let list = $state(false);
 let studio = $state(false);
-let single = $state(false);
-let firstLoaded = $state(false)
+let work = $state(false);
+let personal = $state(false);
 
-export function getToggles() {
-
-  async function setFirstLoaded() {
-		firstLoaded = true
-	}
-	
+export function getToggles() {	
 	async function toggleList(e) {
+    ctaer.setCta("")
 		if (!list) {
-      single = false
       list = true
       studio = false
+      work = false
+      personal = false
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -38,10 +37,12 @@ export function getToggles() {
 	}
 
   async function toggleStudio(e) {
+    ctaer.setCta("")
     if (!studio) {
-      single = false
       list = false
       studio = true
+      work = false
+      personal = false
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -61,11 +62,13 @@ export function getToggles() {
     }
   }
 
-  async function toggleSingle(e, slug) {
-    if (!single) {
-      single = true
+  async function toggleWork(e, slug) {
+    ctaer.setCta("")
+    if (!work) {
       list = false
       studio = false
+      work = true
+      personal = false
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -76,7 +79,7 @@ export function getToggles() {
       }
       const result = await preloadData(href);
       if (result.type === 'loaded' && result.status === 200) {
-        pushState(href, { singleData: result.data });
+        pushState(href, { workData: result.data });
       } else {
         goto(href);
       } 
@@ -85,9 +88,9 @@ export function getToggles() {
     }
   }
 
-  async function changeSingle(e, slug, index) {
+  async function changeWork(e, slug, index) {
     e.preventDefault();
-    if (single) {
+    if (work) {
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -98,7 +101,56 @@ export function getToggles() {
       }
       const result = await preloadData(href);
       if (result.type === 'loaded' && result.status === 200) {
-        replaceState(href, { singleData: result.data });
+        replaceState(href, { workData: result.data });
+      } else {
+        goto(href);
+      }
+    }
+    setTimeout(() => {
+      slider.setSlide(index)
+    }, 100);
+  }
+
+  async function togglePersonal(e, slug) {
+    ctaer.setCta("")
+    if (!personal) {
+      list = false
+      studio = false
+      work = false
+      personal = true
+      let href;
+      if (e) {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+        href = e.currentTarget;
+      } else {
+        href = slug
+      }
+      const result = await preloadData(href);
+      if (result.type === 'loaded' && result.status === 200) {
+        pushState(href, { personalData: result.data });
+      } else {
+        goto(href);
+      } 
+    } else {
+      closeModal(true, e)
+    }
+  }
+
+  async function changePersonal(e, slug, index) {
+    e.preventDefault();
+    if (personal) {
+      let href;
+      if (e) {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+        href = e.currentTarget;
+      } else {
+        href = slug
+      }
+      const result = await preloadData(href);
+      if (result.type === 'loaded' && result.status === 200) {
+        replaceState(href, { personalData: result.data });
       } else {
         goto(href);
       }
@@ -109,12 +161,14 @@ export function getToggles() {
   }
 
   async function closeModal(back, e) {
+    ctaer.setCta("")
     if (e) {
       e.preventDefault()
     }
-    single = false
     list = false
     studio = false
+    work = false
+    personal = false
     if (back) {
       console.log("backedHistory");
       history.back()
@@ -122,8 +176,6 @@ export function getToggles() {
   }
 
 	return {
-    setFirstLoaded,
-    closeModal,
 		get list() {
 			return list;
 		},
@@ -132,10 +184,16 @@ export function getToggles() {
 			return studio;
 		},
 		toggleStudio,
-		get single() {
-			return single;
+		get work() {
+			return work;
 		},
-		toggleSingle,
-    changeSingle,
+		toggleWork,
+    changeWork,
+    get personal() {
+			return personal;
+		},
+		togglePersonal,
+    changePersonal,
+    closeModal,
 	};
 }

@@ -1,10 +1,10 @@
 import { getWork } from '$lib/utils/sanity';
-import { getIndexes } from '$lib/utils/sanity';
+import { getWorkIndexes } from '$lib/utils/sanity';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {
   const work = await getWork(params.slug);
-  const indexes = await getIndexes();
+  const indexes = await getWorkIndexes();
 
   // This array will store all media from matching slugs, with their index
   var indexedMedia = [];

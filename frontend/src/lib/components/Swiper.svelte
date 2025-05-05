@@ -14,12 +14,13 @@ let currentProject = $state(data.projects[0]);
 
 // Lifecycle
 $effect(() => {
-const swiperEl = document.querySelector('swiper-container');
+const swiperEl = document.querySelector('.swiper');
 const swiperParams = {
   slidesPerView: "auto",
+  spaceBetween: 0,
   centeredSlides: false,
   loop: data.projects.length > 5 ? true : false,
-  loopAddBlankSlides: true,
+  normalizeSlideIndex: false,
   mousewheel: {
     forceToAxis: false,
   },
@@ -31,7 +32,6 @@ const swiperParams = {
   freeMode: false,
   keyboard: true,
   direction: "horizontal",
-  hashNavigation: true,
   breakpoints: {
     600: {
       mousewheel: {
@@ -45,35 +45,36 @@ const swiperParams = {
 Object.assign(swiperEl, swiperParams);
 swiperEl.initialize();
 })
+
 const onRealIndexChange = (e) => {
   const [swiper] = e.detail;
   currentProject = data.projects[swiper.realIndex]
 };
-</script>
+</script>   
 
 <swiper-container
+class="swiper"
 init="false"
 onswiperrealindexchange={onRealIndexChange}
 >
   {#each data.projects as project, i}
-    <swiper-slide style={i === data.projects.length - 1 && data.projects.length <= 5 ? "width: 100%" : "width: fit-content"}>
+    <swiper-slide style={i === data.projects.length - 1 && data.projects.length <= 5 ? "width: 100%" : ""}>
       <a class="project"
       onmouseover={() => ctaer.setCta("View")}
-      onclick={(e) => toggler.toggleSingle(e, project.reference.slug.current)} data-sveltekit-preload-data
+      onclick={(e) => toggler.toggleWork(e, project.reference.slug.current)} data-sveltekit-preload-data
       href="{project.reference._type === "/personal" ? "/personal" : "/archive"}/{project.reference.slug.current}"
       >
       {#if project.desktop}
         <img class="media"
         src={urlFor(project.desktop.asset).height(2200)}
-        width={project.desktop.info.metadata.dimensions.width}
-        height={project.desktop.info.metadata.dimensions.height}
-        alt={project.desktop.info.altText}>
+        alt={project.desktop.info.altText}
+        width={innerHeight*project.desktop.info.metadata.dimensions.width/project.desktop.info.metadata.dimensions.height}
+        height={innerHeight}
+        >
       {:else if project.video}
         <video class="media" muted loop autoplay playsinline
         src={project.video.mp4.asset.url}
         placeholder={project.video.cover ? urlFor(project.video.cover.asset).height(2200) : ""}
-        width={innerWidth}
-        height={innerHeight}
         ></video>
       {/if}
       </a>
@@ -99,6 +100,8 @@ swiper-container::part(wrapper) {
 }
 swiper-slide {
   overflow: hidden;
+  display: block;
+  width: auto;
 }
 .swiper-button {
   background: transparent;
@@ -122,6 +125,7 @@ swiper-slide {
   width: auto;
   max-width: 100vw;
   object-fit: cover;
+  display: block;
 }
 .project-info {
   position: absolute;

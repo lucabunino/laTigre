@@ -11,16 +11,25 @@ let toggler = getToggles()
 let totalmedia = data.works.reduce((sum, work) => sum + (work.media?.length || 0), 0);
 let remainingmedia = totalmedia+1;
 let index = 1;
-let cols = 8
+let cols = 8;
 let domLoaded = $state(false);
-let innerWidth = $state(0)
-let innerHeight = $state(0)
+let innerWidth = $state(0);
+let innerHeight = $state(0);
+let activeWork = $state(null);
 let desktopColours = data.colours.desktop
 let mobileColours = data.colours.mobile
 
 // Functions
 function handleMouseover(e) {
   e.target.classList.toggle("on")
+}
+function handleTap(e, workSlug) {
+  e.preventDefault()
+  if (activeWork !== workSlug) {
+    activeWork = workSlug; 
+  } else {
+    activeWork = null
+  }
 }
 
 // Lifecycle
@@ -42,8 +51,16 @@ $effect(() => {
       <a class="work"
       href="/archive/{work.slug.current}"
       data-index={localIndex}
-      onmouseenter={(e) => handleMouseover(e)}
-      onclick={(e) => toggler.toggleSingle(e, work.slug.current)} data-sveltekit-preload-data
+      data-work={work.slug.current}
+      onmouseenter={(e) => {if (innerWidth > 700) {
+        handleMouseover(e)}
+      }}
+      onclick={(e) => {if (innerWidth > 700) {
+        toggler.toggleWork(e, work.slug.current)
+      } else {
+        handleTap(e, work.slug.current)        
+      }}} data-sveltekit-preload-data
+      class:active={activeWork === work.slug.current}
       class:loading={!domLoaded}
       class:on={(row % 2 === 0 && col % 2 !== 0) || (row % 2 !== 0 && col % 2 === 0)}
       style="--desktopColour: {desktopColours[localIndex % desktopColours.length].hex}; --mobileColour: {mobileColours[localIndex % mobileColours.length].hex}"
@@ -120,7 +137,41 @@ section {
   display: none;
   width: 100%;
 }
-.work:hover .work-info {
-  display: block;
+@media screen and (min-width: 701px) {
+  .work:hover .work-info {
+    display: block;
+  }
+}
+@media screen and (max-width: 700px) {
+  section {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .work, .work.on {
+    background-color: var(--mobileColour);
+  }
+  .work.on:not(.loading) .media, .work:not(.loading) .media {
+    opacity: 1;
+  }
+  .work.active {
+    background-color: var(--white);
+  }
+  .work.active .media {
+    opacity: 0 !important;
+  }
+  .index, .work-info {
+    display: none;
+  }
+  .work.active .index {
+    display: block;
+  }
+  .work.active .work-info {
+    display: block;
+  }
+  .work.active ~ .work.active .work-info {
+    display: none;
+  }
+  .work.active:first-of-type .work-info {
+    display: block;
+  }
 }
 </style>
