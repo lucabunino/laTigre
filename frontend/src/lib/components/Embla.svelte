@@ -47,9 +47,7 @@
         <div class="embla__slide">
           <a
             class="project no-cursor"
-            onmouseover={() => ctaer.setCta('View')}
-            onfocus={() => ctaer.setCta("View")}
-            aria-label="View"
+            onmouseover={() => ctaer.setCta('View')} onfocus={() => ctaer.setCta("View")} aria-label="View"
             onclick={(e) => {project.reference._type === 'good' ? toggler.toggleGood(e, project.reference.slug.current, true) : toggler.toggleWork(e, project.reference.slug.current, true)}}
             data-sveltekit-preload-data
             href="{project.reference._type === 'good' ? '/goods' : '/archive'}/{project.reference.slug.current}"
@@ -83,26 +81,19 @@
   <button
     class="embla__button embla__prev no-cursor"
     onclick={scrollPrev}
-    onmouseover={() => ctaer.setCta('Previous')}
-    onfocus={() => ctaer.setCta("Previous")}
-    aria-label="Previous"
+    onmouseover={() => ctaer.setCta('Previous')} onfocus={() => ctaer.setCta("Previous")} aria-label="Previous"
   ></button>
   <button
     class="embla__button embla__next no-cursor"
     onclick={scrollNext}
-    onmouseover={() => ctaer.setCta('Next')}
-    onfocus={() => ctaer.setCta("Next")}
-    aria-label="Next"
+    onmouseover={() => ctaer.setCta('Next')} onfocus={() => ctaer.setCta("Next")} aria-label="Next"
   ></button>
 </div>
 
 <!-- Project Info -->
 <div class="project-info difference"
-onmouseover={() => ctaer.setCta("")}
-onfocus={() => ctaer.setCta("")}
-aria-label="Project info"
-role="button"
-tabindex="0"
+onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")} aria-label="Project info"
+role="button" tabindex="0"
 >
   <h2>{currentProject.reference.title}</h2>
   {#if currentProject.reference.description}

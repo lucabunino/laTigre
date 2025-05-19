@@ -9,7 +9,7 @@
   }
 
   let { portableText, children }: Props = $props();
-  let {value} = $derived(portableText)
+  let {global, value} = $derived(portableText)
   let {style, listItem, markDefs} = $derived(value);
 
   let imgEl = $state()

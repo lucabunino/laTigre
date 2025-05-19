@@ -80,15 +80,12 @@ onswiperrealindexchange={onRealIndexChange}
 
 <button
 class="swiper-single-button swiper-single-button-prev no-cursor"
-onmouseover={() => ctaer.setCta("Previous")}
-onfocus={() => ctaer.setCta("Previous")}
+onmouseover={() => ctaer.setCta("Previous")} onfocus={() => ctaer.setCta("Previous")}
 aria-label="Previous"
 ></button>
 <button
 class="swiper-single-button swiper-single-button-next no-cursor"
-onmouseover={() => ctaer.setCta("Next")}
-onfocus={() => ctaer.setCta("Next")}
-aria-label="Next"
+onmouseover={() => ctaer.setCta("Next")} onfocus={() => ctaer.setCta("Next")} aria-label="Next"
 ></button>
 
 
@@ -96,10 +93,8 @@ aria-label="Next"
   <button
   class="project-link project-link-prev no-cursor"
   onclick={(e) => {toggler.closeModal(true, false, e); slider.setSlide(0)}}
-  onmouseover={() => ctaer.setCta("Close")}
-  onfocus={() => ctaer.setCta("Close")}
+  onmouseover={() => ctaer.setCta("Close")} onfocus={() => ctaer.setCta("Close")} aria-label="Close"
   onmouseleave={() => ctaer.setCta("")}
-  aria-label="Close"
   ></button>
 {:else if domLoaded && data.work[0].prev && slider.slide == 0}
   <a
@@ -107,18 +102,14 @@ aria-label="Next"
   href="/archive/{data.work[0].prev.slug.current}"
   data-sveltekit-preload-data="false"
   onclick={(e) => {toggler.changeWork(e, data.work[0].prev.slug.current, data.work[0].prev.media?.length > 1 ? data.work[0].prev.media?.length : 0)}}
-  onmouseover={() => ctaer.setCta("Previous project")}
-  onfocus={() => ctaer.setCta("Previous project")}
-  aria-label="Previous project"
+  onmouseover={() => ctaer.setCta("Previous project")} onfocus={() => ctaer.setCta("Previous project")} aria-label="Previous project"
   ></a>
 {/if}
 {#if domLoaded && !data.work[0].next && slider.slide == data.work[0].media?.length-1 || slider.slide == data.work[0].media?.length-1 && toggler.last == "home"}
   <button
   class="project-link project-link-next no-cursor"
   onclick={(e) => {toggler.closeModal(true, false, e); slider.setSlide(0)}}
-  onmouseover={() => ctaer.setCta("Close")}
-  onfocus={() => ctaer.setCta("Close")}
-  onmouseleave={() => ctaer.setCta("")}
+  onmouseover={() => ctaer.setCta("Close")} onfocus={() => ctaer.setCta("Close")} onmouseleave={() => ctaer.setCta("")}
   aria-label="Close"
   ></button>
 {:else if domLoaded && data.work[0].next && slider.slide == data.work[0].media?.length-1}
@@ -127,9 +118,7 @@ aria-label="Next"
   href="/archive/{data.work[0].next.slug.current}"
   data-sveltekit-preload-data="false"
   onclick={(e) => {toggler.changeWork(e, data.work[0].next.slug.current, 0)}}
-  onmouseover={() => ctaer.setCta("Next project")}
-  onfocus={() => ctaer.setCta("Next project")}
-  aria-label="Next project"
+  onmouseover={() => ctaer.setCta("Next project")} onfocus={() => ctaer.setCta("Next project")} aria-label="Next project"
   ></a>
 {/if}
 

@@ -108,9 +108,6 @@ a:any-link.underline,
 .mobile-only {
   display: none;
 }
-.desktop-only {
-  /* display: unset; */
-}
 .difference {
   color: var(--white);
   mix-blend-mode: difference;

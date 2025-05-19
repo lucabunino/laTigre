@@ -10,7 +10,7 @@ let totalItems = data.goods.length;
 let totalSlots = totalItems * 2;
 let rows = Math.ceil(totalSlots / cols);
 
-let index = 0;
+var index = 0;
 let domLoaded = $state(false);
 
 let activeGoods = $state([])
