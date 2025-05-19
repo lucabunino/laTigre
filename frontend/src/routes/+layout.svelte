@@ -179,8 +179,8 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
       </Modal>
     </div>
     <div style="width: {closeWidth}"
-    onclick={(e) => {toggler.closeModal(true, false)}}
-    onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggler.closeModal(true, false)} role="button" tabindex=0
+    onclick={(e) => {toggler.toggleList(e)}}
+    onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggler.toggleList(e)} role="button" tabindex=0
     ></div>
   </div>
 {/key}
@@ -190,6 +190,7 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
 {#key $page.state.studioData}
   <div class="background"
   onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
+  role="button" tabindex="0"
   in:backgroundInOut|global={{ duration: 250, delay: 0 }}
   out:backgroundInOut|global={{ duration: 250, delay: 750 }}
   >
@@ -230,6 +231,7 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
   >
     <div style="pointer-events: all;"
     onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
+    role="button" tabindex="0"
     >
       <h1>{$page.state.workData.work[0].title}</h1>
       {#if $page.state.workData.work[0].tags}
@@ -244,6 +246,7 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
     </div>
     <div style="pointer-events: all;"
     onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
+    role="button" tabindex="0"
     >
       {#if $page.state.workData.indexedMedia}
       <div class="single-project-indexes">
@@ -281,6 +284,7 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
   >
     <div style="pointer-events: all;"
     onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
+    role="button" tabindex="0"
     >
       <h1>{$page.state.goodData.good[0].title}</h1>
       {#if $page.state.goodData.good[0].tags}
@@ -295,6 +299,7 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
     </div>
     <div style="pointer-events: all;"
     onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
+    role="button" tabindex="0"
     >
       {#if $page.state.goodData.indexedMedia}
       <div class="single-project-indexes">

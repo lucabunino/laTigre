@@ -20,10 +20,5 @@ export default {
       type: 'array',
       of: [{ type: 'color' }]
     },
-    {
-      name: 'archive',
-      type: 'array',
-      of: [{ type: 'color' }]
-    },
   ],
 };
