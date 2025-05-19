@@ -40,17 +40,19 @@
   <div
     class="embla__viewport"
     use:emblaCarouselSvelte={{options}}
-    on:emblaInit={onInit}
+    onemblaInit={onInit}
   >
     <div class="embla__container">
       {#each data.projects as project}
         <div class="embla__slide">
           <a
-            class="project"
-            on:mouseover={() => ctaer.setCta('View')}
-            on:click={(e) => toggler.toggleWork(e, project.reference.slug.current)}
+            class="project no-cursor"
+            onmouseover={() => ctaer.setCta('View')}
+            onfocus={() => ctaer.setCta("View")}
+            aria-label="View"
+            onclick={(e) => {project.reference._type === 'good' ? toggler.toggleGood(e, project.reference.slug.current, true) : toggler.toggleWork(e, project.reference.slug.current, true)}}
             data-sveltekit-preload-data
-            href="{project.reference._type === '/personal' ? '/personal' : '/archive'}/{project.reference.slug.current}"
+            href="{project.reference._type === 'good' ? '/goods' : '/archive'}/{project.reference.slug.current}"
           >
             {#if project.desktop}
               <img
@@ -79,29 +81,40 @@
 
   <!-- Navigation buttons -->
   <button
-    class="embla__button embla__prev"
-    on:click={scrollPrev}
-    on:mouseover={() => ctaer.setCta('Previous')}
-    aria-label="Previous slide"
+    class="embla__button embla__prev no-cursor"
+    onclick={scrollPrev}
+    onmouseover={() => ctaer.setCta('Previous')}
+    onfocus={() => ctaer.setCta("Previous")}
+    aria-label="Previous"
   ></button>
   <button
-    class="embla__button embla__next"
-    on:click={scrollNext}
-    on:mouseover={() => ctaer.setCta('Next')}
-    aria-label="Next slide"
+    class="embla__button embla__next no-cursor"
+    onclick={scrollNext}
+    onmouseover={() => ctaer.setCta('Next')}
+    onfocus={() => ctaer.setCta("Next")}
+    aria-label="Next"
   ></button>
 </div>
 
 <!-- Project Info -->
-<div class="project-info difference">
+<div class="project-info difference"
+onmouseover={() => ctaer.setCta("")}
+onfocus={() => ctaer.setCta("")}
+aria-label="Project info"
+role="button"
+tabindex="0"
+>
   <h2>{currentProject.reference.title}</h2>
-  {#if currentProject.reference.tags}
+  {#if currentProject.reference.description}
+    <p>{currentProject.reference.description}</p>
+  {/if}
+  <!-- {#if currentProject.reference.tags}
     <p>
       {#each currentProject.reference.tags as tag, i}
         {tag.title}{#if i + 1 < data.projects[0].reference.tags?.length}, {/if}
       {/each}
     </p>
-  {/if}
+  {/if} -->
 </div>
 
 <style>
@@ -150,6 +163,6 @@
     position: absolute;
     left: var(--gutter);
     bottom: var(--gutter);
-    z-index: 3;
+    z-index: 2;
   }
 </style>

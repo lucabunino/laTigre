@@ -31,7 +31,7 @@ export default {
               name: 'reference',
               title: 'Reference to Work or Personal',
               type: 'reference',
-              to: [{ type: 'work' }, { type: 'personal' }],
+              to: [{ type: 'work' }, { type: 'good' }],
               validation: (Rule) => Rule.required(),
             },
             {

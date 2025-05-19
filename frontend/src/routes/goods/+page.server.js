@@ -1,11 +1,11 @@
-import { getPersonals } from '$lib/utils/sanity';
+import { getGoods } from '$lib/utils/sanity';
 import { error } from '@sveltejs/kit';
 
 export async function load() {
-	const personals = await getPersonals();
-	if (personals) {
+	const goods = await getGoods();
+	if (goods) {
 		return {
-			personals
+			goods
 		};
 	}
   throw error(404, 'Not found');

@@ -17,8 +17,10 @@ export async function load() {
 			}
 		});
 	});
-	
-	const tags = Array.from(tagMap.values());
+
+	const tags = Array.from(tagMap.values()).sort((a, b) =>
+		a.orderRank.localeCompare(b.orderRank)
+	);
 
 	if (works && tags) {
 		return {
@@ -26,5 +28,6 @@ export async function load() {
 			tags
 		};
 	}
+
 	throw error(404, 'Not found');
 }

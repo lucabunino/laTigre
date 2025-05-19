@@ -61,6 +61,8 @@ onswiperrealindexchange={onRealIndexChange}
     <swiper-slide style={i === data.projects.length - 1 && data.projects.length <= 5 ? "width: 100%" : ""}>
       <a class="project"
       onmouseover={() => ctaer.setCta("View")}
+      onfocus={() => ctaer.setCta("View")}
+      aria-label="View"
       onclick={(e) => toggler.toggleWork(e, project.reference.slug.current)} data-sveltekit-preload-data
       href="{project.reference._type === "/personal" ? "/personal" : "/archive"}/{project.reference.slug.current}"
       >
@@ -91,8 +93,16 @@ onswiperrealindexchange={onRealIndexChange}
     </p>
   {/if}
 </div>
-<button class="swiper-button swiper-button-prev" onmouseover={() => ctaer.setCta("Previous")}></button>
-<button class="swiper-button swiper-button-next" onmouseover={() => ctaer.setCta("Next")}></button>
+<button class="swiper-button swiper-button-prev"
+onmouseover={() => ctaer.setCta("Previous")}
+onfocus={() => ctaer.setCta("Previous")}
+aria-label="Previous"
+></button>
+<button class="swiper-button swiper-button-next"
+onmouseover={() => ctaer.setCta("Next")}
+onfocus={() => ctaer.setCta("Next")}
+aria-label="Next"
+></button>
 
 <style>
 swiper-container::part(wrapper) {

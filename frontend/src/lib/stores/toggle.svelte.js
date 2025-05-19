@@ -7,16 +7,19 @@ let ctaer = getCta()
 let list = $state(false);
 let studio = $state(false);
 let work = $state(false);
-let personal = $state(false);
+let good = $state(false);
+let last = $state(false);
 
 export function getToggles() {	
+
 	async function toggleList(e) {
     ctaer.setCta("")
 		if (!list) {
+      last = "list"
       list = true
       studio = false
       work = false
-      personal = false
+      good = false
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -32,17 +35,18 @@ export function getToggles() {
         goto(href);
       } 
     } else {
-      closeModal(true, e)
+      closeModal(true, true, e)
     }
 	}
 
   async function toggleStudio(e) {
     ctaer.setCta("")
     if (!studio) {
+      last = "studio"
       list = false
       studio = true
       work = false
-      personal = false
+      good = false
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -58,17 +62,23 @@ export function getToggles() {
         goto(href);
       }
     } else {
-      closeModal(true, e)
+      closeModal(true, false, e)
     }
   }
 
-  async function toggleWork(e, slug) {
+  async function toggleWork(e, slug, fromHome) {
     ctaer.setCta("")
+    if (fromHome) {
+      last = "home"
+    }
     if (!work) {
+      if (last !== "list" && !fromHome) {
+       last = "work" 
+      }
       list = false
       studio = false
       work = true
-      personal = false
+      good = false
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -84,7 +94,7 @@ export function getToggles() {
         goto(href);
       } 
     } else {
-      closeModal(true, e)
+      closeModal(true, false, e)
     }
   }
 
@@ -111,13 +121,19 @@ export function getToggles() {
     }, 100);
   }
 
-  async function togglePersonal(e, slug) {
+  async function toggleGood(e, slug, fromHome) {
     ctaer.setCta("")
-    if (!personal) {
+    if (fromHome) {
+      last = "home"
+    }
+    if (!good) {
+      if (!fromHome) {
+       last = "good"
+      }
       list = false
       studio = false
       work = false
-      personal = true
+      good = true
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -128,18 +144,18 @@ export function getToggles() {
       }
       const result = await preloadData(href);
       if (result.type === 'loaded' && result.status === 200) {
-        pushState(href, { personalData: result.data });
+        pushState(href, { goodData: result.data });
       } else {
         goto(href);
       } 
     } else {
-      closeModal(true, e)
+      closeModal(true, false, e)
     }
   }
 
-  async function changePersonal(e, slug, index) {
+  async function changeGood(e, slug, index) {
     e.preventDefault();
-    if (personal) {
+    if (good) {
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -150,7 +166,7 @@ export function getToggles() {
       }
       const result = await preloadData(href);
       if (result.type === 'loaded' && result.status === 200) {
-        replaceState(href, { personalData: result.data });
+        replaceState(href, { goodData: result.data });
       } else {
         goto(href);
       }
@@ -160,22 +176,29 @@ export function getToggles() {
     }, 100);
   }
 
-  async function closeModal(back, e) {
+  async function closeModal(back, closeList, e) {
     ctaer.setCta("")
     if (e) {
       e.preventDefault()
     }
-    list = false
+    if (!closeList && last == "list") {
+      toggleList()
+    } else {
+      last = null
+      list = false
+    }
     studio = false
     work = false
-    personal = false
+    good = false
     if (back) {
-      console.log("backedHistory");
       history.back()
     }
   }
 
 	return {
+    get last() {
+			return last;
+		},
 		get list() {
 			return list;
 		},
@@ -189,11 +212,11 @@ export function getToggles() {
 		},
 		toggleWork,
     changeWork,
-    get personal() {
-			return personal;
+    get good() {
+			return good;
 		},
-		togglePersonal,
-    changePersonal,
+		toggleGood,
+    changeGood,
     closeModal,
 	};
 }

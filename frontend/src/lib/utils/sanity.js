@@ -68,12 +68,13 @@ export async function getProjects() {
 				_type,
 				title,
 				slug,
-				tags[]->{title},
+				description
 			},
 		}
 		`
 	);
 }
+
 export async function getStudio() {
 	return await client.fetch(
 		`
@@ -121,7 +122,7 @@ export async function getWorks() {
 					title, description, altText, metadata {dimensions}
 				},
 			},
-			tags[]->{title, slug, colour}
+			tags[]->{title, slug, colour, orderRank}
 		}
 		`
 	);
@@ -130,7 +131,7 @@ export async function getTags() {
 	return await client.fetch(
 		`
 		*[_type == "work" && !(_id in path('drafts.**'))]|order(orderRank) {
-			tags[]->{title, slug, colour}
+			tags[]->{title, slug, colour, orderRank}
 		}
 		`
 	);
@@ -180,10 +181,10 @@ export async function getWorkIndexes() {
 		`
 	);
 }
-export async function getPersonals() {
+export async function getGoods() {
 	return await client.fetch(
 		`
-		*[_type == "personal" && !(_id in path('drafts.**'))]|order(orderRank) {
+		*[_type == "good" && !(_id in path('drafts.**'))]|order(orderRank) {
 			...,
 			media[] {
 				video {
@@ -211,10 +212,10 @@ export async function getPersonals() {
 		`
 	);
 }
-export async function getPersonal(slug) {
+export async function getGood(slug) {
 	return await client.fetch(
 		`
-		*[_type == "personal" && slug.current == $slug] {
+		*[_type == "good" && slug.current == $slug] {
 			slug,
 			title,
 			description,
@@ -240,15 +241,15 @@ export async function getPersonal(slug) {
 			tags[]->{title},
 			moreInfo,
 			orderRank,
-			"prev": *[_type == "personal" && orderRank < ^.orderRank] | order(orderRank desc)[0] { title, slug, media[] {type} },
-      "next": *[_type == "personal" && orderRank > ^.orderRank] | order(orderRank asc)[0] { title, slug }
+			"prev": *[_type == "good" && orderRank < ^.orderRank] | order(orderRank desc)[0] { title, slug, media[] {type} },
+      "next": *[_type == "good" && orderRank > ^.orderRank] | order(orderRank asc)[0] { title, slug }
 		}
 		`, { slug });
 }
-export async function getPersonalIndexes() {
+export async function getGoodIndexes() {
 	return await client.fetch(
 		`
-		*[_type == "personal" && !(_id in path('drafts.**'))]|order(orderRank) {
+		*[_type == "good" && !(_id in path('drafts.**'))]|order(orderRank) {
 			slug,
 			media[] {
 				_key,

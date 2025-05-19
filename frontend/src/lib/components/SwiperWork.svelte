@@ -14,6 +14,7 @@ let slider = getSlide()
 
 // Variables
 let cta = $state()
+let domLoaded = $state(false)
 
 // Functions
 function onRealIndexChange(e) {
@@ -43,17 +44,19 @@ const swiperParams = {
 };
 Object.assign(swiperEl, swiperParams);
 swiperEl.initialize();
-
+setTimeout(() => {
+  domLoaded = true;
+}, 500);
 if (swiperEl && swiperEl.swiper && typeof slider.slide === 'number') {
   swiperEl.swiper.slideTo(slider.slide, 0);
 }
 })
 </script>
 
-<svelte:window on:wheel|nonpassive|preventDefault />
+<svelte:window onwheel|nonpassive={(e) => {e.preventDefault()}}/>
 
 <swiper-container
-class={data.work[0].slug.current}
+class="{data.work[0].slug.current} no-cursor"
 init="false"
 onswiperrealindexchange={onRealIndexChange}
 >
@@ -76,44 +79,58 @@ onswiperrealindexchange={onRealIndexChange}
 </swiper-container>
 
 <button
-class="swiper-single-button swiper-single-button-prev"
-onmouseover={() => ctaer.setCta("Previous")}></button>
+class="swiper-single-button swiper-single-button-prev no-cursor"
+onmouseover={() => ctaer.setCta("Previous")}
+onfocus={() => ctaer.setCta("Previous")}
+aria-label="Previous"
+></button>
 <button
-class="swiper-single-button swiper-single-button-next"
-onmouseover={() => ctaer.setCta("Next")}></button>
+class="swiper-single-button swiper-single-button-next no-cursor"
+onmouseover={() => ctaer.setCta("Next")}
+onfocus={() => ctaer.setCta("Next")}
+aria-label="Next"
+></button>
 
-<!-- {#if data.work[0].prev && slider.slide == 0}
-  <a
-  class="project-link project-link-prev"
-  href="/archive/{data.work[0].prev.slug.current}"
-  data-sveltekit-preload-data="false"
-  onclick={(e) => {toggler.changeSingle(e, data.work[0].prev.slug.current, data.work[0].prev.media?.length)}}
-  onmouseover={() => ctaer.setCta("Go to: " + data.work[0].prev.title)}></a>
-{/if}
-{#if data.work[0].next && slider.slide == data.work[0].media?.length-1}
-  <a
-  class="project-link project-link-next"
-  href="/archive/{data.work[0].next.slug.current}"
-  data-sveltekit-preload-data="false"
-  onclick={(e) => {toggler.changeSingle(e, data.work[0].next.slug.current, 0)}}
-  onmouseover={() => ctaer.setCta("Go to: " + data.work[0].next.title)}></a>
-{/if} -->
 
-{#if data.work[0].prev && slider.slide == 0}
+{#if domLoaded && !data.work[0].prev || slider.slide == 0 && toggler.last == "home"}
+  <button
+  class="project-link project-link-prev no-cursor"
+  onclick={(e) => {toggler.closeModal(true, false, e); slider.setSlide(0)}}
+  onmouseover={() => ctaer.setCta("Close")}
+  onfocus={() => ctaer.setCta("Close")}
+  onmouseleave={() => ctaer.setCta("")}
+  aria-label="Close"
+  ></button>
+{:else if domLoaded && data.work[0].prev && slider.slide == 0}
   <a
-  class="project-link project-link-prev"
+  class="project-link project-link-prev no-cursor"
   href="/archive/{data.work[0].prev.slug.current}"
   data-sveltekit-preload-data="false"
   onclick={(e) => {toggler.changeWork(e, data.work[0].prev.slug.current, data.work[0].prev.media?.length > 1 ? data.work[0].prev.media?.length : 0)}}
-  onmouseover={() => ctaer.setCta("Prev")}></a>
+  onmouseover={() => ctaer.setCta("Previous project")}
+  onfocus={() => ctaer.setCta("Previous project")}
+  aria-label="Previous project"
+  ></a>
 {/if}
-{#if data.work[0].next && slider.slide == data.work[0].media?.length-1}
+{#if domLoaded && !data.work[0].next && slider.slide == data.work[0].media?.length-1 || slider.slide == data.work[0].media?.length-1 && toggler.last == "home"}
+  <button
+  class="project-link project-link-next no-cursor"
+  onclick={(e) => {toggler.closeModal(true, false, e); slider.setSlide(0)}}
+  onmouseover={() => ctaer.setCta("Close")}
+  onfocus={() => ctaer.setCta("Close")}
+  onmouseleave={() => ctaer.setCta("")}
+  aria-label="Close"
+  ></button>
+{:else if domLoaded && data.work[0].next && slider.slide == data.work[0].media?.length-1}
   <a
-  class="project-link project-link-next"
+  class="project-link project-link-next no-cursor"
   href="/archive/{data.work[0].next.slug.current}"
   data-sveltekit-preload-data="false"
   onclick={(e) => {toggler.changeWork(e, data.work[0].next.slug.current, 0)}}
-  onmouseover={() => ctaer.setCta("Next")}></a>
+  onmouseover={() => ctaer.setCta("Next project")}
+  onfocus={() => ctaer.setCta("Next project")}
+  aria-label="Next project"
+  ></a>
 {/if}
 
 <style>

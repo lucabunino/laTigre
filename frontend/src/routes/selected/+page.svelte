@@ -9,8 +9,8 @@ let toggler = getToggles()
 
 // Variables
 let totalmedia = data.works.reduce((sum, work) => sum + (work.media?.length || 0), 0);
-let remainingMedia = totalmedia+1;
-let index = 1;
+var remainingMedia = totalmedia+1;
+var index = 1;
 let cols = 8;
 let domLoaded = $state(false);
 let innerWidth = $state(0);

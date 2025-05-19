@@ -10,11 +10,10 @@ export const myStructure = (S, context) => {
       .icon(HomeIcon)
       .child(S.document().schemaType('homepage').documentId('homepage')),
     orderableDocumentListDeskItem({type: 'work', title: 'Archive', icon: ProjectsIcon, S, context}),
-    orderableDocumentListDeskItem({type: 'personal', title: 'Personal', icon: SparklesIcon, S, context}),
+    orderableDocumentListDeskItem({type: 'personal', title: 'Personal (to be deleted)', icon: SparklesIcon, S, context}),
+    orderableDocumentListDeskItem({type: 'good', title: 'Goods', icon: SparklesIcon, S, context}),
     S.divider(),
-    S.documentTypeListItem('tag')
-      .title('Tags')
-      .icon(TagsIcon),
+    orderableDocumentListDeskItem({type: 'tag', title: 'Tags', icon: TagsIcon, S, context}),
     S.divider(),
     S.listItem()
       .title('Studio')

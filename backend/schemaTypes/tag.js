@@ -1,10 +1,12 @@
 import {TagIcon} from '@sanity/icons'
+import {orderRankField} from '@sanity/orderable-document-list'
 
 export default {
   name: 'tag',
   type: 'document',
   icon: TagIcon,
   fields: [
+    orderRankField({ type: "work" }),
     {
       name: 'title',
       type: 'string',

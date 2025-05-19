@@ -14,6 +14,7 @@ let slider = getSlide()
 
 // Variables
 let cta = $state()
+let domLoaded = $state(false)
 
 // Functions
 function onRealIndexChange(e) {
@@ -23,7 +24,7 @@ function onRealIndexChange(e) {
 
 // Lifecycle
 $effect(() => {
-const swiperEl = document.querySelector("." + data.personal[0].slug.current);
+const swiperEl = document.querySelector("." + data.good[0].slug.current);
 const swiperParams = {
   slidesPerView: 1,
   centeredSlides: true,
@@ -43,6 +44,9 @@ const swiperParams = {
 };
 Object.assign(swiperEl, swiperParams);
 swiperEl.initialize();
+setTimeout(() => {
+  domLoaded = true;
+}, 500);
 
 if (swiperEl && swiperEl.swiper && typeof slider.slide === 'number') {
   swiperEl.swiper.slideTo(slider.slide, 0);
@@ -50,14 +54,14 @@ if (swiperEl && swiperEl.swiper && typeof slider.slide === 'number') {
 })
 </script>
 
-<svelte:window on:wheel|nonpassive|preventDefault />
+<svelte:window onwheel|nonpassive={(e) => {e.preventDefault()}}/>
 
 <swiper-container
-class={data.personal[0].slug.current}
+class="{data.good[0].slug.current} no-cursor"
 init="false"
 onswiperrealindexchange={onRealIndexChange}
 >
-  {#each data.personal[0].media as media, i}
+  {#each data.good[0].media as media, i}
     <swiper-slide>
       {#if media.mp4}
         <video class="media" muted loop autoplay playsinline
@@ -76,29 +80,47 @@ onswiperrealindexchange={onRealIndexChange}
 </swiper-container>
 
 <button
-class="swiper-single-button swiper-single-button-prev"
-onmouseover={() => ctaer.setCta("Previous")}></button>
+class="swiper-single-button swiper-single-button-prev no-cursor"
+onmouseover={() => ctaer.setCta("Previous")} onfocus={() => ctaer.setCta("Previous")} aria-label="Previous"
+></button>
 <button
-class="swiper-single-button swiper-single-button-next"
-onmouseover={() => ctaer.setCta("Next")}></button>
+class="swiper-single-button swiper-single-button-next no-cursor"
+onmouseover={() => ctaer.setCta("Next")} onfocus={() => ctaer.setCta("Next")} aria-label="Next"
+></button>
 
-{#if data.personal[0].prev && slider.slide == 0}
+{#if domLoaded && !data.good[0].prev || slider.slide == 0 && toggler.last == "home"}
+  <button
+  class="project-link project-link-prev no-cursor"
+  onclick={(e) => {toggler.closeModal(true, false, e); slider.setSlide(0)}}
+  onmouseover={() => ctaer.setCta("Close")} onfocus={() => ctaer.setCta("Close")} aria-label="Close"
+  onmouseleave={() => ctaer.setCta("")}
+  ></button>
+{:else if domLoaded && data.good[0].prev && slider.slide == 0}
   <a
-  class="project-link project-link-prev"
-  href="/personal/{data.personal[0].prev.slug.current}"
+  class="project-link project-link-prev no-cursor"
+  href="/goods/{data.good[0].prev.slug.current}"
   data-sveltekit-preload-data
-  onclick={(e) => {toggler.changePersonal(e, data.personal[0].prev.slug.current, data.personal[0].prev.media?.length > 1 ? data.personal[0].prev.media?.length : 0)}}
-  onmouseover={() => ctaer.setCta("Prev")}
+  onclick={(e) => {toggler.changeGood(e, data.good[0].prev.slug.current, data.good[0].prev.media?.length > 1 ? data.good[0].prev.media?.length : 0)}}
+  onmouseover={() => ctaer.setCta("Previous good")} onfocus={() => ctaer.setCta("Previous good")} aria-label="Previous good"
   onmouseleave={() => ctaer.setCta("")}
   ></a>
 {/if}
-{#if data.personal[0].next && slider.slide == data.personal[0].media?.length-1}
+{#if domLoaded && !data.good[0].next && slider.slide == data.good[0].media?.length-1 || slider.slide == data.good[0].media?.length-1 && toggler.last == "home"}
+  <button
+  class="project-link project-link-next no-cursor"
+  onclick={(e) => {toggler.closeModal(true, false, e); slider.setSlide(0)}}
+  onmouseover={() => ctaer.setCta("Close")}
+  onfocus={() => ctaer.setCta("Close")}
+  onmouseleave={() => ctaer.setCta("")}
+  aria-label="Close"
+  ></button>
+{:else if domLoaded && data.good[0].next && slider.slide == data.good[0].media?.length-1}
   <a
-  class="project-link project-link-next"
-  href="/personal/{data.personal[0].next.slug.current}"
+  class="project-link project-link-next no-cursor"
+  href="/goods/{data.good[0].next.slug.current}"
   data-sveltekit-preload-data="false"
-  onclick={(e) => {toggler.changePersonal(e, data.personal[0].next.slug.current, 0)}}
-  onmouseover={() => ctaer.setCta("Next")}
+  onclick={(e) => {toggler.changeGood(e, data.good[0].next.slug.current, 0)}}
+  onmouseover={() => ctaer.setCta("Next good")} onfocus={() => ctaer.setCta("Next good")} aria-label="Next good"
   onmouseleave={() => ctaer.setCta("")}
   ></a>
 {/if}

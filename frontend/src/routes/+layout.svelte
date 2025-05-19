@@ -10,7 +10,7 @@ import { preloadData, pushState, goto } from '$app/navigation';
 import { tick } from 'svelte';
 import List from './archive/list/+page.svelte';
 import Work from './archive/[slug]/+page.svelte';
-import Personal from './personal/[slug]/+page.svelte';
+import Personal from './goods/[slug]/+page.svelte';
 import Studio from './studio/+page.svelte';
 import Modal from '$lib/components/Modal.svelte';
 import { urlFor } from '$lib/utils/image';
@@ -27,8 +27,8 @@ let mouse = $state([])
 let domLoaded = $state(false)
 let innerWidth = $state(0)
 let innerHeight = $state(0)
-let modalWidth = $derived(innerWidth <= 700 ? "100%" : $page.state.listData ? "50%" : $page.state.studioData ? "75%" : $page.state.workData ? "100%" : $page.state.personalData ? "100%" : "auto")
-let closeWidth = $derived(innerWidth <= 700 ? "0%" : $page.state.listData ? "50%" : $page.state.studioData ? "25%" : $page.state.workData ? "0%" : $page.state.personalData ? "0%" : "auto")
+let modalWidth = $derived(innerWidth <= 700 ? "100%" : $page.state.listData ? "75%" : $page.state.studioData ? "50%" : $page.state.workData ? "100%" : $page.state.goodData ? "100%" : "auto")
+let closeWidth = $derived(innerWidth <= 700 ? "0%" : $page.state.listData ? "25%" : $page.state.studioData ? "50%" : $page.state.workData ? "0%" : $page.state.goodData ? "0%" : "auto")
 
 // Functions
 function handleMousemove(event) {
@@ -46,7 +46,6 @@ $effect.pre(async () => {
     toggler.toggleList();
   } else if (data.pathname === '/studio') {
     console.log("redirect studio");
-
     await goto('/');
     domLoaded = true;
     await tick();
@@ -54,17 +53,17 @@ $effect.pre(async () => {
   } else if (data.pathname.includes('/archive/')) {
     let slug = data.pathname
     console.log("redirect work");
-    await goto('/');
+    await goto('/archive');
     domLoaded = true;
     await tick();
     toggler.toggleWork(null, slug);
-  } else if (data.pathname.includes('/personal/')) {
+  } else if (data.pathname.includes('/goods/')) {
     let slug = data.pathname
     console.log("redirect work");
-    await goto('/');
+    await goto('/goods');
     domLoaded = true;
     await tick();
-    toggler.togglePersonal(null, slug);
+    toggler.toggleGood(null, slug);
   } else {
     domLoaded = true;
   }
@@ -105,49 +104,50 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
 <!-- svelte-ignore a11y_consider_explicit_label -->
 <header>
     <nav>
-    {#if !toggler.work && !toggler.personal}
+    {#if !toggler.work && !toggler.good}
       <ul class="menu difference"
       in:headerInOut|global={{ duration: 250, delay: 0 }}
       out:headerInOut|global={{ duration: 250, delay: 0 }}
+      onmouseenter={() => ctaer.setCta("")}
       >
         <li class="menu-item">
           <a href="/"
-          onmouseenter={() => ctaer.setCta("")}
-          onclick={(e) => {toggler.closeModal(false)}}
+          onclick={(e) => {toggler.closeModal(false, false)}}
           >La Tigre</a>
         </li>
         <li class="menu-item">
+          <a href="/archive"
+          onclick={(e) => {toggler.closeModal(false, false)}}
+          >Archive</a>
+          {#if innerWidth > 700}
+            <a href="/archive/list"
+            class="list-switch"
+            onclick={(e) => {toggler.toggleList(e)}} data-sveltekit-preload-data
+            class:crossed={toggler.list}
+            class:off={$page.url.pathname !== "/archive" || toggler.studio || toggler.work || toggler.good }
+            >
+              <div style="position: relative; height:100%;">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+              </div>
+            </a>
+          {/if}
+        </li>
+        <li class="menu-item">
           <a href="/studio"
-          onmouseenter={() => ctaer.setCta("")}
           onclick={(e) => {toggler.toggleStudio(e)}} data-sveltekit-preload-data
           >Studio</a>
         </li>
         <li class="menu-item">
-          <a href="/archive"
-          onmouseenter={() => ctaer.setCta("")}
-          onclick={(e) => {toggler.closeModal(false)}}
-          >Archive</a>
-          <a href="/archive/list"
-          class="list-switch"
-          onmouseenter={() => ctaer.setCta("")}
-          onclick={(e) => {toggler.toggleList(e)}} data-sveltekit-preload-data
-          class:crossed={toggler.list}
-          class:off={$page.url.pathname !== "/archive" || toggler.studio || toggler.work || toggler.personal }
-          >
-            <div style="position: relative; height:100%;">
-              <div class="line"></div>
-              <div class="line"></div>
-              <div class="line"></div>
-            </div>
-          </a>
-        </li>
-        <li class="menu-item">
-          <a href="/personal" onclick={(e) => {toggler.closeModal(false)}}>Personal</a>
+          <a href="/goods"
+          onclick={(e) => {toggler.closeModal(false, false)}}
+          >Goods</a>
         </li>
       </ul>
       {:else}
         <button class="close-btn difference"
-        onclick={(e) => {toggler.closeModal(true); slider.setSlide(0)}}
+        onclick={(e) => {toggler.closeModal(true, false); slider.setSlide(0)}}
         in:headerInOut|global={{ duration: 250, delay: 0 }}
         out:headerInOut|global={{ duration: 250, delay: 0 }}
         >Close</button>
@@ -164,6 +164,9 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
 {#if domLoaded && toggler.list && $page.state.listData}
 {#key $page.state.listData}
   <div class="background"
+  onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
+  role="button"
+  tabindex=0
   in:backgroundInOut|global={{ duration: 250, delay: 0 }}
   out:backgroundInOut|global={{ duration: 250, delay: 750 }}
   >
@@ -175,7 +178,10 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
           <List data={$page.state.listData}/>
       </Modal>
     </div>
-    <div onclick={(e) => {toggler.closeModal(true)}} style="width: {closeWidth}"></div>
+    <div style="width: {closeWidth}"
+    onclick={(e) => {toggler.closeModal(true, false)}}
+    onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggler.closeModal(true, false)} role="button" tabindex=0
+    ></div>
   </div>
 {/key}
 {/if}
@@ -183,6 +189,7 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
 {#if domLoaded && toggler.studio && $page.state.studioData}
 {#key $page.state.studioData}
   <div class="background"
+  onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
   in:backgroundInOut|global={{ duration: 250, delay: 0 }}
   out:backgroundInOut|global={{ duration: 250, delay: 750 }}
   >
@@ -194,14 +201,17 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
         <Studio data={$page.state.studioData}/>
       </Modal>
     </div>
-    <div onclick={(e) => {toggler.closeModal(true)}} style="width: {closeWidth}"></div>
+    <div style="width: {closeWidth}"
+    onclick={(e) => {toggler.closeModal(true, false)}}
+    onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggler.closeModal(true, false)} role="button" tabindex=0
+    ></div>
   </div>
 {/key}
 {/if}
 
 {#if domLoaded && toggler.work && $page.state.workData}
 {#key $page.state.workData}
-  <div class="background"
+  <div class="background no-cursor"
   in:backgroundInOut|global={{ duration: 250, delay: 0 }}
   out:backgroundInOut|global={{ duration: 250, delay: 750 }}
   >
@@ -218,20 +228,10 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
   in:headerInOut|global={{ duration: 250, delay: 0 }}
   out:headerInOut|global={{ duration: 250, delay: 0 }}
   >
-    <div>
+    <div style="pointer-events: all;"
+    onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
+    >
       <h1>{$page.state.workData.work[0].title}</h1>
-      {#if $page.state.workData.work[0].description}
-        <p>{$page.state.workData.work[0].description}</p>
-      {/if}
-      {#if $page.state.workData.indexedMedia}
-      <div class="single-project-indexes">
-        {#each $page.state.workData.indexedMedia as index, i}
-          <button data-index={i} class:active={slider.slide === i} onclick={(e) => {slider.setSlide(i)}}>{index._mediaIndex}</button>
-        {/each}
-      </div>
-      {/if}
-    </div>
-    <div>
       {#if $page.state.workData.work[0].tags}
         <p>
           {#each $page.state.workData.work[0].tags as tag, i}
@@ -241,14 +241,28 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
       {:else}
         <p>Missing tag</p>
       {/if}
-    </div>  
+    </div>
+    <div style="pointer-events: all;"
+    onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
+    >
+      {#if $page.state.workData.indexedMedia}
+      <div class="single-project-indexes">
+        {#each $page.state.workData.indexedMedia as index, i}
+          <button data-index={i} class:active={slider.slide === i} onclick={(e) => {slider.setSlide(i)}}>{index._mediaIndex}</button>
+        {/each}
+      </div>
+      {/if}
+      {#if $page.state.workData.work[0].description}
+        <p>{$page.state.workData.work[0].description}</p>
+      {/if}
+    </div>
   </div>
 {/key}
 {/if}
 
-{#if domLoaded && toggler.personal && $page.state.personalData}
-{#key $page.state.personalData}
-  <div class="background"
+{#if domLoaded && toggler.good && $page.state.goodData}
+{#key $page.state.goodData}
+  <div class="background no-cursor"
   in:backgroundInOut|global={{ duration: 250, delay: 0 }}
   out:backgroundInOut|global={{ duration: 250, delay: 750 }}
   >
@@ -257,7 +271,7 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
     out:singleOut|global={{ duration: 500, delay: 500, fromRight: true}}
     >
       <Modal onclose={() => history.back()} width={modalWidth} bgWhite={false}>
-        <Personal data={$page.state.personalData}/>
+        <Personal data={$page.state.goodData}/>
       </Modal>
     </div>
   </div>
@@ -265,31 +279,35 @@ function handleKey({key}) {if (key === 'G' && dev) {viewGrid = !viewGrid}}
   in:headerInOut|global={{ duration: 250, delay: 0 }}
   out:headerInOut|global={{ duration: 250, delay: 0 }}
   >
-    <div>
-      <h1>{$page.state.personalData.personal[0].title}</h1>
-      {#if $page.state.personalData.personal[0].description}
-        <p>{$page.state.personalData.personal[0].description}</p>
-      {/if}
-      {#if $page.state.personalData.indexedMedia}
-      <div class="single-project-indexes">
-        {#each $page.state.personalData.indexedMedia as index, i}
-          <button data-index={i} class:active={slider.slide === i} onclick={(e) => {slider.setSlide(i)}}>{index._mediaIndex}</button>
-        {/each}
-      </div>
-      {/if}
-    </div>
-    <div>
-      {#if $page.state.personalData.personal[0].moreInfo}
-        <p>{$page.state.personalData.personal[0].moreInfo}</p>
-      {/if}
-      {#if $page.state.personalData.personal[0].tags}
+    <div style="pointer-events: all;"
+    onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
+    >
+      <h1>{$page.state.goodData.good[0].title}</h1>
+      {#if $page.state.goodData.good[0].tags}
         <p>
-          {#each $page.state.personalData.personal[0].tags as tag, i}
-            {tag.title}{#if i+1 < $page.state.personalData.personal[0].tags.length}{@html ", "}{/if}
+          {#each $page.state.goodData.good[0].tags as tag, i}
+            {tag.title}{#if i+1 < $page.state.goodData.good[0].tags.length}{@html ", "}{/if}
           {/each}
         </p>
       {:else}
         <p>Missing tag</p>
+      {/if}
+    </div>
+    <div style="pointer-events: all;"
+    onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
+    >
+      {#if $page.state.goodData.indexedMedia}
+      <div class="single-project-indexes">
+        {#each $page.state.goodData.indexedMedia as index, i}
+          <button data-index={i} class:active={slider.slide === i} onclick={(e) => {slider.setSlide(i)}}>{index._mediaIndex}</button>
+        {/each}
+      </div>
+      {/if}
+      {#if $page.state.goodData.good[0].description}
+        <p>{$page.state.goodData.good[0].description}</p>
+      {/if}
+      {#if $page.state.goodData.good[0].moreInfo}
+        <p>{$page.state.goodData.good[0].moreInfo}</p>
       {/if}
     </div>  
   </div>
@@ -318,7 +336,7 @@ class:visible={mouse.x}
   width: 100%;
   padding: 0 var(--gutter);
 }
-.menu-item:nth-child(3) {
+.menu-item:nth-child(2) {
   display: flex;
   align-items: flex-end;
   gap: .2em;
@@ -360,7 +378,7 @@ class:visible={mouse.x}
   transform: rotate(-20deg);
   top: 50%;
 }
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 360px) {
   .menu {
     flex-wrap: wrap;
   }
@@ -392,7 +410,6 @@ class:visible={mouse.x}
   position: fixed;
   top: 50%;
   pointer-events: none;
-  margin: 1em;
   visibility: hidden;
   text-wrap-mode: nowrap;
 }
@@ -420,6 +437,14 @@ class:visible={mouse.x}
 .single-project-indexes button:hover,
 .single-project-indexes button.active {
   text-decoration: underline;
+  cursor: pointer;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+@media screen and (max-width: 700px) {
+  .background {
+    backdrop-filter: blur(10px);
+  }
 }
 
 /* Close */
@@ -429,32 +454,4 @@ class:visible={mouse.x}
   top: var(--gutter);
   z-index: 4;
 }
-
-/* Footer */
-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-footer div {
-  display: grid;
-  grid-template-rows: repeat(2, auto);
-  grid-auto-flow: column;
-  column-gap: var(--gutter);
-}
-@media screen and (max-width: 900px) {
-  footer {
-    flex-direction: column;
-    align-items: flex-start;
-    padding-bottom: 1em;
-  }
-  footer div {
-    display: flex;
-    flex-direction: column;
-  }
-  footer div>*:nth-child(even) {
-    margin-bottom: 1.5em;
-  }
-}
-
 </style>
