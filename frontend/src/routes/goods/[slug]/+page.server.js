@@ -2,8 +2,6 @@ import { getGood } from '$lib/utils/sanity';
 import { getGoodIndexes } from '$lib/utils/sanity';
 import { error } from '@sveltejs/kit';
 
-export const prerender = false;
-
 export async function load({ params }) {
   const good = await getGood(params.slug);
   const indexes = await getGoodIndexes();

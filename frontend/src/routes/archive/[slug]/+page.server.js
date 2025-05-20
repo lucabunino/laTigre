@@ -2,8 +2,6 @@ import { getWork } from '$lib/utils/sanity';
 import { getWorkIndexes } from '$lib/utils/sanity';
 import { error } from '@sveltejs/kit';
 
-export const prerender = false;
-
 export async function load({ params }) {
   const work = await getWork(params.slug);
   const indexes = await getWorkIndexes();
