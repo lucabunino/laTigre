@@ -99,6 +99,9 @@ a:any-link.underline,
   letter-spacing: 0;
   line-height: 1.1;
 }
+.folio-18 {
+  font-size: 1rem;
+}
 .uppercase {
   text-transform: uppercase;
 }
@@ -111,6 +114,8 @@ a:any-link.underline,
 .difference {
   color: var(--white);
   mix-blend-mode: difference;
+  isolation: isolate;
+  position: relative;
 }
 .no-cursor {
   cursor: none !important;

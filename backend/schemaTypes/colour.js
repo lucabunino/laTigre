@@ -20,5 +20,10 @@ export default {
       type: 'array',
       of: [{ type: 'color' }]
     },
+	{
+      name: 'menu',
+      type: 'array',
+      of: [{ type: 'color' }]
+    },
   ],
 };

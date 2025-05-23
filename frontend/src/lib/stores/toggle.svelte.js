@@ -5,9 +5,9 @@ import { getCta  } from '$lib/stores/cta.svelte.js';
 let ctaer = getCta()
 
 let list = $state(false);
-let studio = $state(false);
+let info = $state(false);
 let work = $state(false);
-let good = $state(false);
+let thing = $state(false);
 let last = $state(false);
 
 export function getToggles() {	
@@ -17,16 +17,16 @@ export function getToggles() {
 		if (!list) {
       last = "list"
       list = true
-      studio = false
+      info = false
       work = false
-      good = false
+      thing = false
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault();
         href = e.currentTarget;
       } else {
-        href = '/archive/list'
+        href = '/works/list'
       }
       const result = await preloadData(href);
       if (result.type === 'loaded' && result.status === 200) {
@@ -39,25 +39,25 @@ export function getToggles() {
     }
 	}
 
-  async function toggleStudio(e) {
+  async function toggleInfo(e) {
     ctaer.setCta("")
-    if (!studio) {
-      last = "studio"
+    if (!info) {
+      last = "info"
       list = false
-      studio = true
+      info = true
       work = false
-      good = false
+      thing = false
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault();
-        href = e.currentTarget;
+        href = e.currentTarget;		
       } else {
-        href = '/studio'
+        href = '/info'
       }
       const result = await preloadData(href);
       if (result.type === 'loaded' && result.status === 200) {
-        pushState(href, { studioData: result.data });
+        pushState(href, { infoData: result.data });
       } else {
         goto(href);
       }
@@ -76,9 +76,9 @@ export function getToggles() {
        last = "work" 
       }
       list = false
-      studio = false
+      info = false
       work = true
-      good = false
+      thing = false
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -121,19 +121,19 @@ export function getToggles() {
     }, 100);
   }
 
-  async function toggleGood(e, slug, fromHome) {
+  async function toggleThing(e, slug, fromHome) {
     ctaer.setCta("")
     if (fromHome) {
       last = "home"
     }
-    if (!good) {
+    if (!thing) {
       if (!fromHome) {
-       last = "good"
+       last = "thing"
       }
       list = false
-      studio = false
+      info = false
       work = false
-      good = true
+      thing = true
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -144,7 +144,7 @@ export function getToggles() {
       }
       const result = await preloadData(href);
       if (result.type === 'loaded' && result.status === 200) {
-        pushState(href, { goodData: result.data });
+        pushState(href, { thingData: result.data });
       } else {
         goto(href);
       } 
@@ -153,9 +153,9 @@ export function getToggles() {
     }
   }
 
-  async function changeGood(e, slug, index) {
+  async function changeThing(e, slug, index) {
     e.preventDefault();
-    if (good) {
+    if (thing) {
       let href;
       if (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -166,7 +166,7 @@ export function getToggles() {
       }
       const result = await preloadData(href);
       if (result.type === 'loaded' && result.status === 200) {
-        replaceState(href, { goodData: result.data });
+        replaceState(href, { thingData: result.data });
       } else {
         goto(href);
       }
@@ -187,9 +187,9 @@ export function getToggles() {
       last = null
       list = false
     }
-    studio = false
+    info = false
     work = false
-    good = false
+    thing = false
     if (back) {
       history.back()
     }
@@ -203,20 +203,20 @@ export function getToggles() {
 			return list;
 		},
 		toggleList,
-		get studio() {
-			return studio;
+		get info() {
+			return info;
 		},
-		toggleStudio,
+		toggleInfo,
 		get work() {
 			return work;
 		},
 		toggleWork,
     changeWork,
-    get good() {
-			return good;
+    get thing() {
+			return thing;
 		},
-		toggleGood,
-    changeGood,
+		toggleThing,
+    changeThing,
     closeModal,
 	};
 }

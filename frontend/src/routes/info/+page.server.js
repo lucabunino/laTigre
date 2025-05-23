@@ -1,11 +1,11 @@
-import { getStudio } from '$lib/utils/sanity';
+import { getInfo } from '$lib/utils/sanity';
 import { error } from '@sveltejs/kit';
 
 export async function load() {
-	const studio = await getStudio();
-	if (studio) {
+	const info = await getInfo();
+	if (info) {
 		return {
-			studio
+			info
 		};
 	}
   throw error(404, 'Not found');

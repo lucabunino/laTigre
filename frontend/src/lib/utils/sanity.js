@@ -75,10 +75,10 @@ export async function getProjects() {
 	);
 }
 
-export async function getStudio() {
+export async function getInfo() {
 	return await client.fetch(
 		`
-		*[_type == "studio" && !(_id in path('drafts.**'))][0] {
+		*[_type == "info" && !(_id in path('drafts.**'))][0] {
 			...,
 			body[] {
 				...,
@@ -181,10 +181,10 @@ export async function getWorkIndexes() {
 		`
 	);
 }
-export async function getGoods() {
+export async function getThings() {
 	return await client.fetch(
 		`
-		*[_type == "good" && !(_id in path('drafts.**'))]|order(orderRank) {
+		*[_type == "thing" && !(_id in path('drafts.**'))]|order(orderRank) {
 			...,
 			media[] {
 				video {
@@ -212,10 +212,10 @@ export async function getGoods() {
 		`
 	);
 }
-export async function getGood(slug) {
+export async function getThing(slug) {
 	return await client.fetch(
 		`
-		*[_type == "good" && slug.current == $slug] {
+		*[_type == "thing" && slug.current == $slug] {
 			slug,
 			title,
 			description,
@@ -241,15 +241,15 @@ export async function getGood(slug) {
 			tags[]->{title},
 			moreInfo,
 			orderRank,
-			"prev": *[_type == "good" && orderRank < ^.orderRank] | order(orderRank desc)[0] { title, slug, media[] {type} },
-      "next": *[_type == "good" && orderRank > ^.orderRank] | order(orderRank asc)[0] { title, slug }
+			"prev": *[_type == "thing" && orderRank < ^.orderRank] | order(orderRank desc)[0] { title, slug, media[] {type} },
+      "next": *[_type == "thing" && orderRank > ^.orderRank] | order(orderRank asc)[0] { title, slug }
 		}
 		`, { slug });
 }
-export async function getGoodIndexes() {
+export async function getThingIndexes() {
 	return await client.fetch(
 		`
-		*[_type == "good" && !(_id in path('drafts.**'))]|order(orderRank) {
+		*[_type == "thing" && !(_id in path('drafts.**'))]|order(orderRank) {
 			slug,
 			media[] {
 				_key,

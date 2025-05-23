@@ -1,6 +1,7 @@
 <script>
 // Imports
 import Embla from "$lib/components/Embla.svelte"
+import Swiper from "$lib/components/Swiper.svelte"
 import { urlFor } from '$lib/utils/image';
 import { getToggles  } from '$lib/stores/toggle.svelte.js';
 let toggler = getToggles()
@@ -15,7 +16,8 @@ let innerHeight = $state(0)
 
 {#if innerWidth > 700}
 {#key data.projects}
-  <Embla data={data}/>
+  <!-- <Embla data={data}/> -->
+  <Swiper data={data}/>
 {/key}
 {:else}
 {#each data.projects as project, i}

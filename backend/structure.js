@@ -9,16 +9,19 @@ export const myStructure = (S, context) => {
       .title('Homepage')
       .icon(HomeIcon)
       .child(S.document().schemaType('homepage').documentId('homepage')),
-    orderableDocumentListDeskItem({type: 'work', title: 'Archive', icon: ProjectsIcon, S, context}),
-    orderableDocumentListDeskItem({type: 'personal', title: 'Personal (to be deleted)', icon: SparklesIcon, S, context}),
-    orderableDocumentListDeskItem({type: 'good', title: 'Goods', icon: SparklesIcon, S, context}),
+    orderableDocumentListDeskItem({type: 'work', title: 'Works', icon: ProjectsIcon, S, context}),
+    orderableDocumentListDeskItem({type: 'thing', title: 'Things', icon: SparklesIcon, S, context}),
     S.divider(),
     orderableDocumentListDeskItem({type: 'tag', title: 'Tags', icon: TagsIcon, S, context}),
     S.divider(),
+    // S.listItem()
+    //   .title('Studio (to be replaced)')
+    //   .icon(InfoOutlineIcon)
+    //   .child(S.document().schemaType('studio').documentId('studio')),
     S.listItem()
-      .title('Studio')
+      .title('Info')
       .icon(InfoOutlineIcon)
-      .child(S.document().schemaType('studio').documentId('studio')),
+      .child(S.document().schemaType('info').documentId('info')),
     S.listItem()
       .title('Colours')
       .icon(ColorWheelIcon)

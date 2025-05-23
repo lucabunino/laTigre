@@ -79,7 +79,7 @@ style={`--hoverColor: ${hoverColor}; --activeColor: ${activeColor}`}
       {#if domLoaded}
       <li>
         <a class="folio-14 work"
-        href="/archive/{work.slug.current}"
+        href="/works/{work.slug.current}"
         data-tags={work.tags ? work.tags.map(tag => tag.slug.current).join(',') : ''}
         in:listInOut|global={{ duration: 10, delay: 500+i*10}}
         out:listInOut|global={{ duration: 10, delay: i*10}}
@@ -181,12 +181,11 @@ a>*:nth-child(3) {
   text-align: right;
 }
 .media {
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
-  width: 50%;
+  width: 25%;
   height: auto;
-  transform: translateX(-100%);
   display: none;
 }
 a:hover .media {

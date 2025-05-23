@@ -24,7 +24,7 @@ function onRealIndexChange(e) {
 
 // Lifecycle
 $effect(() => {
-const swiperEl = document.querySelector("." + data.good[0].slug.current);
+const swiperEl = document.querySelector("." + data.thing[0].slug.current);
 const swiperParams = {
   slidesPerView: 1,
   centeredSlides: true,
@@ -57,11 +57,11 @@ if (swiperEl && swiperEl.swiper && typeof slider.slide === 'number') {
 <svelte:window onwheel|nonpassive={(e) => {e.preventDefault()}}/>
 
 <swiper-container
-class="{data.good[0].slug.current} no-cursor"
+class="{data.thing[0].slug.current} no-cursor"
 init="false"
 onswiperrealindexchange={onRealIndexChange}
 >
-  {#each data.good[0].media as media, i}
+  {#each data.thing[0].media as media, i}
     <swiper-slide>
       {#if media.mp4}
         <video class="media" muted loop autoplay playsinline
@@ -88,24 +88,24 @@ class="swiper-single-button swiper-single-button-next no-cursor"
 onmouseover={() => ctaer.setCta("Next")} onfocus={() => ctaer.setCta("Next")} aria-label="Next"
 ></button>
 
-{#if domLoaded && !data.good[0].prev || slider.slide == 0 && toggler.last == "home"}
+{#if domLoaded && !data.thing[0].prev || slider.slide == 0 && toggler.last == "home"}
   <button
   class="project-link project-link-prev no-cursor"
   onclick={(e) => {toggler.closeModal(true, false, e); slider.setSlide(0)}}
   onmouseover={() => ctaer.setCta("Close")} onfocus={() => ctaer.setCta("Close")} aria-label="Close"
   onmouseleave={() => ctaer.setCta("")}
   ></button>
-{:else if domLoaded && data.good[0].prev && slider.slide == 0}
+{:else if domLoaded && data.thing[0].prev && slider.slide == 0}
   <a
   class="project-link project-link-prev no-cursor"
-  href="/goods/{data.good[0].prev.slug.current}"
+  href="/things/{data.thing[0].prev.slug.current}"
   data-sveltekit-preload-data
-  onclick={(e) => {toggler.changeGood(e, data.good[0].prev.slug.current, data.good[0].prev.media?.length > 1 ? data.good[0].prev.media?.length : 0)}}
-  onmouseover={() => ctaer.setCta("Previous good")} onfocus={() => ctaer.setCta("Previous good")} aria-label="Previous good"
+  onclick={(e) => {toggler.changeThing(e, data.thing[0].prev.slug.current, data.thing[0].prev.media?.length > 1 ? data.thing[0].prev.media?.length : 0)}}
+  onmouseover={() => ctaer.setCta("Previous thing")} onfocus={() => ctaer.setCta("Previous thing")} aria-label="Previous thing"
   onmouseleave={() => ctaer.setCta("")}
   ></a>
 {/if}
-{#if domLoaded && !data.good[0].next && slider.slide == data.good[0].media?.length-1 || slider.slide == data.good[0].media?.length-1 && toggler.last == "home"}
+{#if domLoaded && !data.thing[0].next && slider.slide == data.thing[0].media?.length-1 || slider.slide == data.thing[0].media?.length-1 && toggler.last == "home"}
   <button
   class="project-link project-link-next no-cursor"
   onclick={(e) => {toggler.closeModal(true, false, e); slider.setSlide(0)}}
@@ -114,13 +114,13 @@ onmouseover={() => ctaer.setCta("Next")} onfocus={() => ctaer.setCta("Next")} ar
   onmouseleave={() => ctaer.setCta("")}
   aria-label="Close"
   ></button>
-{:else if domLoaded && data.good[0].next && slider.slide == data.good[0].media?.length-1}
+{:else if domLoaded && data.thing[0].next && slider.slide == data.thing[0].media?.length-1}
   <a
   class="project-link project-link-next no-cursor"
-  href="/goods/{data.good[0].next.slug.current}"
+  href="/things/{data.thing[0].next.slug.current}"
   data-sveltekit-preload-data="false"
-  onclick={(e) => {toggler.changeGood(e, data.good[0].next.slug.current, 0)}}
-  onmouseover={() => ctaer.setCta("Next good")} onfocus={() => ctaer.setCta("Next good")} aria-label="Next good"
+  onclick={(e) => {toggler.changeThing(e, data.thing[0].next.slug.current, 0)}}
+  onmouseover={() => ctaer.setCta("Next thing")} onfocus={() => ctaer.setCta("Next thing")} aria-label="Next thing"
   onmouseleave={() => ctaer.setCta("")}
   ></a>
 {/if}

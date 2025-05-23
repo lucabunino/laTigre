@@ -5,9 +5,9 @@ import PortableTextStyle from '$lib/components/PortableTextStyle.svelte';
 </script>
 
 <section>
-{#if data.studio.body}
+{#if data.info.body}
 <PortableText
-value={data.studio.body}
+value={data.info.body}
 components={{
   block: {
     normal: PortableTextStyle,

@@ -99,7 +99,7 @@ onmouseover={() => ctaer.setCta("Next")} onfocus={() => ctaer.setCta("Next")} ar
 {:else if domLoaded && data.work[0].prev && slider.slide == 0}
   <a
   class="project-link project-link-prev no-cursor"
-  href="/archive/{data.work[0].prev.slug.current}"
+  href="/works/{data.work[0].prev.slug.current}"
   data-sveltekit-preload-data="false"
   onclick={(e) => {toggler.changeWork(e, data.work[0].prev.slug.current, data.work[0].prev.media?.length > 1 ? data.work[0].prev.media?.length : 0)}}
   onmouseover={() => ctaer.setCta("Previous project")} onfocus={() => ctaer.setCta("Previous project")} aria-label="Previous project"
@@ -115,7 +115,7 @@ onmouseover={() => ctaer.setCta("Next")} onfocus={() => ctaer.setCta("Next")} ar
 {:else if domLoaded && data.work[0].next && slider.slide == data.work[0].media?.length-1}
   <a
   class="project-link project-link-next no-cursor"
-  href="/archive/{data.work[0].next.slug.current}"
+  href="/works/{data.work[0].next.slug.current}"
   data-sveltekit-preload-data="false"
   onclick={(e) => {toggler.changeWork(e, data.work[0].next.slug.current, 0)}}
   onmouseover={() => ctaer.setCta("Next project")} onfocus={() => ctaer.setCta("Next project")} aria-label="Next project"
