@@ -12,7 +12,7 @@ components={{
   block: {
     normal: PortableTextStyle,
     h3: PortableTextStyle,
-    h4: PortableTextStyle,
+    h6: PortableTextStyle,
   },
   listItem: PortableTextStyle,
   marks: {

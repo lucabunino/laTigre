@@ -84,6 +84,7 @@ bind:this={swiperEl}
 	{#each data.projects as project, i}
 		<swiper-slide style={i === data.projects.length - 1 && data.projects.length <= 5 ? "width: 100%" : ""}
 		class:swiper-slide-past={i < currentSlide}
+		loading="lazy"
 		>
 			<div class="swiper-slide-transform">
 				<a
@@ -112,7 +113,7 @@ bind:this={swiperEl}
 							placeholder={project.video.cover ? urlFor(project.video.cover.asset).height(2200) : ''}
 						></video>
 					{/if}
-					<div class="filter"></div>
+					<div class="filter noise"></div>
 				</a>
 			</div>
 		</swiper-slide>
@@ -165,9 +166,11 @@ swiper-slide {
 	top: 0;
 	left: 0;
 	transition: var(--transition);
+	opacity: 0;
 }
 :global(swiper-slide.swiper-slide-prev) .filter, .swiper-slide-past .filter {
 	backdrop-filter: blur(30px);
+	opacity: 1;
 }
 /* :global(swiper-slide.swiper-slide-prev), .swiper-slide-past {
 	filter: blur(30px);

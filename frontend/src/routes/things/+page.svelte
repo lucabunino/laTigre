@@ -99,7 +99,7 @@ function handleScroll() {
 								placeholder={thing.media[0].cover ? urlFor(thing.media[0].cover.asset).width(600) : ""}
 								></video>
 							{/if}
-							<div class="thing-info-container difference">
+							<div class="thing-info-container difference noise">
 								<div class="thing-info">
 									<h2>{thing.title}</h2>
 									{#if thing.description}<p>{thing.description}</p>{/if}
@@ -107,8 +107,8 @@ function handleScroll() {
 								<div class="thing-cta">
 									{#if thing.priceInfo}
 									<p>
-										{#if thing.linkPayPalUrl && thing.payPalUrl}
-											<a class="buy-btn" href={thing.payPalUrl} target="_blank" rel="noopener noreferrer">{thing.priceInfo}</a>
+										{#if thing.linkExternalUrl && thing.linkExternalUrl}
+											<a class="buy-btn" href={thing.linkExternalUrl} target="_blank" rel="noopener noreferrer">{thing.priceInfo}</a>
 										{:else}
 											<span class="buy-btn">{thing.priceInfo}</span>
 										{/if}
@@ -195,6 +195,9 @@ section {
 	padding: .1em .3em .2em;
 	border-radius: .2em;
 }
+a.buy-btn:hover {
+	filter: invert(1);
+}
 .swiper-container {
 	position: absolute;
 	top: 0;
@@ -217,7 +220,7 @@ section {
 	}
 } */
 @media screen and (min-width: 701px) {
-	.thing:hover .thing-info-container {
+	.thing:not(.loading):hover .thing-info-container {
 		display: flex;
 	}
 }

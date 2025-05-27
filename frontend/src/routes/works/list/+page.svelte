@@ -61,8 +61,8 @@ style={`--hoverColor: ${hoverColor}; --activeColor: ${activeColor}`}
       <li>
         <button class="tag"
         style={`--tagColor: ${tag.colour.hex}`}
-        in:listInOut|global={{ duration: 10, delay: 500+i*10}}
-        out:listInOut|global={{ duration: 10, delay: i*10}}
+        in:listInOut|global={{ duration: 10, delay: 300+i*50}}
+        out:listInOut|global={{ duration: 10, delay: data.tags.length*50 - i*50}}
         onclick={() => {handleTagClick(tag.slug.current, tag.colour.hex)}}
         onmouseenter={() => {handleTagEnter(tag.slug.current, tag.colour.hex)}}
         onmouseleave={() => {handleTagLeave(tag.slug.current)}}
@@ -81,8 +81,8 @@ style={`--hoverColor: ${hoverColor}; --activeColor: ${activeColor}`}
         <a class="folio-14 work"
         href="/works/{work.slug.current}"
         data-tags={work.tags ? work.tags.map(tag => tag.slug.current).join(',') : ''}
-        in:listInOut|global={{ duration: 10, delay: 500+i*10}}
-        out:listInOut|global={{ duration: 10, delay: i*10}}
+        in:listInOut|global={{ duration: 10, delay: 300+i*7}}
+        out:listInOut|global={{ duration: 10, delay: i*7}}
         onclick={(e) => toggler.toggleWork(e, work.slug.current)} data-sveltekit-preload-data
         class:active={work.tags?.some(tag => activeTags.has(tag.slug.current))}
         class:hover={work.tags?.some(tag => hoverTags.includes(tag.slug.current))}

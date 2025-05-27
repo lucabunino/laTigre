@@ -119,8 +119,8 @@ function handleKey({ key }) {
 {#if domLoaded}
 {#key data.pathname}
 	<main
-	in:blur={{amount: 50, duration: 500, delay: 500}}
-	out:blur={{amount: 50, duration: 500}}
+	in:blur={{amount: 50, duration: 300, delay: 300}}
+	out:blur={{amount: 50, duration: 300}}
 	>
 		{@render children()}
 	</main>
@@ -195,16 +195,16 @@ function handleKey({ key }) {
 
 {#if domLoaded && toggler.list && $page.state.listData}
 {#key $page.state.listData}
-	<div class="background"
+	<div class="background noise"
 	onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
 	role="button"
 	tabindex=0
 	in:backgroundInOut|global={{ duration: 250, delay: 0 }}
-	out:backgroundInOut|global={{ duration: 250, delay: 750 }}
+	out:backgroundInOut|global={{ duration: 250, delay: 550 }}
 	>
 		<div
-		in:modalInOut|global={{ duration: 500, delay: 0 }}
-		out:modalInOut|global={{ duration: 500, delay: 500}}
+		in:modalInOut|global={{ duration: 300, delay: 0 }}
+		out:modalInOut|global={{ duration: 300, delay: 300}}
 		>
 			<Modal onclose={() => history.back()} width={modalWidth} bgWhite={true}>
 					<List data={$page.state.listData}/>
@@ -220,15 +220,15 @@ function handleKey({ key }) {
 
 {#if domLoaded && toggler.info && $page.state.infoData}
 {#key $page.state.infoData}
-	<div class="background"
+	<div class="background noise"
 	onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
 	role="button" tabindex="0"
 	in:backgroundInOut|global={{ duration: 250, delay: 0 }}
-	out:backgroundInOut|global={{ duration: 250, delay: 750 }}
+	out:backgroundInOut|global={{ duration: 250, delay: 550 }}
 	>
 		<div
-		in:modalInOut|global={{ duration: 500, delay: 0 }}
-		out:modalInOut|global={{ duration: 500, delay: 500}}
+		in:modalInOut|global={{ duration: 300, delay: 0 }}
+		out:modalInOut|global={{ duration: 300, delay: 300}}
 		>
 			<Modal onclose={() => history.back()} width={modalWidth} bgWhite={true}>
 				<Info data={$page.state.infoData}/>
@@ -244,7 +244,7 @@ function handleKey({ key }) {
 
 {#if domLoaded && toggler.work && $page.state.workData}
 {#key $page.state.workData}
-	<div class="background no-cursor"
+	<div class="background noise no-cursor"
 	in:backgroundInOut|global={{ duration: 250, delay: 0 }}
 	out:backgroundInOut|global={{ duration: 250, delay: 750 }}
 	>
@@ -297,7 +297,7 @@ function handleKey({ key }) {
 
 {#if domLoaded && toggler.thing && $page.state.thingData}
 {#key $page.state.thingData}
-	<div class="background no-cursor"
+	<div class="background noise no-cursor"
 	in:backgroundInOut|global={{ duration: 250, delay: 0 }}
 	out:backgroundInOut|global={{ duration: 250, delay: 750 }}
 	>
@@ -383,11 +383,11 @@ class:visible={mouse.x}
 .menu-item:nth-child(4) {
 	left: 75%;
 }
-.menu-item:hover, .menu-item.active {
+.menu-item:hover {
 	color: var(--hoverColour);
 	mix-blend-mode: normal;
 }
-.menu-item:hover .line, .menu-item.active .line {
+.menu-item:hover .line {
 	background-color: var(--hoverColour);
 }
 .list-switch {

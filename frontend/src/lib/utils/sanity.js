@@ -187,17 +187,15 @@ export async function getThings() {
 		*[_type == "thing" && !(_id in path('drafts.**'))]|order(orderRank) {
 			...,
 			media[] {
-				video {
-					mp4 {
-						asset-> {url}
+				mp4 {
+					asset-> {url}
+				},
+				cover {
+					asset {
+						_ref, _id, _type
 					},
-					cover {
-						asset {
-							_ref, _id, _type
-						},
-						"info": asset->{
-							title, description, altText, metadata {dimensions}
-						},
+					"info": asset->{
+						title, description, altText, metadata {dimensions}
 					},
 				},
 				asset {

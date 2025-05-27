@@ -16,8 +16,8 @@ let innerHeight = $state(0)
 
 {#if innerWidth > 700}
 {#key data.projects}
-  <!-- <Embla data={data}/> -->
-  <Swiper data={data}/>
+  <Embla data={data}/>
+  <!-- <Swiper data={data}/> -->
 {/key}
 {:else}
 {#each data.projects as project, i}

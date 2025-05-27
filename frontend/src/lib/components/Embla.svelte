@@ -129,11 +129,11 @@ role="button" tabindex="0"
 		align-items: center;
 		transition: var(--transition);
 	}
-	.embla__slide.inactive {
+	/* .embla__slide.inactive {
 		transform: translateX(100%);
 		filter: blur(30px);
 		opacity: 0;
-	}
+	} */
 	.embla__button {
 		background: transparent;
 		border: none;
