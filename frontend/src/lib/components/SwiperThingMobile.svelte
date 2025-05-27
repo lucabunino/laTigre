@@ -5,6 +5,7 @@ let { media } = $props()
 import { register } from 'swiper/element/bundle';register();
 import { urlFor } from '$lib/utils/image';
 import { goto } from '$app/navigation';
+import Media from "$lib/components/Media.svelte"
 
 // Variables
 let domLoaded = $state(false)
