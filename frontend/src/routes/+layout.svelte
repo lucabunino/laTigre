@@ -45,27 +45,27 @@ function handleHoverMenu() {
 // Lifecycle
 $effect.pre(async () => {	
 	if (data.pathname === '/works/list') {
-		console.log("redirect list");
+		// console.log("redirect list");
 		await goto('/works');
 		domLoaded = true;		
 		await tick();
 		toggler.toggleList();
 	} else if (data.pathname === '/info') {
-		console.log("redirect info");
+		// console.log("redirect info");
 		await goto('/');
 		domLoaded = true;
 		await tick();
 		toggler.toggleInfo();
 	} else if (data.pathname.includes('/works/')) {
 		let slug = data.pathname
-		console.log("redirect work");
+		// console.log("redirect work");
 		await goto('/works');
 		domLoaded = true;
 		await tick();
 		toggler.toggleWork(null, slug);
 	} else if (data.pathname.includes('/things/')) {
 		let slug = data.pathname
-		console.log("redirect work");
+		// console.log("redirect work");
 		await goto('/things');
 		domLoaded = true;
 		await tick();

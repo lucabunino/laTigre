@@ -2,6 +2,7 @@
 import { urlFor } from "$lib/utils/image";
 import { getToggles	} from '$lib/stores/toggle.svelte.js';
 import SwiperThingMobile from '$lib/components/SwiperThingMobile.svelte';
+import Media from "$lib/components/Media.svelte"
 let toggler = getToggles()
 
 let { data } = $props()
@@ -88,16 +89,20 @@ function handleScroll() {
 						style="--desktopColour: {data.colours.desktop[index % data.colours.desktop.length].hex}; --mobileColour: {data.colours.mobile[index % data.colours.mobile.length].hex}"
 						>
 							{#if thing.media[0]?.asset}
-								<img class="media"
-								src={urlFor(thing.media[0].asset).height(1920)}
-								width={thing.media[0].info.metadata.dimensions.width}
-								height={thing.media[0].info.metadata.dimensions.height}
-								alt={thing.media[0].info.altText}>
+								<Media media={thing.media[0]}
+								className="things-media"
+								resolution={1920}
+								width={thing.media[0].info?.metadata.dimensions.width}
+								height={thing.media[0].info?.metadata.dimensions.height}
+								/>
 							{:else}
-								<video class="media" muted loop autoplay playsinline
-								src={thing.media[0].mp4.asset.url}
-								placeholder={thing.media[0].cover ? urlFor(thing.media[0].cover.asset).width(600) : ""}
-								></video>
+								<Media media={thing.media[0]}
+								className="things-media"
+								resolution={1920}
+								width={thing.media[0].info?.metadata.dimensions.width}
+								height={thing.media[0].info?.metadata.dimensions.height}
+								video={true}
+								/>
 							{/if}
 							<div class="thing-info-container difference noise">
 								<div class="thing-info">
@@ -161,15 +166,6 @@ section {
 	background-color: var(--desktopColour);
 	transition: var(--transition);
 }
-.thing .media {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	display: none;
-}
-.thing:not(.loading) .media {
-	display: block;
-}
 .thing-info-container {
 	position: absolute;
 	top: 0;
@@ -202,23 +198,7 @@ a.buy-btn:hover {
 	position: absolute;
 	top: 0;
 	width: 100vw;
-	/* aspect-ratio: 2/3; */
 }
-/* @media screen and (min-width: 1025px) {
-	section {
-		grid-template-columns: repeat(4, 1fr);
-	}
-}
-@media screen and (min-width: 1281px) {
-	section {
-		grid-template-columns: repeat(5, 1fr);
-	}
-}
-@media screen and (min-width: 1601px) {
-	section {
-		grid-template-columns: repeat(6, 1fr);
-	}
-} */
 @media screen and (min-width: 701px) {
 	.thing:not(.loading):hover .thing-info-container {
 		display: flex;

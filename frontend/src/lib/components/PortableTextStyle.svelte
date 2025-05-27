@@ -118,6 +118,9 @@ h6 {
 	.imgHover.active {
 		display: block;
 	}
+	.imgHover img {
+		max-height: 90vh;
+	}
 	.background {
 		position: fixed;
 		top: 0;

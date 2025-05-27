@@ -5,6 +5,8 @@ let { data } = $props()
 import { register } from 'swiper/element/bundle';register();
 import { urlFor } from '$lib/utils/image';
 import { goto } from '$app/navigation';
+import Media from "$lib/components/Media.svelte"
+
 import { getToggles  } from '$lib/stores/toggle.svelte.js';
 let toggler = getToggles()
 import { getCta  } from '$lib/stores/cta.svelte.js';
@@ -63,16 +65,16 @@ onswiperrealindexchange={onRealIndexChange}
   {#each data.work[0].media as media, i}
     <swiper-slide>
       {#if media.mp4}
-        <video class="media" muted loop autoplay playsinline
-        src={media.mp4.asset.url}
-        placeholder={media.cover ? urlFor(media.cover).height(2200) : ""}
-        ></video>
+		<Media media={media}
+		className="swiper-media"
+		resolution={2200}
+		video={true}
+		/>
       {:else}
-        <img class="media"
-        src={urlFor(media).height(2200)}
-        width={media.info.metadata.dimensions.width}
-        height={media.info.metadata.dimensions.height}
-        alt={media.info.altText}>
+	  	<Media media={media}
+		className="swiper-media"
+		resolution={2200}
+		/>
       {/if}
     </swiper-slide>
   {/each}
@@ -153,11 +155,5 @@ swiper-slide {
 .swiper-single-button-next,
 .project-link-next {
   right: 0;
-}
-.media {
-  height: 100vh;
-  width: auto;
-  max-width: 100vw;
-  object-fit: cover;
 }
 </style>

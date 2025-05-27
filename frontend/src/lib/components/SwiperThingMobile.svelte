@@ -41,16 +41,16 @@ bind:this={swiperEl}
   {#each media as media, i}
     <swiper-slide>
       {#if media.mp4}
-        <video class="media" muted loop autoplay playsinline
-        src={media.mp4.asset.url}
-        placeholder={media.cover ? urlFor(media.cover).height(1920) : ""}
-        ></video>
+	  	<Media media={media}
+		className="swiper-thing-mobile-media"
+		resolution={1920}
+		video={true}
+		/>
       {:else}
-        <img class="media"
-        src={urlFor(media).height(1920)}
-        width={media.info.metadata.dimensions.width}
-        height={media.info.metadata.dimensions.height}
-        alt={media.info.altText}>
+	  	<Media media={media}
+		className="swiper-thing-mobile-media"
+		resolution={1920}
+		/>
       {/if}
     </swiper-slide>
   {/each}
@@ -110,12 +110,5 @@ swiper-slide {
 .swiper-single-button-next,
 .project-link-next {
   right: 0;
-}
-.media {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 2/3;
-  max-width: 100vw;
-  object-fit: cover;
 }
 </style>

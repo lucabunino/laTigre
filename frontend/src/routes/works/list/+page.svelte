@@ -3,6 +3,7 @@
 import { urlFor } from "$lib/utils/image";
 import { listInOut } from '$lib/utils/transition.js';
 import { getToggles  } from '$lib/stores/toggle.svelte.js';
+import Media from "$lib/components/Media.svelte"
 let toggler = getToggles()
 
 // Variables
@@ -98,16 +99,20 @@ style={`--hoverColor: ${hoverColor}; --activeColor: ${activeColor}`}
           {/if}
           <p>{#if (remainingMedia - work.media?.length)+1 < remainingMedia}{remainingMedia.toString().padStart(3, '0')}–{/if}{((remainingMedia -= work.media?.length) + 1).toString().padStart(3, '0')}</p>
           {#if work.media[0]?.asset}
-            <img class="media"
-            src={urlFor(work.media[0].asset).height(1080)}
-            width={work.media[0].info.metadata.dimensions.width}
-            height={work.media[0].info.metadata.dimensions.height}
-            alt={work.media[0].info.altText}>
+		  	<Media media={work.media[0]}
+			className="list-works-media"
+			resolution={1080}
+			width={work.media[0].info?.metadata.dimensions.width}
+			height={work.media[0].info?.metadata.dimensions.height}
+			/>
           {:else}
-            <video class="media" muted loop autoplay playsinline
-            src={work.media[0].mp4.asset.url}
-            placeholder={work.media[0].cover ? urlFor(work.media[0].cover.asset).width(500) : ""}
-            ></video>
+		  	<Media media={work.media[0]}
+			className="list-works-media"
+			resolution={1080}
+			width={work.media[0].info?.metadata.dimensions.width}
+			height={work.media[0].info?.metadata.dimensions.height}
+			video={true}
+			/>
           {/if}
         </a>
       </li>
@@ -179,16 +184,5 @@ a>*:nth-child(2) {
 a>*:nth-child(3) {
   width: calc(100%/12*1);
   text-align: right;
-}
-.media {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 25%;
-  height: auto;
-  display: none;
-}
-a:hover .media {
-  display: block;
 }
 </style>

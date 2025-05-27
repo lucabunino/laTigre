@@ -5,6 +5,7 @@ let { data } = $props()
 // Imports
 import { urlFor } from "$lib/utils/image";
 import { getToggles	} from '$lib/stores/toggle.svelte.js';
+import Media from "$lib/components/Media.svelte"
 let toggler = getToggles()
 
 // Variables
@@ -72,14 +73,9 @@ style="--mobileColour0: {mobileColours[0]?.hex}; --mobileColour1: {mobileColours
 			style="--desktopColour: {desktopColours[localIndex % desktopColours.length].hex}; --mobileColour: {mobileColours[localIndex % mobileColours.length].hex}"
 			>
 			{#if media.asset}
-				<img class="media"
-				style="--transition-delay:{localIndex*30}ms"
-				src={urlFor(media).width(600)} alt="">
+				<Media media={media} className="works-media" resolution={600} style="--transition-delay:{localIndex*30}ms"/>
 			{:else if media.mp4}
-				<video class="media" muted loop autoplay playsinline
-				style="--transition-delay:{localIndex*30}ms"
-				src={media.mp4.asset.url}
-				placeholder={media.cover ? urlFor(media.cover.asset).width(600) : ""}></video>
+				<Media media={media} className="works-media" resolution={600} style="--transition-delay:{localIndex*30}ms" video={true}/>
 			{/if}
 				<div class="work-info-container">
 					<div class="work-info difference"
@@ -116,12 +112,6 @@ section {
 	aspect-ratio: 2/3;
 	overflow: hidden;
 }
-.work .media {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	opacity: 0;
-}
 .work-info-container {
 	position: absolute;
 	bottom: 0;
@@ -143,9 +133,6 @@ section {
 	.work.on {
 	background-color: var(--desktopColour);
 	}
-	.work.on:not(.loading) .media {
-	opacity: 1;
-	}
 	.work.on .index {
 	opacity: 0;
 	}
@@ -163,18 +150,6 @@ section {
 	.work:not(.loading) {
 		background-color: var(--white);
 	}
-	/* .work.on {
-	background-color: var(--white);
-	} */
-	.work.on:not(.loading) .media, .work:not(.loading) .media {
-		opacity: 1;
-	}
-	.work.active {
-		/* background-color: var(--white); */
-	}
-	.work .media {
-		opacity: 0 !important;
-	}
 	.index, .work-info {
 		opacity: 1;
 	}
@@ -189,9 +164,6 @@ section {
 	}
 	.work.active .work-info {
 		opacity: 0;
-	}
-	.work.active .media {
-		opacity: 1 !important;
 	}
 	.work.active:first-of-type .work-info {
 		opacity: 0;
