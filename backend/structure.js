@@ -14,10 +14,6 @@ export const myStructure = (S, context) => {
     S.divider(),
     orderableDocumentListDeskItem({type: 'tag', title: 'Tags', icon: TagsIcon, S, context}),
     S.divider(),
-    // S.listItem()
-    //   .title('Studio (to be replaced)')
-    //   .icon(InfoOutlineIcon)
-    //   .child(S.document().schemaType('studio').documentId('studio')),
     S.listItem()
       .title('Info')
       .icon(InfoOutlineIcon)

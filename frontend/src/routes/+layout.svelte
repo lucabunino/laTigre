@@ -42,6 +42,14 @@ function handleHoverMenu() {
 	headerHover = !headerHover
 }
 
+let activeHover = $state(false)
+function handleHover(index) {
+	activeHover=index
+}
+function clearHover() {
+	activeHover = null;
+}
+
 // Lifecycle
 $effect.pre(async () => {	
 	if (data.pathname === '/works/list') {
@@ -130,18 +138,22 @@ function handleKey({ key }) {
 		<nav>
 		{#if !toggler.work && !toggler.thing}
 			<ul class="menu" onmouseenter={() => ctaer.setCta("")}>
-				<li class="menu-item difference" class:active={$page.url.pathname === "/"}
+				<li class="menu-item difference" class:active={activeHover === 1}
 				in:headerInOut|global={{ duration: 250, delay: 0 }}
 				out:headerInOut|global={{ duration: 250, delay: 0 }}
+				onmouseover={() => {handleHover(1)}}
+				onmouseleave={() => {clearHover()}}
 				style="--hoverColour: {data.colours.menu ? data.colours.menu[0 % data.colours.menu.length].hex : "red"};"
 				>
 					<a href="/"
 					onclick={(e) => {toggler.closeModal(false, false)}}
 					>LaTigre</a>
 				</li>
-				<li class="menu-item difference" class:active={$page.url.pathname.includes("/works") && (!toggler.info || toggler.thing) || toggler.work}
+				<li class="menu-item difference" class:active={activeHover === 2}
 				in:headerInOut|global={{ duration: 250, delay: 0 }}
 				out:headerInOut|global={{ duration: 250, delay: 0 }}
+				onmouseover={() => {handleHover(2)}}
+				onmouseleave={() => {clearHover()}}
 				style="--hoverColour: {data.colours.menu[0] ? data.colours.menu[1 % data.colours.menu.length].hex : "red"};"
 				>
 					<a href="/works"
@@ -163,18 +175,22 @@ function handleKey({ key }) {
 						</a>
 					{/if}
 				</li>
-				<li class="menu-item difference" class:active={toggler.info}
+				<li class="menu-item difference" class:active={activeHover === 3}
 				in:headerInOut|global={{ duration: 250, delay: 0 }}
 				out:headerInOut|global={{ duration: 250, delay: 0 }}
+				onmouseover={() => {handleHover(3)}}
+				onmouseleave={() => {clearHover()}}
 				style="--hoverColour: {data.colours.menu[2] ? data.colours.menu[2 % data.colours.menu.length].hex : "red"};"
 				>
 					<a href="/info"
 					onclick={(e) => {toggler.toggleInfo(e)}} data-sveltekit-preload-data
 					>Info</a>
 				</li>
-				<li class="menu-item difference" class:active={$page.url.pathname.includes("/things") && (!toggler.info || toggler.work) || toggler.thing}
+				<li class="menu-item difference" class:active={activeHover === 4}
 				in:headerInOut|global={{ duration: 250, delay: 0 }}
 				out:headerInOut|global={{ duration: 250, delay: 0 }}
+				onmouseover={() => {handleHover(4)}}
+				onmouseleave={() => {clearHover()}}
 				style="--hoverColour: {data.colours.menu[3] ? data.colours.menu[3 % data.colours.menu.length].hex : "red"};"
 				>
 					<a href="/things"
@@ -383,11 +399,11 @@ class:visible={mouse.x}
 .menu-item:nth-child(4) {
 	left: 75%;
 }
-.menu-item:hover {
+.menu-item.active {
 	color: var(--hoverColour);
 	mix-blend-mode: normal;
 }
-.menu-item:hover .line {
+.menu-item.active .line {
 	background-color: var(--hoverColour);
 }
 .list-switch {
