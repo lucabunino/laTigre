@@ -6,7 +6,8 @@ let {
 	width,
 	height,
 	resolution = 2000,
-	style = ""
+	style = "",
+	delay = 0
 } = $props()
 import { urlFor } from '$lib/utils/image';
 
@@ -28,11 +29,15 @@ if (!video) {
 }
 let blurred = $state(true);
 let loaded = $state(false);
+let domLoaded = $state(false);
 let observer;
 let img;
 
 // Lifecycle
 $effect(() => {
+	setTimeout(() => {
+		domLoaded = true
+	}, delay);
 	const highImg = new Image();
 	highImg.src = high;
 	highImg.onload = () => {
@@ -40,6 +45,7 @@ $effect(() => {
 		loaded = true;
 		if (isInViewport(img)) blurred = false;
 	};
+	if (video && domLoaded) blurred = false;
 	return () => observer?.disconnect();
 });
 // Functions
@@ -66,6 +72,7 @@ function entersViewport(e) {
 	<video class={className} muted loop autoplay playsinline
 	use:entersViewport
 	class:blurred={blurred}
+	class:invisible={delay > 0 && !domLoaded}
 	src={media.mp4.asset.url}
 	placeholder={media.cover ? urlFor(media.cover.asset).height(resolution) : ""}
 	width={width}
@@ -77,6 +84,7 @@ function entersViewport(e) {
 	<img class={className}
 	use:entersViewport
 	class:blurred={blurred}
+	class:invisible={delay > 0 && !domLoaded}
 	src={imgSrc}
 	width={media.info.metadata.dimensions.width}
 	height={media.info.metadata.dimensions.height}
@@ -87,26 +95,18 @@ function entersViewport(e) {
 {/if}
 
 <style>
+/* General */
 img, video {
 	-webkit-transition: var(--transition);
     -o-transition: var(--transition);
     transition: var(--transition);
 	transition-property: filter;
 }
-.media-container {
-	overflow: hidden;
-}
-/* General */
 .blurred {
-	filter: blur(10px);
+	filter: blur(20px);
 }
-.blurred::before {
-	content: '';
-	position: absolute;
-	inset: 0;
-	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='n' x='0%' y='0%' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='1' numOctaves='1' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-	opacity: 0.2;
-	pointer-events: none;
+.invisible {
+	filter: blur(20px) opacity(0);
 }
 /* Home */
 .home-mobile-media {
@@ -135,7 +135,7 @@ img, video {
 }
 @media screen and (max-width: 700px) {
 	:global(.work.on:not(.loading) .works-media), :global(.work:not(.loading) .works-media) {
-		opacity: 1;
+		opacity: 0;
 	}
 	:global(.work.active .works-media) {
 		opacity: 1 !important;

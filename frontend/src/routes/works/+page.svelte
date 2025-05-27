@@ -73,9 +73,9 @@ style="--mobileColour0: {mobileColours[0]?.hex}; --mobileColour1: {mobileColours
 			style="--desktopColour: {desktopColours[localIndex % desktopColours.length].hex}; --mobileColour: {mobileColours[localIndex % mobileColours.length].hex}"
 			>
 			{#if media.asset}
-				<Media media={media} className="works-media" resolution={600} style="--transition-delay:{localIndex*30}ms"/>
+				<Media media={media} className="works-media" resolution={600} delay={1500 + localIndex*10} style="--transition-delay:{localIndex*30}ms"/>
 			{:else if media.mp4}
-				<Media media={media} className="works-media" resolution={600} style="--transition-delay:{localIndex*30}ms" video={true}/>
+				<Media media={media} className="works-media" resolution={600} delay={1500 + localIndex*10} style="--transition-delay:{localIndex*30}ms" video={true}/>
 			{/if}
 				<div class="work-info-container">
 					<div class="work-info difference"
@@ -143,6 +143,7 @@ section {
 	}
 	.work {
 		background-color: var(--mobileColour0);
+		transition: var(--transition);
 	}
 	.work.onMobile {
 		background-color: var(--mobileColour1);

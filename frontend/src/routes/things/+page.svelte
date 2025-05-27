@@ -47,6 +47,10 @@ function handleOpenThing(i) {
 		openThing = i
 	}
 }
+function closeOpenThing() {
+	openThing = false
+}
+
 
 let threshold = 1;
 function handleScroll() {
@@ -81,7 +85,7 @@ function handleScroll() {
 					{@const thing = data.things[index]}
 						<div
 						class="thing"
-						class:last={i === data.things.length-1 && i === openThing && thing.moreInfo}
+						class:last={i === data.things.length-1 && i === openThing}
 						class:loading={!domLoaded}
 						class:active={activeThings.includes(i)}
 						class:open={openThing === i}
@@ -94,6 +98,7 @@ function handleScroll() {
 								resolution={1920}
 								width={thing.media[0].info?.metadata.dimensions.width}
 								height={thing.media[0].info?.metadata.dimensions.height}
+								delay={1500 + i*10}
 								/>
 							{:else}
 								<Media media={thing.media[0]}
@@ -102,6 +107,7 @@ function handleScroll() {
 								width={thing.media[0].info?.metadata.dimensions.width}
 								height={thing.media[0].info?.metadata.dimensions.height}
 								video={true}
+								delay={1500 + i*10}
 								/>
 							{/if}
 							<div class="thing-info-container noise">
@@ -127,20 +133,23 @@ function handleScroll() {
 										href="/things/{thing.slug.current}"
 										onclick={(e) => toggler.toggleThing(e, thing.slug.current)} data-sveltekit-preload-data
 										>More info</a>
-									{:else if thing.moreInfo || thing.media.length > 1}
+									{:else if thing.media.length > 1}
 										<button ontouchstart={(e) => handleOpenThing(i)}>More info</button>
 									{/if}
 								</div>
 							</div>
-							{#if innerWidth < 700 && openThing === i && activeThings.includes(i)}
-								<div class="swiper-container">
-									<SwiperThingMobile media={thing.media}/>
-								</div>
-								{#if thing.moreInfo}
-									<p class="moreInfo folio-18">{thing.moreInfo}</p>
-								{/if}
-							{/if}
 						</div>
+						{#if innerWidth < 700 && openThing === i && activeThings.includes(i)}
+							<div class="swiper-container">
+								<SwiperThingMobile media={thing.media}/>
+								<button class="close-btn difference"
+								onclick={(e) => {() => closeOpenThing()}}
+								>AAAA</button>
+							</div>
+							<!-- {#if thing.moreInfo}
+								<p class="moreInfo folio-18">{thing.moreInfo}</p>
+							{/if} -->
+						{/if}
 					{@html (() => { index++ })()}
 				{/if}
 			{:else}
@@ -165,6 +174,9 @@ section {
 	overflow: hidden;
 	background-color: var(--desktopColour);
 	transition: var(--transition);
+}
+.thing:not(.loading) {
+	background-color: var(--white);
 }
 .thing-info-container {
 	position: absolute;
@@ -196,9 +208,13 @@ a.buy-btn:hover {
 	background-color: var(--black);
 }
 .swiper-container {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	width: 100vw;
+	height: 100%;
+	background-color: var(--white);
+	z-index: 99;
+	display: block;
 }
 @media screen and (min-width: 701px) {
 	.thing:not(.loading):hover .thing-info-container {
@@ -225,7 +241,7 @@ a.buy-btn:hover {
 	.thing.last {
 		margin-bottom: 50vh;
 	}
-	.moreInfo {
+	/* .moreInfo {
 		position: absolute;
 		bottom: 0;
 		display: block;
@@ -234,6 +250,6 @@ a.buy-btn:hover {
 		transform: translateY(100%);
 		padding: var(--gutter);
 		backdrop-filter: blur(30px) saturate(3);
-	}
+	} */
 }
 </style>

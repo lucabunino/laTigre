@@ -4,7 +4,6 @@ let { media } = $props()
 // Imports
 import { register } from 'swiper/element/bundle';register();
 import { urlFor } from '$lib/utils/image';
-import { goto } from '$app/navigation';
 import Media from "$lib/components/Media.svelte"
 
 // Variables
@@ -14,8 +13,8 @@ let domLoaded = $state(false)
 let swiperEl = $state()
 $effect(() => {
 const swiperParams = {
-  slidesPerView: 1,
-  loop: true,
+  slidesPerView: 1.2,
+  loop: media.length > 2 ? false : false,
   speed: 400,
   freeMode: false,
   direction: "horizontal",
@@ -57,14 +56,14 @@ bind:this={swiperEl}
   {/each}
 </swiper-container>
 
-<button
+<!-- <button
 class="swiper-single-button swiper-single-button-prev no-cursor"
 onmouseover={() => ctaer.setCta("Previous")} onfocus={() => ctaer.setCta("Previous")} aria-label="Previous"
 ></button>
 <button
 class="swiper-single-button swiper-single-button-next no-cursor"
 onmouseover={() => ctaer.setCta("Next")} onfocus={() => ctaer.setCta("Next")} aria-label="Next"
-></button>
+></button> -->
 
 <style>
 swiper-slide {

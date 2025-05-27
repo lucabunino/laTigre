@@ -23,8 +23,7 @@
 </script>
 
 {#if value._type === 'image'}
-	<span class="imgHover-span" ontouchstart={(e) => toggleImgTap(e)}>{@render children()}</span>
-	<div
+	<span class="imgHover-span" ontouchstart={(e) => toggleImgTap(e)}>{@render children()}</span><div
 	class="imgHover"
 	bind:this={imgEl}
 	class:active={active === imgEl}
