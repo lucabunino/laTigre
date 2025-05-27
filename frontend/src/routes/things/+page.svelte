@@ -1,7 +1,7 @@
 <script>
 import { urlFor } from "$lib/utils/image";
 import { getToggles	} from '$lib/stores/toggle.svelte.js';
-import SwiperThingMobile from '$lib/components/SwiperThingMobile.svelte';
+import SwiperMobile from '$lib/components/SwiperMobile.svelte';
 import Media from "$lib/components/Media.svelte"
 let toggler = getToggles()
 
@@ -27,16 +27,18 @@ $effect(() => {
 });
 
 function handleTap(i) {
-	if (openThing != i || !openThing) {
-		if (activeThings.includes(i)) {
-			const index = activeThings.indexOf(i);
-			if (index !== -1) {
-				activeThings.splice(index, 1); // Remove the index if it exists in the array
-			}
-		} else {
-			activeThings = [];
-			activeThings.push(i)
-			openThing = false
+	if (innerWidth < 700) {
+		if (openThing != i || !openThing) {
+			if (activeThings.includes(i)) {
+				const index = activeThings.indexOf(i);
+				if (index !== -1) {
+					activeThings.splice(index, 1); // Remove the index if it exists in the array
+				}
+			} else {
+				activeThings = [];
+				activeThings.push(i)
+				openThing = false
+			}	
 		}	
 	}
 }
@@ -89,7 +91,7 @@ function handleScroll() {
 						class:loading={!domLoaded}
 						class:active={activeThings.includes(i)}
 						class:open={openThing === i}
-						ontouchend={(e) => {handleTap(i)}}
+						onclick={(e) => {handleTap(i)}}
 						style="--desktopColour: {data.colours.desktop[index % data.colours.desktop.length].hex}; --mobileColour: {data.colours.mobile[index % data.colours.mobile.length].hex}"
 						>
 							{#if thing.media[0]?.asset}
@@ -134,17 +136,17 @@ function handleScroll() {
 										onclick={(e) => toggler.toggleThing(e, thing.slug.current)} data-sveltekit-preload-data
 										>More info</a>
 									{:else if thing.media.length > 1}
-										<button ontouchstart={(e) => handleOpenThing(i)}>More info</button>
+										<button ontouchstart={(e) => handleOpenThing(i)}>More images</button>
 									{/if}
 								</div>
 							</div>
 						</div>
 						{#if innerWidth < 700 && openThing === i && activeThings.includes(i)}
 							<div class="swiper-container">
-								<SwiperThingMobile media={thing.media}/>
+								<SwiperMobile media={thing.media}/>
 								<button class="close-btn difference"
-								onclick={(e) => {() => closeOpenThing()}}
-								>AAAA</button>
+								onclick={(e) => {closeOpenThing()}}
+								>Close</button>
 							</div>
 							<!-- {#if thing.moreInfo}
 								<p class="moreInfo folio-18">{thing.moreInfo}</p>
@@ -210,11 +212,19 @@ a.buy-btn:hover {
 .swiper-container {
 	position: fixed;
 	top: 0;
-	width: 100vw;
+	width: 100%;
 	height: 100%;
+	display: flex;
+	align-items: center;
 	background-color: var(--white);
 	z-index: 99;
-	display: block;
+}
+.close-btn {
+	position: fixed;
+	right: var(--gutter);
+	top: var(--gutter);
+	z-index: 100;
+	font-size: 1rem;
 }
 @media screen and (min-width: 701px) {
 	.thing:not(.loading):hover .thing-info-container {

@@ -334,11 +334,11 @@ function handleKey({ key }) {
 		role="button" tabindex="0"
 		>
 			{#if $page.state.thingData.indexedMedia}
-			<div class="single-project-indexes">
+			<!-- <div class="single-project-indexes">
 				{#each $page.state.thingData.indexedMedia as index, i}
 					<button data-index={i} class:active={slider.slide === i} onclick={(e) => {slider.setSlide(i)}}>{index._mediaIndex}</button>
 				{/each}
-			</div>
+			</div> -->
 			{/if}
 			{#if $page.state.thingData.thing[0].description}
 				<p>{$page.state.thingData.thing[0].description}</p>

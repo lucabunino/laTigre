@@ -6,6 +6,7 @@ let { data } = $props()
 import { urlFor } from "$lib/utils/image";
 import { getToggles	} from '$lib/stores/toggle.svelte.js';
 import Media from "$lib/components/Media.svelte"
+import SwiperMobile from '$lib/components/SwiperMobile.svelte';
 let toggler = getToggles()
 
 // Variables
@@ -18,6 +19,7 @@ let domLoaded = $state(false);
 let innerWidth = $state(0);
 let innerHeight = $state(0);
 let activeWork = $state(null);
+let openWork = $state(false);
 let desktopColours = data.colours.desktop
 let mobileColours = data.colours.mobile
 
@@ -25,13 +27,23 @@ let mobileColours = data.colours.mobile
 function handleMouseover(e) {
 	e.target.classList.toggle("on")
 }
-function handleTap(e, workSlug) {
+function handleTap(e, workSlug, index) {
 	e.preventDefault()
 	if (activeWork !== workSlug) {
 		activeWork = workSlug; 
 	} else {
-		activeWork = null
+		handleOpenWork(index)
 	}
+}
+function handleOpenWork(i) {
+	if (openWork === i) {
+		openWork = false
+	} else {
+		openWork = i
+	}
+}
+function closeOpenWork() {
+	openWork = false
 }
 
 // Lifecycle
@@ -64,7 +76,7 @@ style="--mobileColour0: {mobileColours[0]?.hex}; --mobileColour1: {mobileColours
 			onclick={(e) => {if (innerWidth > 700) {
 				toggler.toggleWork(e, work.slug.current)
 			} else {
-				handleTap(e, work.slug.current)				
+				handleTap(e, work.slug.current, i)	
 			}}} data-sveltekit-preload-data
 			class:active={activeWork === work.slug.current}
 			class:loading={!domLoaded}
@@ -95,6 +107,17 @@ style="--mobileColour0: {mobileColours[0]?.hex}; --mobileColour1: {mobileColours
 			</a>
 			{(() => {index++})()}
 		{/each}
+		{#if innerWidth < 700 && openWork === i}
+			<div class="swiper-container">
+				<SwiperMobile media={work.media}/>
+				<button class="close-btn difference"
+				onclick={(e) => {closeOpenWork()}}
+				>Close</button>
+			</div>
+			<!-- {#if thing.moreInfo}
+				<p class="moreInfo folio-18">{thing.moreInfo}</p>
+			{/if} -->
+		{/if}
 	{/each}
 </section>
 
@@ -125,6 +148,23 @@ section {
 .work .work-info {
 	opacity: 0;
 	width: 100%;
+}
+.swiper-container {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	background-color: var(--white);
+	z-index: 99;
+}
+.close-btn {
+	position: fixed;
+	right: var(--gutter);
+	top: var(--gutter);
+	z-index: 100;
+	font-size: 1rem;
 }
 @media screen and (min-width: 701px) {
 	.work:hover .work-info {

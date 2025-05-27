@@ -20,6 +20,7 @@ function onInit(event) {
 	emblaApi = event.detail;
 	emblaApi.on('select', () => {
 	const index = emblaApi.selectedScrollSnap();
+	activeIndex = index
 	currentProject = data.projects[index];
 	});
 }
@@ -84,6 +85,7 @@ function scrollPrev() {
 onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")} aria-label="Project info"
 role="button" tabindex="0"
 >
+	<p class="counter">{(activeIndex+1).toString().padStart(3, '0')}/{(data.projects.length).toString().padStart(3, '0')}</p>
 	<h2>{currentProject.reference.title}</h2>
 	{#if currentProject.reference.description}
 		<p>{currentProject.reference.description}</p>

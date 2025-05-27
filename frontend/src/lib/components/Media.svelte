@@ -170,11 +170,11 @@ img, video {
 	max-width: 100vw;
 	object-fit: cover;
 }
-.swiper-thing-mobile-media {
+.swiper-mobile-media {
 	width: 100%;
 	height: auto;
 	aspect-ratio: 2/3;
 	max-width: 100vw;
-	object-fit: cover;
+	object-fit: contain;
 }
 </style>
