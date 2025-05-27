@@ -104,7 +104,7 @@ function handleScroll() {
 								video={true}
 								/>
 							{/if}
-							<div class="thing-info-container difference noise">
+							<div class="thing-info-container noise">
 								<div class="thing-info">
 									<h2>{thing.title}</h2>
 									{#if thing.description}<p>{thing.description}</p>{/if}
@@ -177,13 +177,13 @@ section {
 	display: none;
 	width: 100%;
 	height: 100%;
-	backdrop-filter: blur(20px);
+	backdrop-filter: blur(30px) saturate(3);
 }
 .thing-cta {
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
-	mix-blend-mode: difference;
+	/* mix-blend-mode: difference; */
 }
 .buy-btn {
 	color: var(--black);
@@ -192,7 +192,8 @@ section {
 	border-radius: .2em;
 }
 a.buy-btn:hover {
-	filter: invert(1);
+	color: var(--white);
+	background-color: var(--black);
 }
 .swiper-container {
 	position: absolute;
@@ -232,7 +233,7 @@ a.buy-btn:hover {
 		width: 100%;
 		transform: translateY(100%);
 		padding: var(--gutter);
-		backdrop-filter: blur(30px);
+		backdrop-filter: blur(30px) saturate(3);
 	}
 }
 </style>
