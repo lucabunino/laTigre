@@ -477,7 +477,7 @@ class:visible={mouse.x}
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	backdrop-filter: blur(30px);
+	backdrop-filter: blur(30px) saturate(5);
 	z-index: 2;
 }
 .background>div:nth-child(1) {
