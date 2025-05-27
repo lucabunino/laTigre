@@ -18,9 +18,14 @@ let activeColor = $state()
 
 let hoverTags = $state([]);
 let hoverColor = $state()
+let body = $state()
 
 $effect(() => {
   domLoaded = true;
+  body.style.overflow = 'hidden';
+  return(() => {
+	body.style.overflow = '';
+  })
 })
 
 function handleTagEnter(slug, color) {
@@ -51,7 +56,7 @@ function activeColorFor(work) {
 }
 </script>
 
-<svelte:window onwheel|nonpassive={(e) => {e.preventDefault()}}/>
+<svelte:body bind:this={body}/>
 
 <div onwheel={(e) => { e.stopPropagation()}}
 style={`--hoverColor: ${hoverColor}; --activeColor: ${activeColor}`}
@@ -150,6 +155,9 @@ style={`--hoverColor: ${hoverColor}; --activeColor: ${activeColor}`}
   justify-content: space-between;
   width: -webkit-fill-available;
   gap: var(--gutter);
+}
+.work:visited {
+	color: #9e9e9e;
 }
 .work.active {
   color: var(--activeColor);

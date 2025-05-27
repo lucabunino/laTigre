@@ -2,7 +2,18 @@
 let { data } = $props()
 import { PortableText } from '@portabletext/svelte'
 import PortableTextStyle from '$lib/components/PortableTextStyle.svelte';
+
+let body = $state()
+
+$effect(() => {
+  body.style.overflow = 'hidden';
+  return(() => {
+	body.style.overflow = '';
+  })
+})
 </script>
+
+<svelte:body bind:this={body}/>
 
 <section>
 {#if data.info.body}

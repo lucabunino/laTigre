@@ -17,13 +17,19 @@ let domLoaded = $state(false);
 
 let activeThings = $state([])
 let openThing = $state(false)
-$inspect(activeThings)
 $inspect(openThing)
+
+let body = $state()
 
 $effect(() => {
 	setTimeout(() => {
 		domLoaded = true;
 	}, 1500);
+	if (openThing === 0 || openThing > 0) {
+		body.style.overflow = 'hidden';
+	} else {
+		body.style.overflow = '';
+	}
 });
 
 function handleTap(i) {
@@ -76,7 +82,7 @@ function handleScroll() {
 }
 </script>
 
-<!-- <svelte:window onscroll={() => handleScroll()}></svelte:window> -->
+<svelte:body bind:this={body}/>
 
 <section class="folio-14 chess-board" style="--cols: {cols};">
 	{#each Array(rows) as _, row}

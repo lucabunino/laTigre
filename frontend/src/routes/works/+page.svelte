@@ -22,6 +22,19 @@ let activeWork = $state(null);
 let openWork = $state(false);
 let desktopColours = data.colours.desktop
 let mobileColours = data.colours.mobile
+let body = $state()
+
+// Lifecycle
+$effect(() => {
+	setTimeout(() => {
+		domLoaded = true;
+	}, 1500);
+	if (openWork === 0 || openWork > 0) {
+		body.style.overflow = 'hidden';
+	} else {
+		body.style.overflow = '';
+	}
+})
 
 // Functions
 function handleMouseover(e) {
@@ -45,16 +58,10 @@ function handleOpenWork(i) {
 function closeOpenWork() {
 	openWork = false
 }
-
-// Lifecycle
-$effect(() => {
-	setTimeout(() => {
-		domLoaded = true;
-	}, 1500);
-})
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight></svelte:window>
+<svelte:body bind:this={body}/>
 
 <section class="folio-14"
 style="--mobileColour0: {mobileColours[0]?.hex}; --mobileColour1: {mobileColours[1]?.hex}"
