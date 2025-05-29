@@ -109,13 +109,23 @@ role="button" tabindex="0"
 	width: 100%;
 }
 .embla__container {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
 }
 .embla__slide {
-	flex: 0 0 auto;
+	-webkit-box-flex: 0;
+	    -ms-flex: 0 0 auto;
+	        flex: 0 0 auto;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	justify-content: center;
-	align-items: center;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
 }
 .embla__button {
 	background: transparent;

@@ -389,8 +389,12 @@ class:visible={mouse.x}
 }
 .menu-item:nth-child(2) {
 	left: 25%;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	align-items: flex-end;
+	-webkit-box-align: end;
+	    -ms-flex-align: end;
+	        align-items: flex-end;
 	gap: .2em;
 }
 .menu-item:nth-child(3) {
@@ -399,12 +403,14 @@ class:visible={mouse.x}
 .menu-item:nth-child(4) {
 	left: 75%;
 }
-.menu-item.active {
-	color: var(--hoverColour);
-	mix-blend-mode: normal;
-}
-.menu-item.active .line {
-	background-color: var(--hoverColour);
+@media screen and (min-width: 701px) {
+	.menu-item.active {
+		color: var(--hoverColour);
+		mix-blend-mode: normal;
+	}
+	.menu-item.active .line {
+		background-color: var(--hoverColour);
+	}
 }
 .list-switch {
 	width: 1em;
@@ -416,31 +422,45 @@ class:visible={mouse.x}
 .list-switch.off .line {
 	width: 0;
 }
-.list-switch .line:nth-child(1) { transition-delay: .05s; }
-.list-switch .line:nth-child(2) { transition-delay: .10s; }
-.list-switch .line:nth-child(3) { transition-delay: .15s; }
+.list-switch .line:nth-child(1) { -webkit-transition-delay: .05s; -o-transition-delay: .05s; transition-delay: .05s; }
+.list-switch .line:nth-child(2) { -webkit-transition-delay: .10s; -o-transition-delay: .10s; transition-delay: .10s; }
+.list-switch .line:nth-child(3) { -webkit-transition-delay: .15s; -o-transition-delay: .15s; transition-delay: .15s; }
 .line {
 	width: 100%;
 	height: clamp(1px, .1vw, 2px);
 	height: 2px;
 	background-color: var(--white);
 	position: absolute;
+	-webkit-transition: var(--transition);
+	-o-transition: var(--transition);
 	transition: var(--transition);
+	-webkit-transition-property: top, width, -webkit-transform, -webkit-transform-origin;
+	transition-property: top, width, -webkit-transform, -webkit-transform-origin;
+	-o-transition-property: top, transform, transform-origin, width;
 	transition-property: top, transform, transform-origin, width;
-	transform-origin: center;
+	transition-property: top, transform, transform-origin, width, -webkit-transform, -webkit-transform-origin, -ms-transform-origin;
+	-webkit-transform-origin: center;
+	    -ms-transform-origin: center;
+	        transform-origin: center;
 }
 .line:nth-child(1) {top: 0;}
 .line:nth-child(2) {top: 50%;}
 .line:nth-child(3) {top: 100%;}
 .list-switch.crossed .line:nth-child(1) {
-	transform: rotate(20deg);
+	-webkit-transform: rotate(20deg);
+	    -ms-transform: rotate(20deg);
+	        transform: rotate(20deg);
 	top: 50%;
 }
 .list-switch.crossed .line:nth-child(2) {
-	transform: scaleX(0);
+	-webkit-transform: scaleX(0);
+	    -ms-transform: scaleX(0);
+	        transform: scaleX(0);
 }
 .list-switch.crossed .line:nth-child(3) {
-	transform: rotate(-20deg);
+	-webkit-transform: rotate(-20deg);
+	    -ms-transform: rotate(-20deg);
+	        transform: rotate(-20deg);
 	top: 50%;
 }
 @media screen and (max-width: 700px) {
@@ -493,11 +513,13 @@ class:visible={mouse.x}
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	backdrop-filter: blur(30px) saturate(3);
+	-webkit-backdrop-filter: blur(30px) saturate(3);
+	        backdrop-filter: blur(30px) saturate(3);
 	z-index: 2;
 }
 .background>div:nth-child(1) {
-	backdrop-filter: opacity(1);
+	-webkit-backdrop-filter: opacity(1);
+	        backdrop-filter: opacity(1);
 }
 .background>div:nth-child(2) {
 	position: absolute;
@@ -511,6 +533,9 @@ class:visible={mouse.x}
 	pointer-events: none;
 	visibility: hidden;
 	text-wrap-mode: nowrap;
+	-webkit-transform: translateY(-50%);
+	    -ms-transform: translateY(-50%);
+	        transform: translateY(-50%);
 }
 #cta.visible {
 	visibility: visible;
@@ -524,12 +549,21 @@ class:visible={mouse.x}
 	width: 100vw;
 	height: 100vh;
 	padding: var(--gutter);
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
+	-webkit-box-pack: justify;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
 }
 .single-project-indexes {
 	pointer-events: all;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
 	gap: .3em;
 }
@@ -542,7 +576,8 @@ class:visible={mouse.x}
 }
 @media screen and (max-width: 700px) {
 	.background {
-		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		        backdrop-filter: blur(10px);
 	}
 }
 

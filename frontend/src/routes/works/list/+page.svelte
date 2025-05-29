@@ -129,9 +129,14 @@ style={`--hoverColor: ${hoverColor}; --activeColor: ${activeColor}`}
 <style>
 .tags {
   padding: calc(var(--gutter)*2 + .7em) var(--gutter) var(--gutter);
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  column-gap: .2em;
-  flex-wrap: wrap;
+  -webkit-column-gap: .2em;
+     -moz-column-gap: .2em;
+          column-gap: .2em;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   z-index: 2;
   position: relative;
 }
@@ -151,8 +156,12 @@ style={`--hoverColor: ${hoverColor}; --activeColor: ${activeColor}`}
   width: 100%;
 }
 .work {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   width: -webkit-fill-available;
   gap: var(--gutter);
 }
@@ -162,26 +171,41 @@ style={`--hoverColor: ${hoverColor}; --activeColor: ${activeColor}`}
 .work.active {
   color: var(--activeColor);
   color: var(--workActive);
+  -webkit-transition-property: opacity;
+  -o-transition-property: opacity;
   transition-property: opacity;
-  transition-delay: 0s;
+  -webkit-transition-delay: 0s;
+       -o-transition-delay: 0s;
+          transition-delay: 0s;
 }
 .work.hover {
   color: var(--hoverColor);
+  -webkit-transition-property: opacity;
+  -o-transition-property: opacity;
   transition-property: opacity;
-  transition-delay: 0s;
+  -webkit-transition-delay: 0s;
+       -o-transition-delay: 0s;
+          transition-delay: 0s;
 }
 .work:hover {
   color: var(--listColor);
+  -webkit-transition-property: opacity;
+  -o-transition-property: opacity;
   transition-property: opacity;
-  transition-delay: 0s;
+  -webkit-transition-delay: 0s;
+       -o-transition-delay: 0s;
+          transition-delay: 0s;
 }
 a:not(:hover) {
-  transition-delay: 500ms;
+  -webkit-transition-delay: 500ms;
+       -o-transition-delay: 500ms;
+          transition-delay: 500ms;
 }
 a>* {
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+     text-overflow: ellipsis;
 }
 a>*:nth-child(1) {
   width: calc(100%/12*3);

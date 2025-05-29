@@ -55,6 +55,8 @@ swiper-container {
 }
 swiper-slide {
 	overflow: hidden;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
 }
 </style>

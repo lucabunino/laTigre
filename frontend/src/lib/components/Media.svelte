@@ -14,7 +14,7 @@ import { urlFor } from '$lib/utils/image';
 // Variables
 const observerOptions = {
 	root: null,
-	rootMargin: "-50px",
+	rootMargin: "-10px",
 	threshold: 0.1,
 };
 
@@ -100,32 +100,41 @@ img, video {
 	-webkit-transition: var(--transition);
     -o-transition: var(--transition);
     transition: var(--transition);
+	-webkit-transition-property: -webkit-filter;
+	transition-property: -webkit-filter;
+	-o-transition-property: filter;
 	transition-property: filter;
+	transition-property: filter, -webkit-filter;
 }
 .blurred {
-	filter: blur(20px);
+	-webkit-filter: blur(20px);
+	        filter: blur(20px);
 }
 .invisible {
-	filter: blur(20px) opacity(0);
+	-webkit-filter: blur(20px) opacity(0);
+	        filter: blur(20px) opacity(0);
 }
 /* Home */
 .home-mobile-media {
 	width: 100%;
 	height: 85vh;
-	object-fit: cover;
+	-o-object-fit: cover;
+	   object-fit: cover;
 }
 .embla-media {
 	display: block;
 	height: 100vh;
 	width: auto;
 	max-width: 100vw;
-	object-fit: cover;
+	-o-object-fit: cover;
+	   object-fit: cover;
 }
 /* Works */
 .works-media {
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
+	-o-object-fit: cover;
+	   object-fit: cover;
 	opacity: 0;
 }
 @media screen and (min-width: 701px) {
@@ -156,7 +165,8 @@ img, video {
 .things-media {
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
+	-o-object-fit: cover;
+	   object-fit: cover;
 	display: none;
 }
 :global(.thing:not(.loading) .things-media) {
@@ -168,13 +178,15 @@ img, video {
 	height: 100vh;
 	width: auto;
 	max-width: 100vw;
-	object-fit: cover;
+	-o-object-fit: cover;
+	   object-fit: cover;
 }
 .swiper-mobile-media {
 	width: 100%;
 	height: auto;
 	aspect-ratio: 2/3;
 	max-width: 100vw;
-	object-fit: contain;
+	-o-object-fit: contain;
+	   object-fit: contain;
 }
 </style>

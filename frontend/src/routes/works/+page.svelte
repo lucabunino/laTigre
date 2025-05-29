@@ -130,9 +130,13 @@ style="--mobileColour0: {mobileColours[0]?.hex}; --mobileColour1: {mobileColours
 
 <style>
 section {
+	display: -ms-grid;
 	display: grid;
 	width: 100vw;
-	align-items: start;
+	-webkit-box-align: start;
+	    -ms-flex-align: start;
+	        align-items: start;
+	-ms-grid-columns: (1fr)[8];
 	grid-template-columns: repeat(8, 1fr);
 }
 .work {
@@ -146,9 +150,15 @@ section {
 	position: absolute;
 	bottom: 0;
 	padding: calc(var(--gutter)/2);
-	align-items: flex-end;
-	justify-content: flex-end;
+	-webkit-box-align: end;
+	    -ms-flex-align: end;
+	        align-items: flex-end;
+	-webkit-box-pack: end;
+	    -ms-flex-pack: end;
+	        justify-content: flex-end;
 	gap: calc(var(--gutter)/2);
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
 	width: 100%;
 }
@@ -161,9 +171,13 @@ section {
 	top: 0;
 	width: 100%;
 	height: 100%;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	align-items: center;
-	background-color: var(--white);
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	background-color: var(--black);
 	z-index: 99;
 }
 .close-btn {
@@ -186,10 +200,13 @@ section {
 }
 @media screen and (max-width: 700px) {
 	section {
+		-ms-grid-columns: (1fr)[3];
 		grid-template-columns: repeat(3, 1fr);
 	}
 	.work {
 		background-color: var(--mobileColour0);
+		-webkit-transition: var(--transition);
+		-o-transition: var(--transition);
 		transition: var(--transition);
 	}
 	.work.onMobile {

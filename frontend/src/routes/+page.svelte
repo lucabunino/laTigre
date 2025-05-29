@@ -54,8 +54,12 @@ let innerHeight = $state(0)
 	height: 85vh;
 	z-index: 2;
 	width: 100%;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	align-items: center;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
 }
 .project-title {
 	position: sticky;

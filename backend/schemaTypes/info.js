@@ -8,7 +8,8 @@ export default {
 		{
 			name: 'title',
 			type: 'string',
-			hidden: true,
+			hidden: ({document}) => true, // or false conditionally
+  			initialValue: 'Info'
 		},
 		{
 			name: 'slug',

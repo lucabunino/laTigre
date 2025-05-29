@@ -1,9 +1,11 @@
 <script>
 import { urlFor } from "$lib/utils/image";
-import { getToggles	} from '$lib/stores/toggle.svelte.js';
 import SwiperMobile from '$lib/components/SwiperMobile.svelte';
 import Media from "$lib/components/Media.svelte"
+import { getToggles	} from '$lib/stores/toggle.svelte.js';
 let toggler = getToggles()
+import { getCta	} from '$lib/stores/cta.svelte.js';
+let ctaer = getCta()
 
 let { data } = $props()
 
@@ -16,6 +18,7 @@ var index = 0;
 let domLoaded = $state(false);
 
 let activeThings = $state([])
+$inspect(activeThings)
 let openThing = $state(false)
 $inspect(openThing)
 
@@ -33,22 +36,25 @@ $effect(() => {
 });
 
 function handleTap(i) {
-	if (innerWidth < 700) {
-		if (openThing != i || !openThing) {
-			if (activeThings.includes(i)) {
-				const index = activeThings.indexOf(i);
-				if (index !== -1) {
-					activeThings.splice(index, 1); // Remove the index if it exists in the array
-				}
-			} else {
+	if (innerWidth < 700 && !activeThings.includes(i)) {
+		// if (openThing != i || !openThing) {
+			// if (activeThings.includes(i)) {
+			// 	const index = activeThings.indexOf(i);
+			// 	if (index !== -1) {
+			// 		activeThings.splice(index, 1); // Remove the index if it exists in the array
+			// 	}
+			// } else {
 				activeThings = [];
 				activeThings.push(i)
 				openThing = false
-			}	
-		}	
+			// }	
+		// }	
 	}
 }
-function handleOpenThing(i) {
+function handleOpenThing(i, e) {
+	if (e) {
+		e.preventDefault()
+	}
 	if (openThing === i) {
 		openThing = false
 	} else {
@@ -100,24 +106,32 @@ function handleScroll() {
 						onclick={(e) => {handleTap(i)}}
 						style="--desktopColour: {data.colours.desktop[index % data.colours.desktop.length].hex}; --mobileColour: {data.colours.mobile[index % data.colours.mobile.length].hex}"
 						>
-							{#if thing.media[0]?.asset}
-								<Media media={thing.media[0]}
-								className="things-media"
-								resolution={1920}
-								width={thing.media[0].info?.metadata.dimensions.width}
-								height={thing.media[0].info?.metadata.dimensions.height}
-								delay={1500 + i*10}
-								/>
-							{:else}
-								<Media media={thing.media[0]}
-								className="things-media"
-								resolution={1920}
-								width={thing.media[0].info?.metadata.dimensions.width}
-								height={thing.media[0].info?.metadata.dimensions.height}
-								video={true}
-								delay={1500 + i*10}
-								/>
-							{/if}
+							<a
+							class="thing-link"
+							href="/things/{thing.slug.current}"
+							onclick={(e) => {innerWidth > 700 ? toggler.toggleThing(e, thing.slug.current) : handleOpenThing(i, e);}} data-sveltekit-preload-data
+							onmouseover={() => ctaer.setCta('More info')} onfocus={() => ctaer.setCta("More info")} aria-label="More info"
+							onmouseleave={() => ctaer.setCta('')}
+							>
+								{#if thing.media[0]?.asset}
+									<Media media={thing.media[0]}
+									className="things-media"
+									resolution={1920}
+									width={thing.media[0].info?.metadata.dimensions.width}
+									height={thing.media[0].info?.metadata.dimensions.height}
+									delay={1500 + i*30}
+									/>
+								{:else}
+									<Media media={thing.media[0]}
+									className="things-media"
+									resolution={1920}
+									width={thing.media[0].info?.metadata.dimensions.width}
+									height={thing.media[0].info?.metadata.dimensions.height}
+									video={true}
+									delay={1500 + i*30}
+									/>
+								{/if}
+							</a>
 							<div class="thing-info-container noise">
 								<div class="thing-info">
 									<h2>{thing.title}</h2>
@@ -126,8 +140,8 @@ function handleScroll() {
 								<div class="thing-cta">
 									{#if thing.priceInfo}
 									<p>
-										{#if thing.linkExternalUrl && thing.linkExternalUrl}
-											<a class="buy-btn" href={thing.linkExternalUrl} target="_blank" rel="noopener noreferrer">{thing.priceInfo}</a>
+										{#if thing.linkExternalUrl && thing.externalUrl}
+											<a class="buy-btn" href={thing.externalUrl} target="_blank" rel="noopener noreferrer">{thing.priceInfo}</a>
 										{:else}
 											<span class="buy-btn">{thing.priceInfo}</span>
 										{/if}
@@ -136,13 +150,8 @@ function handleScroll() {
 										{/if}
 									</p>
 									{/if}
-									{#if innerWidth > 700}
-										<a
-										href="/things/{thing.slug.current}"
-										onclick={(e) => toggler.toggleThing(e, thing.slug.current)} data-sveltekit-preload-data
-										>More info</a>
-									{:else if thing.media.length > 1}
-										<button ontouchstart={(e) => handleOpenThing(i)}>More images</button>
+									{#if innerWidth <= 700 && thing.media.length > 1}
+										<span>More images</span>
 									{/if}
 								</div>
 							</div>
@@ -154,9 +163,6 @@ function handleScroll() {
 								onclick={(e) => {closeOpenThing()}}
 								>Close</button>
 							</div>
-							<!-- {#if thing.moreInfo}
-								<p class="moreInfo folio-18">{thing.moreInfo}</p>
-							{/if} -->
 						{/if}
 					{@html (() => { index++ })()}
 				{/if}
@@ -169,9 +175,13 @@ function handleScroll() {
 
 <style>
 section {
+	display: -ms-grid;
 	display: grid;
 	width: 100vw;
-	align-items: start;
+	-webkit-box-align: start;
+	    -ms-flex-align: start;
+	        align-items: start;
+	-ms-grid-columns: (1fr)[4];
 	grid-template-columns: repeat(4, 1fr);
 }
 .thing {
@@ -181,6 +191,8 @@ section {
 	aspect-ratio: 2/3;
 	overflow: hidden;
 	background-color: var(--desktopColour);
+	-webkit-transition: var(--transition);
+	-o-transition: var(--transition);
 	transition: var(--transition);
 }
 .thing:not(.loading) {
@@ -190,26 +202,47 @@ section {
 	position: absolute;
 	top: 0;
 	padding: var(--gutter);
-	flex-direction: column;
-	align-items: flex-start;
-	justify-content: flex-end;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
+	-webkit-box-align: start;
+	    -ms-flex-align: start;
+	        align-items: flex-start;
+	-webkit-box-pack: end;
+	    -ms-flex-pack: end;
+	        justify-content: flex-end;
 	gap: calc(var(--gutter)/2);
 	display: none;
 	width: 100%;
 	height: 100%;
-	backdrop-filter: blur(30px) saturate(3);
+	-webkit-backdrop-filter: blur(30px) saturate(3);
+	        backdrop-filter: blur(30px) saturate(3);
+	pointer-events: none;
+}
+@media screen and (min-width: 701px) {
+	.thing-link {
+		cursor: none;
+	}
+}
+.thing-info {
+	width: 100%;
 }
 .thing-cta {
 	width: 100%;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	justify-content: space-between;
-	/* mix-blend-mode: difference; */
+	-webkit-box-pack: justify;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
 }
 .buy-btn {
 	color: var(--black);
 	background-color: var(--white);
 	padding: .1em .3em .2em;
 	border-radius: .2em;
+	pointer-events: all;
 }
 a.buy-btn:hover {
 	color: var(--white);
@@ -220,9 +253,13 @@ a.buy-btn:hover {
 	top: 0;
 	width: 100%;
 	height: 100%;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	align-items: center;
-	background-color: var(--white);
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	background-color: var(--black);
 	z-index: 99;
 }
 .close-btn {
@@ -234,11 +271,14 @@ a.buy-btn:hover {
 }
 @media screen and (min-width: 701px) {
 	.thing:not(.loading):hover .thing-info-container {
+		display: -webkit-box;
+		display: -ms-flexbox;
 		display: flex;
 	}
 }
 @media screen and (max-width: 700px) {
 	section {
+		-ms-grid-columns: (1fr)[1];
 		grid-template-columns: repeat(1, 1fr);
 	}
 	.thing.open {
@@ -252,20 +292,12 @@ a.buy-btn:hover {
 		opacity: 0;
 	}
 	.thing.active .thing-info-container {
+		display: -webkit-box;
+		display: -ms-flexbox;
 		display: flex;
 	}
 	.thing.last {
 		margin-bottom: 50vh;
 	}
-	/* .moreInfo {
-		position: absolute;
-		bottom: 0;
-		display: block;
-		height: 50vh;
-		width: 100%;
-		transform: translateY(100%);
-		padding: var(--gutter);
-		backdrop-filter: blur(30px) saturate(3);
-	} */
 }
 </style>

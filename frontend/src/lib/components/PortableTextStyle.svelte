@@ -70,7 +70,9 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	transform: translateX(-100%);
+	-webkit-transform: translateX(-100%);
+	    -ms-transform: translateX(-100%);
+	        transform: translateX(-100%);
 	display: none;
 	width: calc((100vw - calc(var(--gutter))*1)/4);
 }
@@ -109,10 +111,13 @@ h6 {
 
 @media screen and (max-width: 700px) {
 	.imgHover {
-		transform: translateX(0);
+		-webkit-transform: translateX(0);
+		    -ms-transform: translateX(0);
+		        transform: translateX(0);
 		width: 100%;
 		max-height: 100%;
-		object-fit: cover;
+		-o-object-fit: cover;
+		   object-fit: cover;
 	}
 	.imgHover.active {
 		display: block;
@@ -126,7 +131,8 @@ h6 {
 		left: 0;
 		width: 100vw;
 		height: 100vh;
-		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		        backdrop-filter: blur(10px);
 		z-index: -1;
 	}
 }

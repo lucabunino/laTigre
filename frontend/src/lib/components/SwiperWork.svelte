@@ -126,12 +126,18 @@ onmouseover={() => ctaer.setCta("Next")} onfocus={() => ctaer.setCta("Next")} ar
 
 <style>
 swiper-container::part(wrapper) {
-  justify-content: flex-start !important;
+  -webkit-box-pack: start !important;
+      -ms-flex-pack: start !important;
+          justify-content: flex-start !important;
 }
 swiper-slide {
   overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 .swiper-single-button,
 .project-link {

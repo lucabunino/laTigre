@@ -1,7 +1,7 @@
-[data-testid="image-input"],
+/* [data-testid="image-input"],
 [data-testid="image-input"] img,
 [data-testid="image-input"] div {
-  max-height: 150px !important;
+  height: 150px !important;
   width: auto;
   object-fit: contain;
-}
+} */

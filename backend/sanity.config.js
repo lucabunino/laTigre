@@ -1,4 +1,4 @@
-import './structure.css';
+// import './structure.css';
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {myStructure} from './structure.js'
