@@ -122,7 +122,6 @@ function handleKey({ key }) {
 	<meta property="og:type" content="website">
 	{#if data.seo[0].SEOTitle}<meta property="og:site_name" content={data.seo[0].SEOTitle}>{/if}
 </svelte:head>
-<p>{$page.url.hostname}</p>
 {#if data.maintenance.active && $page.url.hostname === "www.latigre.net"}
 	<Maintenance maintenance={data.maintenance}/>
 {:else}
