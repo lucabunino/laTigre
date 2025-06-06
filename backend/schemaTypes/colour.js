@@ -25,5 +25,10 @@ export default {
       type: 'array',
       of: [{ type: 'color' }]
     },
+	{
+      name: 'info',
+      type: 'array',
+      of: [{ type: 'color' }]
+    },
   ],
 };

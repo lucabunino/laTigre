@@ -90,7 +90,7 @@ a:any-link {
 	cursor: pointer;
 	text-decoration: none;
 }
-a:not(.menu-item>a):not(.project):not(.work):not(.work-list):not(.buy-btn):hover {
+a:not(.menu-item>a):not(.project):not(.work):not(.work-list):not(.buy-btn):not(.link):hover {
 	color: #999;
 }
 a:-webkit-any-link.underline {

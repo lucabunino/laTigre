@@ -1,4 +1,4 @@
-import { EarthGlobeIcon, InfoOutlineIcon, TagsIcon, ProjectsIcon, SparklesIcon, HomeIcon, ColorWheelIcon} from '@sanity/icons'
+import { EarthGlobeIcon, InfoOutlineIcon, TagsIcon, ProjectsIcon, SparklesIcon, HomeIcon, ColorWheelIcon, WrenchIcon} from '@sanity/icons'
 import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 
 
@@ -22,6 +22,10 @@ export const myStructure = (S, context) => {
       .title('Colours')
       .icon(ColorWheelIcon)
       .child(S.document().schemaType('colour').documentId('colour')),
+	S.listItem()
+      .title('Maintenance')
+      .icon(WrenchIcon)
+      .child(S.document().schemaType('maintenance').documentId('maintenance')),
   ];
   const siteSettings = [
     S.divider(),

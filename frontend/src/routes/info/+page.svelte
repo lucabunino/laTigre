@@ -2,6 +2,11 @@
 let { data } = $props()
 import { PortableText } from '@portabletext/svelte'
 import PortableTextStyle from '$lib/components/PortableTextStyle.svelte';
+import { getColors	} from '$lib/stores/color.svelte.js';
+let colorer = getColors()
+if (data.colours.info) {
+	colorer.setColors(data.colours.info)	
+}
 
 let body = $state()
 

@@ -13,6 +13,7 @@ import Work from './works/[slug]/+page.svelte';
 import Personal from './things/[slug]/+page.svelte';
 import Info from './info/+page.svelte';
 import Modal from '$lib/components/Modal.svelte';
+import Maintenance from '$lib/components/Maintenance.svelte';
 import { urlFor } from '$lib/utils/image';
 import { modalInOut, backgroundInOut, headerInOut, singleIn, singleOut } from '$lib/utils/transition.js';
 import { blur } from 'svelte/transition';
@@ -122,8 +123,9 @@ function handleKey({ key }) {
 	{#if data.seo[0].SEOTitle}<meta property="og:site_name" content={data.seo[0].SEOTitle}>{/if}
 </svelte:head>
 
-<!-- svelte-ignore a11y_consider_explicit_label -->
-
+{#if data.maintenance.active && $page.url.hostname === "https://www.latigre.net/"}
+<Maintenance maintenance={data.maintenance}/>
+{:else}
 {#if domLoaded}
 {#key data.pathname}
 	<main
@@ -365,6 +367,7 @@ function handleKey({ key }) {
 		</div>	
 	</div>
 {/key}
+{/if}
 {/if}
 
 <p id="cta" class="difference desktop-only"

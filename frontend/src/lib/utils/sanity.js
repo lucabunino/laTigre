@@ -31,6 +31,15 @@ export async function getColours() {
 		`
 	);
 }
+export async function getMaintenance() {
+	return await client.fetch(
+		`
+		*[_type == "maintenance" && !(_id in path('drafts.**'))][0] {
+			...,
+		}
+		`
+	);
+}
 export async function getProjects() {
 	return await client.fetch(
 		`

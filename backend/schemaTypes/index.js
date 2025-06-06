@@ -7,6 +7,7 @@ import colour from './colour'
 import tag from './tag'
 import policy from './policy'
 import seo from './seo'
+import maintenance from './maintenance'
 
 export const schemaTypes = [
   work,
@@ -18,4 +19,5 @@ export const schemaTypes = [
   colour,
   policy,
   seo,
+  maintenance
 ]

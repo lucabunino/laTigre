@@ -1,29 +1,31 @@
 <!-- PortableTextStyle -->
 <script lang="ts">
-	import type {BlockComponentProps} from '@portabletext/svelte'
-	import { urlFor } from '$lib/utils/image.js';
+import type {BlockComponentProps} from '@portabletext/svelte'
+import { urlFor } from '$lib/utils/image.js';
+interface Props {
+	portableText: BlockComponentProps;
+	children?: import('svelte').Snippet;
+	colours: any;
+}
+let { portableText, children, colours }: Props = $props();
+let {global, value} = $derived(portableText)
+let {style, listItem, markDefs} = $derived(value);
 
-	interface Props {
-		portableText: BlockComponentProps;
-		children?: import('svelte').Snippet;
-	}
+import { getColors	} from '$lib/stores/color.svelte.js';
+let colorer = getColors()
 
-	let { portableText, children }: Props = $props();
-	let {global, value} = $derived(portableText)
-	let {style, listItem, markDefs} = $derived(value);
-
-	let imgEl = $state()
-	let active = $state()
-	function toggleImgTap(e: Event) {
-		const el = (e.currentTarget as HTMLElement).nextElementSibling as HTMLElement;
-		active = active === el ? null : el;		// toggle
-
-		console.log(active);
-	}
+let imgEl = $state()
+let active = $state()
+function toggleImgTap(e: Event) {
+	const el = (e.currentTarget as HTMLElement).nextElementSibling as HTMLElement;
+	active = active === el ? null : el;
+}
 </script>
 
 {#if value._type === 'image'}
-	<span class="imgHover-span" ontouchstart={(e) => toggleImgTap(e)}>{@render children()}</span><div
+	<span class="imgHover-span"
+	style="--hoverColor: {colorer.colors[Math.floor(Math.random() * colorer.colors.length)].hex}"
+	ontouchstart={(e) => toggleImgTap(e)}>{@render children()}</span><div
 	class="imgHover"
 	bind:this={imgEl}
 	class:active={active === imgEl}
@@ -45,7 +47,9 @@
 		{/if}
 	</li>
 {:else if value._type === 'link'}
-	<a class="link" href={value?.url} target={value?.blank ? '_blank' : undefined}>
+	<a class="link" href={value?.url} target={value?.blank ? '_blank' : undefined}
+	style="--hoverColor: {colorer.colors[Math.floor(Math.random() * colorer.colors.length)].hex}"
+	>
 		{@render children()}
 	</a>
 {:else if style === 'normal' && !listItem}
@@ -92,6 +96,9 @@
 	cursor: pointer;
 	text-decoration-thickness: 1px;
 	text-underline-offset: 2px;
+}
+.imgHover-span:hover, .link:hover {
+	color: var(--hoverColor);
 }
 .paragraph {
 	margin: 0;

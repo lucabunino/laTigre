@@ -8,18 +8,8 @@ export default {
 		{
 			name: 'title',
 			type: 'string',
-			hidden: ({document}) => true, // or false conditionally
+			hidden: ({document}) => true,
   			initialValue: 'Info'
-		},
-		{
-			name: 'slug',
-			type: 'slug',
-			validation: (Rule) => Rule.required(),
-			options: {
-				source: 'title',
-				maxLength: 96,
-			},
-			hidden: true,
 		},
 		{
 			name: 'body',
