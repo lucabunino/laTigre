@@ -14,9 +14,9 @@ let innerHeight = $state(0)
 
 <svelte:window bind:innerWidth bind:innerHeight></svelte:window>
 
-{#if innerWidth > 700}
+{#if innerWidth/innerHeight > 1}
 	{#key data.projects}
-	<Embla data={data}/>
+		<Embla data={data}/>
 	{/key}
 {:else}
 {#each data.projects as project, i}

@@ -137,12 +137,20 @@ img, video {
 	   object-fit: cover;
 	opacity: 0;
 }
-@media screen and (min-width: 701px) {
+
+/* Tablet horizontal */
+@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
+	.embla-media {
+		max-width: 90vw;
+	}
+}
+
+@media screen and (min-width: 821px) {
 	:global(.work.on:not(.loading) .works-media) {
 		opacity: 1;
 	}
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 820px) {
 	:global(.work.on:not(.loading) .works-media), :global(.work:not(.loading) .works-media) {
 		opacity: 0;
 	}

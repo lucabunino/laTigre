@@ -36,7 +36,7 @@ $effect(() => {
 });
 
 function handleTap(i) {
-	if (innerWidth < 700 && !activeThings.includes(i)) {
+	if (!activeThings.includes(i)) {
 		// if (openThing != i || !openThing) {
 			// if (activeThings.includes(i)) {
 			// 	const index = activeThings.indexOf(i);
@@ -109,7 +109,7 @@ function handleScroll() {
 							<a
 							class="thing-link"
 							href="/things/{thing.slug.current}"
-							onclick={(e) => {innerWidth > 700 ? toggler.toggleThing(e, thing.slug.current) : handleOpenThing(i, e);}} data-sveltekit-preload-data
+							onclick={(e) => {innerWidth > 1024 && activeThings.includes(i) ? toggler.toggleThing(e, thing.slug.current) : handleOpenThing(i, e);}} data-sveltekit-preload-data
 							onmouseover={() => ctaer.setCta('More info')} onfocus={() => ctaer.setCta("More info")} aria-label="More info"
 							onmouseleave={() => ctaer.setCta('')}
 							>
@@ -150,13 +150,13 @@ function handleScroll() {
 										{/if}
 									</p>
 									{/if}
-									{#if innerWidth <= 700 && thing.media.length > 1}
-										<span>More images</span>
+									{#if thing.media.length > 1}
+										<span class="moreImages">More images</span>
 									{/if}
 								</div>
 							</div>
 						</div>
-						{#if innerWidth < 700 && openThing === i && activeThings.includes(i)}
+						{#if innerWidth/innerHeight < 1 && openThing === i && activeThings.includes(i)}
 							<div class="swiper-container">
 								<SwiperMobile media={thing.media}/>
 								<button class="close-btn difference"
@@ -269,18 +269,11 @@ a.buy-btn:hover {
 	z-index: 100;
 	font-size: 1rem;
 }
-@media screen and (min-width: 701px) {
-	.thing:not(.loading):hover .thing-info-container {
-		display: -webkit-box;
-		display: -ms-flexbox;
-		display: flex;
-	}
+.moreImages {
+	display: none;
 }
-@media screen and (max-width: 700px) {
-	section {
-		-ms-grid-columns: (1fr)[1];
-		grid-template-columns: repeat(1, 1fr);
-	}
+/* Shared styles for touch/mobile/tablet */
+@media (pointer: coarse) and (hover: none), (max-width: 600px) {
 	.thing.open {
 		overflow: visible;
 		z-index: 2;
@@ -288,7 +281,8 @@ a.buy-btn:hover {
 	.thing.open .thing-info-container {
 		height: calc(100% + 50vh);
 	}
-	.thing.open .thing-info, .thing.open .thing-cta {
+	.thing.open .thing-info,
+	.thing.open .thing-cta {
 		opacity: 0;
 	}
 	.thing.active .thing-info-container {
@@ -298,6 +292,36 @@ a.buy-btn:hover {
 	}
 	.thing.last {
 		margin-bottom: 50vh;
+	}
+	.moreImages {
+		display: block;
+	}
+}
+/* Tablet vertical */
+@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: portrait) {
+	.spacer {
+		display: none;
+	}
+	section {
+		-ms-grid-columns: (1fr)[2];
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+@media (max-width: 600px) {
+	.spacer {
+		display: none;
+	}
+	section {
+		-ms-grid-columns: (1fr)[1];
+		grid-template-columns: repeat(1, 1fr);
+	}
+}
+/* Hover styles for non-touch devices (desktops) */
+@media (min-width: 601px) {
+	.thing:not(.loading):hover .thing-info-container {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
 	}
 }
 </style>

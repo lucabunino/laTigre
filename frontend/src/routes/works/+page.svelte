@@ -39,6 +39,8 @@ $effect(() => {
 // Functions
 function handleMouseover(e) {
 	e.target.classList.toggle("on")
+	console.log(e.target);
+	
 }
 function handleTap(e, workSlug, index) {
 	e.preventDefault()
@@ -77,10 +79,10 @@ style="--mobileColour0: {mobileColours[0]?.hex}; --mobileColour1: {mobileColours
 			href="/works/{work.slug.current}"
 			data-index={localIndex}
 			data-work={work.slug.current}
-			onmouseenter={(e) => {if (innerWidth > 700) {
+			onmouseenter={(e) => {if (innerWidth > 820) {
 				handleMouseover(e)}
 			}}
-			onclick={(e) => {if (innerWidth > 700) {
+			onclick={(e) => {if (innerWidth > 820) {
 				toggler.toggleWork(e, work.slug.current)
 			} else {
 				handleTap(e, work.slug.current, i)	
@@ -114,7 +116,7 @@ style="--mobileColour0: {mobileColours[0]?.hex}; --mobileColour1: {mobileColours
 			</a>
 			{(() => {index++})()}
 		{/each}
-		{#if innerWidth < 700 && openWork === i}
+		{#if innerWidth <= 820 && openWork === i}
 			<div class="swiper-container">
 				<SwiperMobile media={work.media}/>
 				<button class="close-btn difference"
@@ -187,22 +189,30 @@ section {
 	z-index: 100;
 	font-size: 1rem;
 }
-@media screen and (min-width: 701px) {
-	.work:hover .work-info {
-		opacity: 1;
-	}
-	.work.on {
-	background-color: var(--desktopColour);
-	}
-	.work.on .index {
-	opacity: 0;
-	}
-}
-@media screen and (max-width: 700px) {
+
+/* Shared styles for touch/mobile/tablet */
+@media (pointer: coarse) and (hover: none), (max-width: 600px) {
 	section {
 		-ms-grid-columns: (1fr)[3];
 		grid-template-columns: repeat(3, 1fr);
 	}
+}
+/* Tablet vertical */
+@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: portrait) {
+	section {
+		-ms-grid-columns: (1fr)[3];
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+/* Tablet horizontal */
+@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
+	section {
+		-ms-grid-columns: (1fr)[8];
+		grid-template-columns: repeat(8, 1fr);
+	}
+}
+/* Hover styles for non-touch devices (desktops) */
+@media (max-width: 820px) {
 	.work {
 		background-color: var(--mobileColour0);
 		-webkit-transition: var(--transition);
@@ -231,6 +241,18 @@ section {
 		opacity: 0;
 	}
 	.work.active:first-of-type .work-info {
+		opacity: 0;
+	}
+}
+/* Hover styles for non-touch devices (desktops) */
+@media (min-width: 821px) {
+	.work:hover .work-info {
+		opacity: 1;
+	}
+	.work.on {
+		background-color: var(--desktopColour);
+	}
+	.work.on .index {
 		opacity: 0;
 	}
 }

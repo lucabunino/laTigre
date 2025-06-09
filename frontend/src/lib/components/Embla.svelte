@@ -90,13 +90,6 @@ role="button" tabindex="0"
 	{#if currentProject.reference.description}
 		<p>{currentProject.reference.description}</p>
 	{/if}
-	<!-- {#if currentProject.reference.tags}
-		<p>
-			{#each currentProject.reference.tags as tag, i}
-				{tag.title}{#if i + 1 < data.projects[0].reference.tags?.length}, {/if}
-			{/each}
-		</p>
-	{/if} -->
 </div>
 
 <style>
@@ -149,5 +142,12 @@ role="button" tabindex="0"
 	left: var(--gutter);
 	bottom: var(--gutter);
 	z-index: 2;
+}
+
+/* Tablet horizontal */
+@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
+	.embla__button {
+		display: none;
+	}
 }
 </style>

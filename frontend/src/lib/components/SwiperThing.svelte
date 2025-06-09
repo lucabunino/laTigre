@@ -168,4 +168,25 @@ swiper-slide {
 .project-link-next {
 	right: 0;
 }
+
+/* Tablet horizontal */
+@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
+	.swiper-single-button,
+	.project-link {
+		background: var(--white);
+		width: 50px;
+		height: 50px;
+		border-radius: 99px;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	.swiper-single-button-prev,
+	.project-link-prev {
+		left: var(--gutter);
+	}
+	.swiper-single-button-next,
+	.project-link-next {
+		right: var(--gutter);
+	}
+}
 </style>

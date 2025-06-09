@@ -594,4 +594,14 @@ class:visible={mouse.x}
 	color: var(--hoverColour);
 	mix-blend-mode: normal;
 }
+
+/* Tablet */
+@media (pointer: coarse) and (hover: none) and (min-width: 768px) {
+	#cta {
+		display: none;
+	}
+	.list-switch {
+		display: none;
+	}
+}
 </style>
