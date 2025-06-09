@@ -600,6 +600,8 @@ class:visible={mouse.x}
 	#cta {
 		display: none;
 	}
+}
+@media (pointer: coarse) and (hover: none) and (max-width: 820px) {
 	.list-switch {
 		display: none;
 	}
