@@ -20,6 +20,18 @@ export default {
 			},
 		},
 		{
+			name: 'status',
+			type: 'string',
+			options: {
+				list: [
+					{ title: 'Public', value: 'public' },
+					{ title: 'Hidden', value: 'hidden' },
+				],
+			},
+			initialValue: 'hidden',
+			validation: (Rule) => Rule.required(),
+		},
+		{
 			name: 'media',
 			type: 'array',
 			of: [
@@ -80,10 +92,9 @@ export default {
 			tag2: 'tags.2.title',
 			tag3: 'tags.3.title',
 			media: 'media',
-			_id: '_id'
+			status: 'status',
 		},
-		prepare({ title, tag0, tag1, tag2, tag3, media, _id }) {
-			const isDraft = _id?.startsWith('drafts.');
+		prepare({ title, tag0, tag1, tag2, tag3, media, status }) {
 			let mediaUsed
 			if (media[0].asset) {
 				mediaUsed = media[0].asset
@@ -92,10 +103,10 @@ export default {
 			}
 			const tags = [tag0, tag1, tag2, tag3].filter(Boolean).sort();
 			return {
-				title: isDraft ? `[DRAFT] ${title}` : title,
+				title: status === "hidden" ? `[HIDDEN] ${title}` : title,
 				subtitle: tags.length ? tags.join(', ') : 'No tags',
-				media: !isDraft ? mediaUsed : undefined,
-				icon: isDraft ? EditIcon : undefined,
+				media: status !== "hidden" ? mediaUsed : undefined,
+				icon: status === "hidden" ? EditIcon : undefined,
 			};
 		}
 	}

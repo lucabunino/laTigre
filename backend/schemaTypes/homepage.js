@@ -32,6 +32,10 @@ export default {
 							title: 'Reference to Work or Personal',
 							type: 'reference',
 							to: [{ type: 'work' }, { type: 'thing' }],
+							options: {
+								filter: 'status == $status',
+								filterParams: { status: 'public' }
+							},
 							validation: (Rule) => Rule.required(),
 						},
 						{

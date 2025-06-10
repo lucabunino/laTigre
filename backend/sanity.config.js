@@ -10,6 +10,21 @@ import {media} from 'sanity-plugin-media'
 const singletonActions = new Set(['publish', 'discardChanges', 'restore'])
 const singletonTypes = new Set(['homepage', 'network'])
 
+export function StatusBadge(props) {
+  const status = props.published?.status || props.draft?.status
+  if (!status) return null
+
+  let color = 'primary'
+  if (status === 'public') color = 'success'
+  if (status === 'hidden') color = 'danger'
+
+  return {
+    label: status.charAt(0).toUpperCase() + status.slice(1),
+    title: `Status: ${status}`,
+    color,
+  }
+}
+
 export default defineConfig({
 	name: 'default',
 	title: 'LaTigre',
@@ -35,5 +50,6 @@ export default defineConfig({
 			singletonTypes.has(context.schemaType)
 				? input.filter(({ action }) => action && singletonActions.has(action))
 				: input,
+		badges: [StatusBadge]
 	},
 })

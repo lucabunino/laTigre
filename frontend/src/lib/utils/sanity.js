@@ -110,7 +110,7 @@ export async function getInfo() {
 export async function getWorks() {
 	return await client.fetch(
 		`
-		*[_type == "work" && !(_id in path('drafts.**'))]|order(orderRank) {
+		*[_type == "work" && !(_id in path('drafts.**')) && status == "public"]|order(orderRank) {
 			...,
 			media[] {
 				mp4 {
@@ -181,7 +181,7 @@ export async function getWork(slug) {
 export async function getWorkIndexes() {
 	return await client.fetch(
 		`
-		*[_type == "work" && !(_id in path('drafts.**'))]|order(orderRank) {
+		*[_type == "work" && !(_id in path('drafts.**')) && status == "public"]|order(orderRank) {
 			slug,
 			media[] {
 				_key,
@@ -193,7 +193,7 @@ export async function getWorkIndexes() {
 export async function getThings() {
 	return await client.fetch(
 		`
-		*[_type == "thing" && !(_id in path('drafts.**'))]|order(orderRank) {
+		*[_type == "thing" && !(_id in path('drafts.**')) && status == "public"]|order(orderRank) {
 			...,
 			media[] {
 				mp4 {
@@ -256,7 +256,7 @@ export async function getThing(slug) {
 export async function getThingIndexes() {
 	return await client.fetch(
 		`
-		*[_type == "thing" && !(_id in path('drafts.**'))]|order(orderRank) {
+		*[_type == "thing" && !(_id in path('drafts.**')) && status == "public"]|order(orderRank) {
 			slug,
 			media[] {
 				_key,
