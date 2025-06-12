@@ -144,13 +144,25 @@ img, video {
 		max-width: 90vw;
 	}
 }
-
-@media screen and (min-width: 821px) {
+@media (pointer: fine) and (min-width: 601px) {
 	:global(.work.on:not(.loading) .works-media) {
 		opacity: 1;
 	}
 }
-@media screen and (max-width: 820px) {
+@media (pointer: fine) and (max-width: 1000px) {
+	:global(.work.on:not(.loading) .works-media) {
+		opacity: 0;
+	}
+	:global(.work.onTablet:not(.loading) .works-media) {
+		opacity: 1;
+	}
+}
+@media (pointer: fine) and (max-width: 600px) {
+	:global(.work.onTablet:not(.loading) .works-media) {
+		opacity: 0;
+	}
+}
+@media (pointer: coarse) and (hover: none), (max-width: 600px) {
 	:global(.work.on:not(.loading) .works-media), :global(.work:not(.loading) .works-media) {
 		opacity: 0;
 	}

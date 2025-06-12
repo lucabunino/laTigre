@@ -14,6 +14,7 @@ let totalmedia = data.works.reduce((sum, work) => sum + (work.media?.length || 0
 let remainingMedia = totalmedia+1;
 let index = 1;
 let cols = 8;
+let colsTablet = 4;
 let colsMobile = 3;
 let domLoaded = $state(false);
 let innerWidth = $state(0);
@@ -38,18 +39,17 @@ $effect(() => {
 
 // Functions
 function handleMouseover(e) {
-	e.target.classList.toggle("on")
-	console.log(e.target);
-	
+	e.target.classList.toggle("on")	
+	e.target.classList.toggle("onTablet")	
 }
-function handleTap(e, workSlug, index) {
-	e.preventDefault()
-	if (activeWork !== workSlug) {
-		activeWork = workSlug; 
-	} else {
-		handleOpenWork(index)
-	}
-}
+// function handleTap(e, workSlug, index) {
+// 	e.preventDefault()
+// 	if (activeWork !== workSlug) {
+// 		activeWork = workSlug; 
+// 	} else {
+// 		handleOpenWork(index)
+// 	}
+// }
 function handleOpenWork(i) {
 	if (openWork === i) {
 		openWork = false
@@ -59,6 +59,39 @@ function handleOpenWork(i) {
 }
 function closeOpenWork() {
 	openWork = false
+}
+
+let touched = false;
+function handleTouchStart(e, workSlug, i) {
+	touched = true;
+	setTimeout(() => {
+	touched = false;
+	}, 500);
+	console.log("touch event");
+	if (activeWork !== workSlug) {
+		activeWork = workSlug;
+	} else {
+		if (innerWidth > innerHeight) {
+			touched = false;
+		} else {
+			handleOpenWork(i)
+		}
+	}
+}
+function handleClick(e, workSlug, i) {
+	if (!touched && innerWidth <= 600) {
+		e.preventDefault();
+		e.stopPropagation();
+		handleTouchStart(e, workSlug, i)
+	}
+	if (touched) {
+		e.preventDefault();
+		e.stopPropagation();
+		console.log("click suppressed after touch");
+		return;
+	}
+	console.log("mouse click event");
+	toggler.toggleWork(e, workSlug)
 }
 </script>
 
@@ -72,25 +105,23 @@ style="--mobileColour0: {mobileColours[0]?.hex}; --mobileColour1: {mobileColours
 		{#each work.media as media, j}
 		{@const localIndex = index}
 		{@const col = (localIndex - 1) % cols}
+		{@const colTablet = (localIndex - 1) % colsTablet}
 		{@const colMobile = (localIndex - 1) % colsMobile}
 		{@const row = Math.floor((localIndex - 1) / cols)}
+		{@const rowTablet = Math.floor((localIndex - 1) / colsTablet)}
 		{@const rowMobile = Math.floor((localIndex - 1) / colsMobile)}
 			<a class="work"
 			href="/works/{work.slug.current}"
 			data-index={localIndex}
 			data-work={work.slug.current}
-			onmouseenter={(e) => {if (innerWidth > 820) {
-				handleMouseover(e)}
-			}}
-			onclick={(e) => {if (innerWidth > 820) {
-				toggler.toggleWork(e, work.slug.current)
-			} else {
-				handleTap(e, work.slug.current, i)	
-			}}} data-sveltekit-preload-data
+			onmouseenter={(e) => {handleMouseover(e)}}
+			ontouchstart={(e) => {handleTouchStart(e, work.slug.current, i)}}
+			onclick={(e) => {handleClick(e, work.slug.current, i)}} data-sveltekit-preload-data
 			class:active={activeWork === work.slug.current}
 			class:loading={!domLoaded}
 			class:on={(row % 2 === 0 && col % 2 !== 0) || (row % 2 !== 0 && col % 2 === 0)}
 			class:onMobile={(rowMobile % 2 === 0 && colMobile % 2 !== 0) || (rowMobile % 2 !== 0 && colMobile % 2 === 0)}
+			class:onTablet={(rowTablet % 2 === 0 && colTablet % 2 !== 0) || (rowTablet % 2 !== 0 && colTablet % 2 === 0)}
 			style="--desktopColour: {desktopColours[localIndex % desktopColours.length].hex}; --mobileColour: {mobileColours[localIndex % mobileColours.length].hex}"
 			>
 			{#if media.asset}
@@ -116,7 +147,7 @@ style="--mobileColour0: {mobileColours[0]?.hex}; --mobileColour1: {mobileColours
 			</a>
 			{(() => {index++})()}
 		{/each}
-		{#if innerWidth <= 820 && openWork === i}
+		{#if innerWidth <= 1024 && openWork === i}
 			<div class="swiper-container">
 				<SwiperMobile media={work.media}/>
 				<button class="close-btn difference"
@@ -189,30 +220,12 @@ section {
 	z-index: 100;
 	font-size: 1rem;
 }
-
-/* Shared styles for touch/mobile/tablet */
+/* Touch or u 600px */
 @media (pointer: coarse) and (hover: none), (max-width: 600px) {
 	section {
 		-ms-grid-columns: (1fr)[3];
 		grid-template-columns: repeat(3, 1fr);
 	}
-}
-/* Tablet vertical */
-@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: portrait) {
-	section {
-		-ms-grid-columns: (1fr)[3];
-		grid-template-columns: repeat(3, 1fr);
-	}
-}
-/* Tablet horizontal */
-@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
-	section {
-		-ms-grid-columns: (1fr)[8];
-		grid-template-columns: repeat(8, 1fr);
-	}
-}
-/* Hover styles for non-touch devices (desktops) */
-@media (max-width: 820px) {
 	.work {
 		background-color: var(--mobileColour0);
 		-webkit-transition: var(--transition);
@@ -244,8 +257,46 @@ section {
 		opacity: 0;
 	}
 }
+/* Tablet vertical */
+@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: portrait) {
+	section {
+		-ms-grid-columns: (1fr)[4];
+		grid-template-columns: repeat(4, 1fr);
+	}
+	.work.loading:not(.onTablet) {
+		background-color: var(--mobileColour0);
+	}
+	.work.loading.onTablet {
+		background-color: var(--mobileColour1);
+	}
+}
+/* Tablet horizontal */
+@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
+	section {
+		-ms-grid-columns: (1fr)[4];
+		grid-template-columns: repeat(4, 1fr);
+	}
+	.work.loading:not(.onTablet) {
+		background-color: var(--mobileColour0);
+	}
+	.work.loading.onTablet {
+		background-color: var(--mobileColour1);
+	}
+}
+@media (pointer: fine) and (max-width: 1000px) {
+	section {
+		-ms-grid-columns: (1fr)[4];
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+@media (pointer: fine) and (max-width: 600px) {
+	section {
+		-ms-grid-columns: (1fr)[3];
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
 /* Hover styles for non-touch devices (desktops) */
-@media (min-width: 821px) {
+@media (pointer: fine) and (min-width: 601px) {
 	.work:hover .work-info {
 		opacity: 1;
 	}
@@ -254,6 +305,14 @@ section {
 	}
 	.work.on .index {
 		opacity: 0;
+	}
+}
+@media (pointer: fine) and (min-width: 601px) and (max-width: 1000px) {
+	.work.on {
+		background-color: unset;
+	}
+	.work.onTablet {
+		background-color: var(--desktopColour);
 	}
 }
 </style>

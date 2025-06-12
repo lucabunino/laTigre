@@ -44,9 +44,9 @@ function scrollPrev() {
 					<a
 						class="project no-cursor"
 						onmouseover={() => ctaer.setCta('View')} onfocus={() => ctaer.setCta("View")} aria-label="View"
-						onclick={(e) => {project.reference._type === 'good' ? toggler.toggleGood(e, project.reference.slug.current, true) : toggler.toggleWork(e, project.reference.slug.current, true)}}
+						onclick={(e) => {project.reference._type === 'thing' ? toggler.toggleThing(e, project.reference.slug.current, true) : toggler.toggleWork(e, project.reference.slug.current, true)}}
 						data-sveltekit-preload-data
-						href="{project.reference._type === 'good' ? '/goods' : '/works'}/{project.reference.slug.current}"
+						href="{project.reference._type === 'thing' ? '/things' : '/works'}/{project.reference.slug.current}"
 					>
 						{#if project.desktop}
 							<Media media={project.desktop}

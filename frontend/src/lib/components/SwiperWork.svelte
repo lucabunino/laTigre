@@ -167,9 +167,10 @@ swiper-slide {
 @media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
 	.swiper-single-button,
 	.project-link {
-		background: var(--white);
-		width: 50px;
-		height: 50px;
+		width: auto;
+		height: auto;
+		padding: 1rem;
+		margin: -1rem;
 		border-radius: 99px;
 		top: 50%;
 		transform: translateY(-50%);
@@ -178,9 +179,19 @@ swiper-slide {
 	.project-link-prev {
 		left: var(--gutter);
 	}
+	.swiper-single-button-prev:after,
+	.project-link-prev:after {
+		content: "Prev";
+		visibility: hidden;
+	}
 	.swiper-single-button-next,
 	.project-link-next {
 		right: var(--gutter);
+	}
+	.swiper-single-button-next:after,
+	.project-link-next:after {
+		content: "Next";
+		visibility: hidden;
 	}
 }
 </style>

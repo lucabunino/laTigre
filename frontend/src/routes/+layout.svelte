@@ -308,6 +308,8 @@ function handleKey({ key }) {
 				<p>{$page.state.workData.work[0].description}</p>
 			{/if}
 		</div>
+		<div class="swiper-button-tag swiper-button-tag-prev">Prev</div>
+		<div class="swiper-button-tag swiper-button-tag-next">Next</div>
 	</div>
 {/key}
 {/if}
@@ -351,11 +353,6 @@ function handleKey({ key }) {
 		role="button" tabindex="0"
 		>
 			{#if $page.state.thingData.indexedMedia}
-			<!-- <div class="single-project-indexes">
-				{#each $page.state.thingData.indexedMedia as index, i}
-					<button data-index={i} class:active={slider.slide === i} onclick={(e) => {slider.setSlide(i)}}>{index._mediaIndex}</button>
-				{/each}
-			</div> -->
 			{/if}
 			{#if $page.state.thingData.thing[0].description}
 				<p>{$page.state.thingData.thing[0].description}</p>
@@ -363,7 +360,9 @@ function handleKey({ key }) {
 			{#if $page.state.thingData.thing[0].moreInfo}
 				<p>{$page.state.thingData.thing[0].moreInfo}</p>
 			{/if}
-		</div>	
+		</div>
+		<div class="swiper-button-tag swiper-button-tag-prev">Prev</div>
+		<div class="swiper-button-tag swiper-button-tag-next">Next</div>
 	</div>
 {/key}
 {/if}
@@ -576,6 +575,35 @@ class:visible={mouse.x}
 	text-decoration-thickness: 1px;
 	text-underline-offset: 2px;
 }
+.swiper-button-tag {
+	display: noner;
+}
+/* Tablet horizontal */
+@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
+	.swiper-button-tag {
+		background: transparent;
+		pointer-events: none;
+		position: absolute;
+		z-index: 2;
+		cursor: pointer;
+		width: auto;
+		height: auto;
+		padding: 1rem;
+		margin: -1rem;
+		border-radius: 99px;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	.swiper-button-tag-prev {
+		left: var(--gutter);
+	}
+	.swiper-button-tag-next {
+		right: var(--gutter);
+	}
+	.swiper-button-tag {
+		display: block;
+	}
+}
 @media screen and (max-width: 700px) {
 	.background {
 		-webkit-backdrop-filter: blur(10px);
@@ -601,7 +629,7 @@ class:visible={mouse.x}
 		display: none;
 	}
 }
-@media (pointer: coarse) and (hover: none) and (max-width: 820px) {
+@media (pointer: coarse) and (hover: none) and (max-width: 1025px) {
 	.list-switch {
 		display: none;
 	}
