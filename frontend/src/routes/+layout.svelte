@@ -576,7 +576,7 @@ class:visible={mouse.x}
 	text-underline-offset: 2px;
 }
 .swiper-button-tag {
-	display: noner;
+	display: none;
 }
 /* Tablet horizontal */
 @media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
