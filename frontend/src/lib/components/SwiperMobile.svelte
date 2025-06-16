@@ -58,5 +58,6 @@ swiper-slide {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
+	align-self: center;
 }
 </style>

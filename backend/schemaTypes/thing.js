@@ -85,10 +85,6 @@ export default {
 			rows: 4,
 		},
 		{
-			name: 'moreInfo',
-			type: 'text',
-		},
-		{
 			name: 'priceInfo',
 			type: 'string',
 		},

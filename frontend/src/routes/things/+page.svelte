@@ -17,10 +17,9 @@ let rows = Math.ceil(totalSlots / cols);
 var index = 0;
 let domLoaded = $state(false);
 
-let activeThings = $state([])
-$inspect(activeThings)
-let openThing = $state(false)
-$inspect(openThing)
+let activeThing = $state(null);
+let openThing = $state(false);
+$inspect(openThing, activeThing)
 
 let body = $state()
 
@@ -35,26 +34,47 @@ $effect(() => {
 	}
 });
 
-function handleTap(i) {
-	if (!activeThings.includes(i)) {
-		// if (openThing != i || !openThing) {
-			// if (activeThings.includes(i)) {
-			// 	const index = activeThings.indexOf(i);
-			// 	if (index !== -1) {
-			// 		activeThings.splice(index, 1); // Remove the index if it exists in the array
-			// 	}
-			// } else {
-				activeThings = [];
-				activeThings.push(i)
-				openThing = false
-			// }	
-		// }	
-	}
+
+
+let touched = false;
+function handleTouchStart() {
+	touched = true;
+	setTimeout(() => (touched = false), 500);
 }
-function handleOpenThing(i, e) {
-	if (e) {
-		e.preventDefault()
+function handleClick(e, thingSlug, i) {
+	if (!touched && innerWidth <= 600) {
+		e.preventDefault();
+		e.stopPropagation();
+		if (activeThing !== thingSlug) {
+			activeThing = thingSlug;
+		} else {
+			if (innerWidth > innerHeight) {
+				touched = false;
+			} else {
+				setOpenThing(i)
+				return;
+			}
+		}
+		return;
 	}
+	if (touched) {
+		e.preventDefault();
+		e.stopPropagation();
+		if (activeThing !== thingSlug) {
+			activeThing = thingSlug;
+			return;
+		} else {
+			if (innerWidth > innerHeight) {
+				touched = false;
+			} else {
+				setOpenThing(i)
+				return;
+			}
+		}
+	}
+	toggler.toggleThing(e, thingSlug)
+}
+function setOpenThing(i) {
 	if (openThing === i) {
 		openThing = false
 	} else {
@@ -63,28 +83,6 @@ function handleOpenThing(i, e) {
 }
 function closeOpenThing() {
 	openThing = false
-}
-
-
-let threshold = 1;
-function handleScroll() {
-	const thingEls = document.querySelectorAll(".thing");
-	for (let i = 0; i < thingEls.length; i++) {
-		const rect = thingEls[i].getBoundingClientRect();
-		
-		// Only push the element index if it's not already in the activeThings array
-		if (rect.top <= threshold && rect.bottom >= threshold && !activeThings.includes(i)) {
-			activeThings.push(i);
-		}
-		
-		// Remove the element index if it's out of the viewport (check it is currently in activeThings)
-		else if (rect.top > threshold) {
-			const index = activeThings.indexOf(i);
-			if (index !== -1) {
-				activeThings.splice(index, 1); // Remove the index if it exists in the array
-			}
-		}
-	}
 }
 </script>
 
@@ -101,15 +99,15 @@ function handleScroll() {
 						class="thing"
 						class:last={i === data.things.length-1 && i === openThing}
 						class:loading={!domLoaded}
-						class:active={activeThings.includes(i)}
+						class:active={activeThing === thing.slug.current}
 						class:open={openThing === i}
-						onclick={(e) => {handleTap(i)}}
 						style="--desktopColour: {data.colours.desktop[index % data.colours.desktop.length].hex}; --mobileColour: {data.colours.mobile[index % data.colours.mobile.length].hex}"
 						>
 							<a
 							class="thing-link"
 							href="/things/{thing.slug.current}"
-							onclick={(e) => {innerWidth > 1024 && activeThings.includes(i) ? toggler.toggleThing(e, thing.slug.current) : handleOpenThing(i, e);}} data-sveltekit-preload-data
+							ontouchstart={(e) => {handleTouchStart()}}
+							onclick={(e) => {handleClick(e, thing.slug.current, i)}} data-sveltekit-preload-data
 							onmouseover={() => ctaer.setCta('More info')} onfocus={() => ctaer.setCta("More info")} aria-label="More info"
 							onmouseleave={() => ctaer.setCta('')}
 							>
@@ -139,16 +137,16 @@ function handleScroll() {
 								</div>
 								<div class="thing-cta">
 									{#if thing.priceInfo}
-									<p>
-										{#if thing.linkExternalUrl && thing.externalUrl}
-											<a class="buy-btn" href={thing.externalUrl} target="_blank" rel="noopener noreferrer">{thing.priceInfo}</a>
-										{:else}
-											<span class="buy-btn">{thing.priceInfo}</span>
-										{/if}
-										{#if thing.showShipping}
-											<span>+ shipping</span>
-										{/if}
-									</p>
+										<p>
+											{#if thing.linkExternalUrl && thing.externalUrl}
+												<a class="buy-btn" href={thing.externalUrl} target="_blank" rel="noopener noreferrer">{thing.priceInfo}</a>
+											{:else}
+												<span class="buy-btn">{thing.priceInfo}</span>
+											{/if}
+											{#if thing.showShipping}
+												<span>+ shipping</span>
+											{/if}
+										</p>
 									{/if}
 									{#if thing.media.length > 1}
 										<span class="moreImages">More images</span>
@@ -156,7 +154,15 @@ function handleScroll() {
 								</div>
 							</div>
 						</div>
-						{#if innerWidth/innerHeight < 1 && openThing === i && activeThings.includes(i)}
+						<!-- {#if innerWidth/innerHeight < 1 && openThing === i && activeThing === i}
+							<div class="swiper-container">
+								<SwiperMobile media={thing.media}/>
+								<button class="close-btn difference"
+								onclick={(e) => {closeOpenThing()}}
+								>Close</button>
+							</div>
+						{/if} -->
+						{#if openThing === i}
 							<div class="swiper-container">
 								<SwiperMobile media={thing.media}/>
 								<button class="close-btn difference"
@@ -237,7 +243,7 @@ section {
 	    -ms-flex-pack: justify;
 	        justify-content: space-between;
 }
-.buy-btn {
+/* .buy-btn {
 	color: var(--black);
 	background-color: var(--white);
 	padding: .1em .3em .2em;
@@ -247,7 +253,7 @@ section {
 a.buy-btn:hover {
 	color: var(--white);
 	background-color: var(--black);
-}
+} */
 .swiper-container {
 	position: fixed;
 	top: 0;
@@ -272,8 +278,24 @@ a.buy-btn:hover {
 .moreImages {
 	display: none;
 }
+@media (max-width: 1024px) {
+	.spacer {
+		display: none;
+	}
+	section {
+		-ms-grid-columns: (1fr)[2];
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
 /* Shared styles for touch/mobile/tablet */
 @media (pointer: coarse) and (hover: none), (max-width: 600px) {
+	.spacer {
+		display: none;
+	}
+	section {
+		-ms-grid-columns: (1fr)[1];
+		grid-template-columns: repeat(1, 1fr);
+	}
 	.thing.open {
 		overflow: visible;
 		z-index: 2;
@@ -305,15 +327,6 @@ a.buy-btn:hover {
 	section {
 		-ms-grid-columns: (1fr)[2];
 		grid-template-columns: repeat(2, 1fr);
-	}
-}
-@media (max-width: 600px) {
-	.spacer {
-		display: none;
-	}
-	section {
-		-ms-grid-columns: (1fr)[1];
-		grid-template-columns: repeat(1, 1fr);
 	}
 }
 /* Hover styles for non-touch devices (desktops) */

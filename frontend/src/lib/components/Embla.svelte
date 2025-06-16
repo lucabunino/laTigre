@@ -145,7 +145,7 @@ role="button" tabindex="0"
 }
 
 /* Tablet horizontal */
-@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
+@media (pointer: coarse) and (hover: none) and (orientation: landscape) {
 	.embla__button {
 		display: none;
 	}

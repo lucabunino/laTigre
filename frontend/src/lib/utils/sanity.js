@@ -53,7 +53,7 @@ export async function getProjects() {
 						_ref, _id, _type
 					},
 					"info": asset->{
-						title, description, altText, metadata {dimensions}
+						title, description, altText, metadata {dimensions, lqip}
 					},
 				},
 			},
@@ -62,7 +62,7 @@ export async function getProjects() {
 					_ref, _id, _type
 				},
 				"info": asset->{
-					title, description, altText, metadata {dimensions}
+					title, description, altText, metadata {dimensions, lqip}
 				},
 			},
 			mobile {
@@ -70,14 +70,33 @@ export async function getProjects() {
 					_ref, _id, _type
 				},
 				"info": asset->{
-					title, description, altText, metadata {dimensions}
+					title, description, altText, metadata {dimensions, lqip}
 				},
 			},
 			reference->{
 				_type,
 				title,
 				slug,
-				description
+				description,
+				media[] {
+				mp4 {
+					asset-> {url}
+				},
+				cover {
+					asset {
+						_ref, _id, _type
+					},
+					"info": asset->{
+						title, description, altText, metadata {dimensions, lqip}
+					},
+				},
+				asset {
+					_ref, _id, _type
+				},
+				"info": asset->{
+					title, description, altText, metadata {dimensions, lqip}
+				},
+			},
 			},
 		}
 		`
@@ -98,7 +117,7 @@ export async function getInfo() {
     					_ref, _id, _type
     				},
             "info": asset->{
-    					title, description, altText, metadata {dimensions}
+    					title, description, altText, metadata {dimensions, lqip}
     				},
 					}
 				}
@@ -121,14 +140,14 @@ export async function getWorks() {
 						_ref, _id, _type
 					},
 					"info": asset->{
-						title, description, altText, metadata {dimensions}
+						title, description, altText, metadata {dimensions, lqip}
 					},
 				},
 				asset {
 					_ref, _id, _type
 				},
 				"info": asset->{
-					title, description, altText, metadata {dimensions}
+					title, description, altText, metadata {dimensions, lqip}
 				},
 			},
 			tags[]->{title, slug, colour, orderRank}
@@ -161,14 +180,14 @@ export async function getWork(slug) {
 						_ref, _id, _type
 					},
 					"info": asset->{
-						title, description, altText, metadata {dimensions}
+						title, description, altText, metadata {dimensions, lqip}
 					},
 				},
 				asset {
 					_ref, _id, _type
 				},
 				"info": asset->{
-					title, description, altText, metadata {dimensions}
+					title, description, altText, metadata {dimensions, lqip}
 				},
 			},
 			tags[]->{title},
@@ -204,14 +223,14 @@ export async function getThings() {
 						_ref, _id, _type
 					},
 					"info": asset->{
-						title, description, altText, metadata {dimensions}
+						title, description, altText, metadata {dimensions, lqip}
 					},
 				},
 				asset {
 					_ref, _id, _type
 				},
 				"info": asset->{
-					title, description, altText, metadata {dimensions}
+					title, description, altText, metadata {dimensions, lqip}
 				},
 			},
 			tags[]->{title}
@@ -223,6 +242,10 @@ export async function getThing(slug) {
 	return await client.fetch(
 		`
 		*[_type == "thing" && slug.current == $slug] {
+			priceInfo,
+			linkExternalUrl,
+			externalUrl,
+			showShipping,
 			slug,
 			title,
 			description,
@@ -235,21 +258,22 @@ export async function getThing(slug) {
 						_ref, _id, _type
 					},
 					"info": asset->{
-						title, description, altText, metadata {dimensions}
+						title, description, altText, metadata {dimensions, lqip}
 					},
 				},
 				asset {
 					_ref, _id, _type
 				},
 				"info": asset->{
-					title, description, altText, metadata {dimensions}
+					title, description, altText, metadata {dimensions, lqip}
 				},
+				
 			},
 			tags[]->{title},
 			moreInfo,
 			orderRank,
 			"prev": *[_type == "thing" && orderRank < ^.orderRank] | order(orderRank desc)[0] { title, slug, media[] {type} },
-      "next": *[_type == "thing" && orderRank > ^.orderRank] | order(orderRank asc)[0] { title, slug }
+      		"next": *[_type == "thing" && orderRank > ^.orderRank] | order(orderRank asc)[0] { title, slug }
 		}
 		`, { slug });
 }

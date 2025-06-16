@@ -164,7 +164,7 @@ swiper-slide {
 }
 
 /* Tablet horizontal */
-@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
+@media (pointer: coarse) and (hover: none) and (orientation: landscape) {
 	.swiper-single-button,
 	.project-link {
 		width: auto;

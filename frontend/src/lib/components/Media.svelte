@@ -1,4 +1,5 @@
 <script>
+import { urlFor } from '$lib/utils/image';
 let {
 	media,
 	className,
@@ -9,7 +10,6 @@ let {
 	style = "",
 	delay = 0
 } = $props()
-import { urlFor } from '$lib/utils/image';
 
 // Variables
 const observerOptions = {
@@ -20,11 +20,13 @@ const observerOptions = {
 
 let imgSrc = $state();
 let high = $state();
+
 if (!video) {
-	imgSrc = media.asset ? urlFor(media.asset).height(100) : "";
+	imgSrc = media.asset ? media.info.metadata.lqip : "";
 	high = media.asset ? urlFor(media.asset).height(resolution) : "";
 } else {
-	imgSrc = media.cover ? urlFor(media.cover.asset).height(100) : "";
+	$inspect(media.cover)
+	imgSrc = media.cover ? media.cover.info.metadata.lqip : "";
 	high = media.cover ? urlFor(media.cover.asset).height(resolution) : "";
 }
 let blurred = $state(true);
@@ -139,7 +141,7 @@ img, video {
 }
 
 /* Tablet horizontal */
-@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
+@media (pointer: coarse) and (hover: none) and (orientation: landscape) {
 	.embla-media {
 		max-width: 90vw;
 	}
@@ -202,11 +204,9 @@ img, video {
 	   object-fit: cover;
 }
 .swiper-mobile-media {
+	background-color: var(--white);
 	width: 100%;
 	height: auto;
-	aspect-ratio: 2/3;
 	max-width: 100vw;
-	-o-object-fit: contain;
-	   object-fit: contain;
 }
 </style>

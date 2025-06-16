@@ -30,7 +30,7 @@ $effect(() => {
 	setTimeout(() => {
 		domLoaded = true;
 	}, 1500);
-	if (openWork === 0 || openWork > 0) {
+	if (openWork) {
 		body.style.overflow = 'hidden';
 	} else {
 		body.style.overflow = '';
@@ -42,15 +42,45 @@ function handleMouseover(e) {
 	e.target.classList.toggle("on")	
 	e.target.classList.toggle("onTablet")	
 }
-// function handleTap(e, workSlug, index) {
-// 	e.preventDefault()
-// 	if (activeWork !== workSlug) {
-// 		activeWork = workSlug; 
-// 	} else {
-// 		handleOpenWork(index)
-// 	}
-// }
-function handleOpenWork(i) {
+let touched = false;
+function handleTouchStart() {
+	touched = true;
+	setTimeout(() => (touched = false), 500);
+}
+function handleClick(e, workSlug, i) {
+	if (!touched && innerWidth <= 600) {
+		e.preventDefault();
+		e.stopPropagation();
+		if (activeWork !== workSlug) {
+			activeWork = workSlug;
+		} else {
+			if (innerWidth > innerHeight) {
+				touched = false;
+			} else {
+				setOpenWork(i)
+				return;
+			}
+		}
+		return;
+	}
+	if (touched) {
+		e.preventDefault();
+		e.stopPropagation();
+		if (activeWork !== workSlug) {
+			activeWork = workSlug;
+			return;
+		} else {
+			if (innerWidth > innerHeight) {
+				touched = false;
+			} else {
+				setOpenWork(i)
+				return;
+			}
+		}
+	}
+	toggler.toggleWork(e, workSlug)
+}
+function setOpenWork(i) {
 	if (openWork === i) {
 		openWork = false
 	} else {
@@ -59,39 +89,6 @@ function handleOpenWork(i) {
 }
 function closeOpenWork() {
 	openWork = false
-}
-
-let touched = false;
-function handleTouchStart(e, workSlug, i) {
-	touched = true;
-	setTimeout(() => {
-	touched = false;
-	}, 500);
-	console.log("touch event");
-	if (activeWork !== workSlug) {
-		activeWork = workSlug;
-	} else {
-		if (innerWidth > innerHeight) {
-			touched = false;
-		} else {
-			handleOpenWork(i)
-		}
-	}
-}
-function handleClick(e, workSlug, i) {
-	if (!touched && innerWidth <= 600) {
-		e.preventDefault();
-		e.stopPropagation();
-		handleTouchStart(e, workSlug, i)
-	}
-	if (touched) {
-		e.preventDefault();
-		e.stopPropagation();
-		console.log("click suppressed after touch");
-		return;
-	}
-	console.log("mouse click event");
-	toggler.toggleWork(e, workSlug)
 }
 </script>
 
@@ -115,7 +112,7 @@ style="--mobileColour0: {mobileColours[0]?.hex}; --mobileColour1: {mobileColours
 			data-index={localIndex}
 			data-work={work.slug.current}
 			onmouseenter={(e) => {handleMouseover(e)}}
-			ontouchstart={(e) => {handleTouchStart(e, work.slug.current, i)}}
+			ontouchstart={(e) => {handleTouchStart()}}
 			onclick={(e) => {handleClick(e, work.slug.current, i)}} data-sveltekit-preload-data
 			class:active={activeWork === work.slug.current}
 			class:loading={!domLoaded}
@@ -147,16 +144,13 @@ style="--mobileColour0: {mobileColours[0]?.hex}; --mobileColour1: {mobileColours
 			</a>
 			{(() => {index++})()}
 		{/each}
-		{#if innerWidth <= 1024 && openWork === i}
+		{#if openWork === i}
 			<div class="swiper-container">
 				<SwiperMobile media={work.media}/>
 				<button class="close-btn difference"
 				onclick={(e) => {closeOpenWork()}}
 				>Close</button>
 			</div>
-			<!-- {#if thing.moreInfo}
-				<p class="moreInfo folio-18">{thing.moreInfo}</p>
-			{/if} -->
 		{/if}
 	{/each}
 </section>
@@ -271,7 +265,7 @@ section {
 	}
 }
 /* Tablet horizontal */
-@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
+@media (pointer: coarse) and (hover: none) and (orientation: landscape) {
 	section {
 		-ms-grid-columns: (1fr)[4];
 		grid-template-columns: repeat(4, 1fr);

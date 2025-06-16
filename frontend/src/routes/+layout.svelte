@@ -352,13 +352,20 @@ function handleKey({ key }) {
 		onmouseover={() => ctaer.setCta("")} onfocus={() => ctaer.setCta("")}
 		role="button" tabindex="0"
 		>
-			{#if $page.state.thingData.indexedMedia}
-			{/if}
 			{#if $page.state.thingData.thing[0].description}
 				<p>{$page.state.thingData.thing[0].description}</p>
 			{/if}
-			{#if $page.state.thingData.thing[0].moreInfo}
-				<p>{$page.state.thingData.thing[0].moreInfo}</p>
+			{#if $page.state.thingData.thing[0].priceInfo}
+				<p>
+					{#if $page.state.thingData.thing[0].linkExternalUrl && $page.state.thingData.thing[0].externalUrl}
+						<a class="buy-btn" href={$page.state.thingData.thing[0].externalUrl} target="_blank" rel="noopener noreferrer">{$page.state.thingData.thing[0].priceInfo}</a>
+					{:else}
+						<span class="buy-btn">{$page.state.thingData.thing[0].priceInfo}</span>
+					{/if}
+					{#if $page.state.thingData.thing[0].showShipping}
+						<span>+ shipping</span>
+					{/if}
+				</p>
 			{/if}
 		</div>
 		<div class="swiper-button-tag swiper-button-tag-prev">Prev</div>
@@ -578,8 +585,22 @@ class:visible={mouse.x}
 .swiper-button-tag {
 	display: none;
 }
+.buy-btn {
+	color: var(--black);
+	border: solid 1px var(--white);
+	background-color: var(--white);
+	padding: .1em .3em .2em;
+	border-radius: .2em;
+	pointer-events: all;
+	display: inline-block;
+}
+a.buy-btn:hover {
+	color: var(--white);
+	background-color: var(--black);
+	border: solid 1px var(--white);
+}
 /* Tablet horizontal */
-@media (pointer: coarse) and (hover: none) and (min-width: 768px) and (orientation: landscape) {
+@media (pointer: coarse) and (hover: none) and (orientation: landscape) {
 	.swiper-button-tag {
 		background: transparent;
 		pointer-events: none;
@@ -624,7 +645,7 @@ class:visible={mouse.x}
 }
 
 /* Tablet */
-@media (pointer: coarse) and (hover: none) and (min-width: 768px) {
+@media (pointer: coarse) and (hover: none) {
 	#cta {
 		display: none;
 	}
