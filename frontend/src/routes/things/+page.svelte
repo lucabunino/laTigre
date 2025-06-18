@@ -243,7 +243,7 @@ section {
 	    -ms-flex-pack: justify;
 	        justify-content: space-between;
 }
-/* .buy-btn {
+.buy-btn {
 	color: var(--black);
 	background-color: var(--white);
 	padding: .1em .3em .2em;
@@ -253,7 +253,7 @@ section {
 a.buy-btn:hover {
 	color: var(--white);
 	background-color: var(--black);
-} */
+}
 .swiper-container {
 	position: fixed;
 	top: 0;
