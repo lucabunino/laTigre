@@ -14,8 +14,8 @@ let {
 // Variables
 const observerOptions = {
 	root: null,
-	rootMargin: "0",
-	threshold: 0.05,
+	rootMargin: "-40px",
+	threshold: 0.5,
 };
 
 let imgSrc = $state();
