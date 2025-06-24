@@ -14,7 +14,7 @@ let {
 // Variables
 const observerOptions = {
 	root: null,
-	rootMargin: "-10px",
+	rootMargin: "0",
 	threshold: 0.05,
 };
 
