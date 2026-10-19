@@ -1,5 +1,5 @@
 // import './structure.css';
-import {defineConfig} from 'sanity'
+import {defineConfig, isDev} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {myStructure} from './structure.js'
 import {visionTool} from '@sanity/vision'
@@ -32,11 +32,14 @@ export default defineConfig({
 	projectId: 'y48jewos',
 	dataset: 'production',
 
+	releases: {enabled: isDev},
+	scheduledDrafts: {enabled: isDev},
+
 	plugins: [
 		structureTool({
 			structure: myStructure,
 		}),
-		visionTool(),
+		...(isDev ? [visionTool()] : []),
 		media(),
 		colorInput(),
 	],
